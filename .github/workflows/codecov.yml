@@ -1,11 +1,11 @@
-name: API workflow
+name: Basic Codecov workflow
 
 on: [push, pull_request]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Test python API
+    name: Run pytest and upload to Codecov
     steps:
     - uses: actions/checkout@v4
     - name: Install requirements
@@ -14,8 +14,6 @@ jobs:
       run: pytest --cov .
     - name: Upload coverage reports to Codecov
       run: |
-        # Replace `linux` below with the appropriate OS
-        # Options are `alpine`, `linux`, `macos`, `windows`
         curl -Os https://cli.codecov.io/latest/linux/codecov
         chmod +x codecov
         ./codecov --verbose upload-process --fail-on-error -t ${{ secrets.CODECOV_TOKEN }} -n 'service'-${{ github.run_id }} -F service -f coverage-service.xml
