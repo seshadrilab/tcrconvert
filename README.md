@@ -1,4 +1,6 @@
 # tcr-converter
+[![codecov](https://codecov.io/gh/emjbishop/tcr-converter/graph/badge.svg?token=BA25XH6BS2)](https://codecov.io/gh/emjbishop/tcr-converter)
+
 Convert human T-cell receptor (TCR) gene names between 10X, Adaptive, and IMGT formats. 
 
 The popular 10X and Adaptive TCR sequencing platforms use different naming conventions for TCR genes, making data interoperability a challenge. The widely used IMGT reference uses yet another convention. Additional conventions exist, such as AIRR, and are currently not covered here.
