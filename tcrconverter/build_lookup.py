@@ -7,6 +7,10 @@ here = os.path.dirname(__file__)
 data_dir = os.path.join(here, 'data/')
 
 def main():
+    '''Runs all functions necessary to make a lookup table.
+
+    :return: None
+    '''
     # Extract IMGT gene names and put into a dataframe
     lookup = extract_imgt_genes(data_dir)
 
