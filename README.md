@@ -1,5 +1,6 @@
 # tcr-converter
 [![codecov](https://codecov.io/gh/emjbishop/tcr-converter/graph/badge.svg?token=BA25XH6BS2)](https://codecov.io/gh/emjbishop/tcr-converter)
+[![Documentation Status](https://readthedocs.org/projects/tcr-converter/badge/?version=latest)](https://tcr-converter.readthedocs.io/en/latest/?badge=latest)
 
 Convert human T-cell receptor (TCR) gene names between 10X, Adaptive, and IMGT formats. 
 
@@ -10,6 +11,8 @@ An example of how the same gene is named across formats:
 * 10X: `TRAV1-2`
 * Adaptive: `TCRAV01-02*01`
 * IMGT: `TRAV1-2*01`
+
+Check out the full documentation here: [https://tcr-converter.readthedocs.io/en/latest/](https://tcr-converter.readthedocs.io/en/latest/)
 
 # Usage
 
