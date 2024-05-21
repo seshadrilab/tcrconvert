@@ -3,7 +3,7 @@ import pandas as pd
 from tcrconverter import build_lookup
 
 def test_parse_imgt_fasta():
-    f = os.path.dirname(__file__) + '/test_traj.fa'
+    f = os.path.dirname(__file__) + '/data/test_traj.fa'
     assert build_lookup.parse_imgt_fasta(f) == ['TRAJ1*01',
                                                 'TRAJ10*01',
                                                 'TRAJ11*01',
@@ -15,7 +15,7 @@ def test_parse_imgt_fasta():
 
 
 def test_extract_imgt_genes():
-    testdir = os.path.dirname(__file__) + '/'
+    testdir = os.path.dirname(__file__) + '/data/'
     outdf = pd.DataFrame({'imgt': ['TRAJ1*01', 'TRAJ10*01', 'TRAJ11*01', 
                                    'TRAJ12*01', 'TRAJ13*01', 'TRAJ13*02', 
                                    'TRAJ14*01', 'TRAJ15*01', 'TRAV1-1*01', 
