@@ -3,14 +3,12 @@ import os
 import re
 import pandas as pd
 
-here = os.path.dirname(__file__)
-data_dir = os.path.join(here, 'data/')
-
-def main():
+def main(data_dir):
     '''Runs all functions necessary to make a lookup table.
 
     :return: None
     '''
+
     # Extract IMGT gene names and put into a dataframe
     lookup = extract_imgt_genes(data_dir)
 
@@ -26,7 +24,7 @@ def main():
     from_tenx = lookup.groupby('tenx').first()
 
     # Save
-    lookup.to_csv(data_dir + '/lookup.csv')
+    lookup.to_csv(data_dir + '/lookup.csv', index=False)
     from_tenx.to_csv(data_dir + '/lookup_from_tenx.csv')
 
 
@@ -91,4 +89,6 @@ def pad_single_digit(s):
 
 
 if __name__ == "__main__":
-    main()
+    here = os.path.dirname(__file__)
+    data_dir = os.path.join(here, 'data/')
+    main(data_dir)
