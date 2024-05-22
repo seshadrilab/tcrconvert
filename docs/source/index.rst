@@ -3,14 +3,19 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to tcr-converter's documentation!
+tcr-converter
 =========================================
+
+Convert TCR annotations between 10X, Adaptive, and IMGT formats.
+----------------------------------------------------------------
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-   usage
+   getstarted
+   datahandling
+   functions
    api
 
 
