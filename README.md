@@ -1,6 +1,6 @@
 # tcr-converter
 [![codecov](https://codecov.io/gh/emjbishop/tcr-converter/graph/badge.svg?token=BA25XH6BS2)](https://codecov.io/gh/emjbishop/tcr-converter)
-[![tests](https://github.com/emjbishop/tcr-converter/blob/main/.github/workflows/pytest.yml/badge.svg)](https://github.com/emjbishop/tcr-converter/blob/main/.github/workflows/pytest.yml)
+[![tests](https://github.com/emjbishop/tcr-converter/actions/workflows/pytest.yml/badge.svg)](https://github.com/emjbishop/tcr-converter/actions/workflows/pytest.yml)
 [![Documentation Status](https://readthedocs.org/projects/tcr-converter/badge/?version=latest)](https://tcr-converter.readthedocs.io/en/latest/?badge=latest)
 
 **Convert human T-cell receptor (TCR) annotations between 10X, Adaptive, and IMGT formats.**
