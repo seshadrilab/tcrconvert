@@ -6,6 +6,8 @@ import pandas as pd
 def main(data_dir):
     '''Runs all functions necessary to make a lookup table.
 
+    :param data_dir: Directory containing IMGT reference fasta files
+    :type data_dir: str
     :return: None
     '''
 
@@ -77,6 +79,11 @@ def extract_imgt_genes(data_dir):
 
 def pad_single_digit(s):
     '''Add a '0' to single-digit gene names to match double-digit adaptive format.
+
+    :param s: Gene name containing single-digit number(s)
+    :type s: str
+    :return: Gene name containing double-digit number(s)
+    :rtype: str
     '''
     # Match strings that are six characters before a '-' etc. (e.g. TCRBV1-)
     pattern = r'^\w{6}(?=\W)'

@@ -4,9 +4,9 @@ Getting started
 Installation
 ------------
 
-`tcr-converter` runs on Python 3 and requires `pandas`.
+``tcr-converter`` runs on Python 3 and requires ``pandas``.
 
-You can install using `pip`. Clone this repo, then from the top-level folder run:
+You can install using ``pip``. Clone this repo, then from the top-level folder run:
 
 .. code-block:: console
 
@@ -16,10 +16,10 @@ You can install using `pip`. Clone this repo, then from the top-level folder run
 Quick Start
 -----------
 
-Load your 10X, Adaptive, or IMGT-formatted TCR data into a `pandas` dataframe. It may have come from files such as:
+Load your 10X, Adaptive, or IMGT-formatted TCR data into a ``pandas`` dataframe. It may have come from files such as:
 
-* 10X: `filtered_contig_annotations.csv`
-* Adaptive: `SAMPLE_TCRB.tsv`
+* 10X: ``filtered_contig_annotations.csv``
+* Adaptive: ``SAMPLE_TCRB.tsv``
 * IMGT: A custom CSV file
 
 Then, convert to your desired format:
