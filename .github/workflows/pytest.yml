@@ -1,0 +1,16 @@
+# This workflow will install dependencies and run pytest
+
+name: tests
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Run pytest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Install requirements
+      run: pip install -r requirements.txt
+    - name: Run tests
+      run: pytest
