@@ -6,5 +6,6 @@ setup(name='tcrconverter',
       author_email='emmab5@uw.edu',
       license='MIT',
       packages=find_packages(),
-      package_data={"": ["*.csv", "*.fa"]},
+      include_package_data=True,
+      package_data={'tcrconverter': ['data/*'],},
       install_requires=['pandas'])
