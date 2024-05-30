@@ -6,7 +6,7 @@
 tcr-converter
 =========================================
 
-Convert TCR annotations between 10X, Adaptive, and IMGT formats.
+Convert TCR annotations between 10X, Adaptive, and IMGT formats
 ----------------------------------------------------------------
 
 .. toctree::

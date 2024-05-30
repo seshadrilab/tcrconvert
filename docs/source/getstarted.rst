@@ -10,8 +10,13 @@ You can install using ``pip``. Clone this repo, then from the top-level folder r
 
 .. code-block:: console
 
-   $ pip install -e .
+   $ pip install .
 
+The lookup tables for translating gene names come pre-built from IMGT fasta files located under ``tcrconverter/data/``. You can re-build these tables by running:
+
+.. code-block:: console
+
+   $ python tcrconverter/build_lookup.py
 
 Quick Start
 -----------

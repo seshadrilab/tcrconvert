@@ -22,7 +22,13 @@ Check out the full documentation here: [https://tcr-converter.readthedocs.io/en/
 You can install using `pip`. Clone this repo, then from the top-level folder run:
 
 ```
-pip install -e .
+pip install .
+```
+
+The lookup tables for translating gene names come pre-built from IMGT fasta files located under ``tcrconverter/data/``. You can re-build these tables by running:
+
+```
+python tcrconverter/build_lookup.py
 ```
 
 # Usage
