@@ -1,4 +1,4 @@
-name: Basic Codecov workflow
+name: Run-Codecov
 
 on: [push, pull_request]
 

@@ -1,6 +1,6 @@
 # This workflow will install dependencies and run pytest
 
-name: tests
+name: Run-Pytest
 
 on: [push, pull_request]
 
