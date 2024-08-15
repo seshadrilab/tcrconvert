@@ -4,11 +4,6 @@
 .. automodule:: build_lookup
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -18,15 +13,3 @@
       pad_single_digit
       parse_imgt_fasta
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-
