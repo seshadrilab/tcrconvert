@@ -1,4 +1,4 @@
-name: Run-Codecov
+name: codecov
 
 on: [push, pull_request]
 

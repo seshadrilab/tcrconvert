@@ -2,9 +2,9 @@
 
 > **Warning**: This project is in **alpha stage**. It is under active development and may be unstable.
 
-[![codecov](https://codecov.io/gh/emjbishop/tcrconvert/graph/badge.svg?token=BA25XH6BS2)](https://codecov.io/gh/emjbishop/tcr-converter)
-[![tests](https://github.com/emjbishop/tcrconvert/actions/workflows/pytest.yml/badge.svg)](https://github.com/emjbishop/tcrconvert/actions/workflows/pytest.yml)
-[![Documentation Status](https://readthedocs.org/projects/tcr-converter/badge/?version=latest)](https://tcr-converter.readthedocs.io/en/latest/?badge=latest)
+[![codecov](https://codecov.io/github/seshadrilab/tcrconvert/graph/badge.svg?token=BA25XH6BS2)](https://codecov.io/github/seshadrilab/tcrconvert)
+[![tests](https://github.com/seshadrilab/tcrconvert/actions/workflows/pytest.yml/badge.svg)](https://github.com/seshadrilab/tcrconvert/actions/workflows/pytest.yml)
+[![Documentation Status](https://readthedocs.org/projects/tcrconvert/badge/?version=latest)](https://tcrconvert.readthedocs.io/en/latest/?badge=latest)
 
 **Convert human T-cell receptor (TCR) annotations between 10X, Adaptive, and IMGT formats.**
 
@@ -20,7 +20,7 @@ Check out the full documentation here: [https://tcr-converter.readthedocs.io/en/
 
 # Installation
 
-`tcrconvert` runs on Python 3 and requires `pandas`.
+`tcrconvert` requires `pandas`.
 
 You can install using `pip`. Clone this repo, then from the top-level folder run:
 
