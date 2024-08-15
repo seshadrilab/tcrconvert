@@ -1,0 +1,5 @@
+-r requirements.txt
+
+packaging==21.0
+sphinx_rtd_theme==2.0.0
+tomli==2.0.1
