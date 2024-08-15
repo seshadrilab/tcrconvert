@@ -1,6 +1,9 @@
-# tcr-converter
-[![codecov](https://codecov.io/gh/emjbishop/tcr-converter/graph/badge.svg?token=BA25XH6BS2)](https://codecov.io/gh/emjbishop/tcr-converter)
-[![tests](https://github.com/emjbishop/tcr-converter/actions/workflows/pytest.yml/badge.svg)](https://github.com/emjbishop/tcr-converter/actions/workflows/pytest.yml)
+# TCRconvert
+
+> **Warning**: This project is in **alpha stage**. It is under active development and may be unstable.
+
+[![codecov](https://codecov.io/gh/emjbishop/tcrconvert/graph/badge.svg?token=BA25XH6BS2)](https://codecov.io/gh/emjbishop/tcr-converter)
+[![tests](https://github.com/emjbishop/tcrconvert/actions/workflows/pytest.yml/badge.svg)](https://github.com/emjbishop/tcrconvert/actions/workflows/pytest.yml)
 [![Documentation Status](https://readthedocs.org/projects/tcr-converter/badge/?version=latest)](https://tcr-converter.readthedocs.io/en/latest/?badge=latest)
 
 **Convert human T-cell receptor (TCR) annotations between 10X, Adaptive, and IMGT formats.**
@@ -11,13 +14,13 @@ The most popular TCR sequencing platforms (Adaptive and 10X) and the widely used
 * Adaptive: `TCRAV01-02*01`
 * IMGT: `TRAV1-2*01`
 
-`tcr-converter` easily converts a dataframe of TCR annotations between formats.
+`tcrconvert` easily converts a dataframe of TCR annotations between formats.
 
 Check out the full documentation here: [https://tcr-converter.readthedocs.io/en/latest/](https://tcr-converter.readthedocs.io/en/latest/)
 
 # Installation
 
-`tcr-converter` runs on Python 3 and requires `pandas`.
+`tcrconvert` runs on Python 3 and requires `pandas`.
 
 You can install using `pip`. Clone this repo, then from the top-level folder run:
 
@@ -25,10 +28,10 @@ You can install using `pip`. Clone this repo, then from the top-level folder run
 pip install .
 ```
 
-The lookup tables for translating gene names come pre-built from IMGT fasta files located under ``tcrconverter/data/``. You can re-build these tables by running:
+The lookup tables for translating gene names come pre-built from IMGT fasta files located under ``tcrconvert/data/``. You can re-build these tables by running:
 
 ```
-python tcrconverter/build_lookup.py
+python tcrconvert/build_lookup.py
 ```
 
 # Usage
@@ -43,7 +46,7 @@ Then, convert to your desired format:
 
 ```
 import pandas as pd
-from tcrconverter import convert
+from tcrconvert import convert
 
 df = pd.read_csv("filtered_contig_annotations.csv")
 converted = convert.convert_tcr(df, fmt_from='tenx', fmt_to='adaptive')
@@ -55,7 +58,7 @@ I welcome feedback! If you would like to resolve an issue or add improvements pl
 
 # Issues
 
-If you run into problems or need help running tcr-converter please file an issue on GitHub.
+If you run into problems or need help running TCRconvert please file an issue on GitHub.
 
 # Contact
 

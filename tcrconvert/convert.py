@@ -31,10 +31,10 @@ def convert_tcr(df,
 
     # Determine if we're using the 10X lookup table
     if fmt_from == 'tenx':
-        lookup_f = pkg_resources.resource_filename('tcrconverter', 'data/lookup_from_tenx.csv')
+        lookup_f = pkg_resources.resource_filename('tcrconvert', 'data/lookup_from_tenx.csv')
         print("CONVERTING FROM 10X: CHOOSING *01 AS ALLELE FOR ALL GENES")
     else:
-        lookup_f = pkg_resources.resource_filename('tcrconverter', 'data/lookup.csv')
+        lookup_f = pkg_resources.resource_filename('tcrconvert', 'data/lookup.csv')
 
     # Load lookup table
     try:

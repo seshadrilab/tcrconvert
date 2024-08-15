@@ -4,7 +4,7 @@ Getting started
 Installation
 ------------
 
-``tcr-converter`` runs on Python 3 and requires ``pandas``.
+``tcrconvert`` runs on Python 3 and requires ``pandas``.
 
 You can install using ``pip``. Clone this repo, then from the top-level folder run:
 
@@ -12,11 +12,11 @@ You can install using ``pip``. Clone this repo, then from the top-level folder r
 
    $ pip install .
 
-The lookup tables for translating gene names come pre-built from IMGT fasta files located under ``tcrconverter/data/``. You can re-build these tables by running:
+The lookup tables for translating gene names come pre-built from IMGT fasta files located under ``tcrconvert/data/``. You can re-build these tables by running:
 
 .. code-block:: console
 
-   $ python tcrconverter/build_lookup.py
+   $ python tcrconvert/build_lookup.py
 
 Quick Start
 -----------
@@ -32,7 +32,7 @@ Then, convert to your desired format:
 .. code-block:: python
 
     import pandas as pd
-    from tcrconverter import convert
+    from tcrconvert import convert
 
     df = pd.read_csv("filtered_contig_annotations.csv")
     converted = convert.convert_tcr(df, fmt_from='tenx', fmt_to='adaptive')

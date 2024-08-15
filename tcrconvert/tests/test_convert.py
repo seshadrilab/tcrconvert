@@ -1,6 +1,6 @@
 import pytest
 import pandas as pd
-from tcrconverter import convert
+from tcrconvert import convert
 
 imgt_df = pd.DataFrame({'v_gene': ['TRAV1-2*01', 'TRBV6-1*01'],
                         'j_gene': ['TRAJ12*01', 'TRBJ2-1*01'],

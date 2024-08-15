@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-from tcrconverter import build_lookup
+from tcrconvert import build_lookup
 
 def test_parse_imgt_fasta():
     f = os.path.dirname(__file__) + '/data/test_traj.fa'

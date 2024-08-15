@@ -1,7 +1,7 @@
 Data Handling
 ===============
 
-More details on how tcr-converter works.
+More details on how tcrconvert works.
 
 Adding alleles to 10X TCR genes
 -------------------------------
