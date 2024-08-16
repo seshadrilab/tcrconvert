@@ -16,7 +16,7 @@ The most popular TCR sequencing platforms (Adaptive and 10X) and the widely used
 
 `tcrconvert` easily converts a dataframe of TCR annotations between formats.
 
-Check out the full documentation here: [https://tcr-converter.readthedocs.io/en/latest/](https://tcr-converter.readthedocs.io/en/latest/)
+Check out the full documentation here: [tcrconvert.readthedocs.io](https://tcrconvert.readthedocs.io/en/latest/)
 
 # Installation
 
