@@ -1,6 +1,6 @@
 import pytest
 import pandas as pd
-from tcrconvert import convert
+import tcrconvert
 
 imgt_df = pd.DataFrame({'v_gene': ['TRAV1-2*01', 'TRBV6-1*01'],
                         'j_gene': ['TRAJ12*01', 'TRBJ2-1*01'],
@@ -48,5 +48,5 @@ extract_df = pd.DataFrame({'v_gene': ['TCRAV01-02*01', 'TCRBV06-01*01'],
     # Extract TCRs only
     (tenx_df,'tenx','adaptive',None,True,False,extract_df)])
 def test_convert_tcr(df,fmt_from,fmt_to,cols_use,extract_tcr,convert_cols,out):
-    result = convert.convert_tcr(df,fmt_from,fmt_to,cols_use,extract_tcr,convert_cols)
+    result = tcrconvert.convert_tcr(df,fmt_from,fmt_to,cols_use,extract_tcr,convert_cols)
     pd.testing.assert_frame_equal(result, out)

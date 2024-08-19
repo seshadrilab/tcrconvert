@@ -1,1 +1,1 @@
-from . import convert
+from .convert import convert_tcr
