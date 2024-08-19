@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tcrconvert"
+version = "0.1"
+dependencies = ["pandas"]
+requires-python = ">= 3.8"
+authors = [
+    {name = "Emma Bishop", email = "emmab5@uw.edu"}
+]
+description = "Convert TCRs between 10X, Adaptive, and IMGT formats."
+readme = "README.md"
+license = {text = "MIT"}
+keywords = ["TCR", "Adaptive", "10X", "IMGT", "T cell receptor", "convert"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Science/Research",
+  "Topic :: Scientific/Engineering :: Bio-Informatics",
+  "License :: OSI Approved :: MIT License",
+  # Supported Python versions
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12"
+]
+
+[project.urls]
+Homepage = "https://example.com"
+Documentation = "https://tcrconvert.readthedocs.io/en/latest/"
+Repository = "https://github.com/seshadrilab/tcrconvert.git"
+Issues = "https://github.com/seshadrilab/tcrconvert/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["*"]
+
+[tool.setuptools.package-data]
+tcrconvert = ["data/*"]
