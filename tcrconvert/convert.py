@@ -1,5 +1,5 @@
 import pandas as pd
-import pkg_resources
+from importlib.resources import files
 
 # Standard column names for different sources of TCR data
 col_ref = {'tenx': ('v_gene', 'j_gene', 'cdr3'),
@@ -31,10 +31,10 @@ def convert_tcr(df,
 
     # Determine if we're using the 10X lookup table
     if fmt_from == 'tenx':
-        lookup_f = pkg_resources.resource_filename('tcrconvert', 'data/lookup_from_tenx.csv')
+        lookup_f = files('tcrconvert.data').joinpath('lookup_from_tenx.csv')
         print("CONVERTING FROM 10X: CHOOSING *01 AS ALLELE FOR ALL GENES")
     else:
-        lookup_f = pkg_resources.resource_filename('tcrconvert', 'data/lookup.csv')
+        lookup_f = files('tcrconvert.data').joinpath('lookup.csv')
 
     # Load lookup table
     try:
