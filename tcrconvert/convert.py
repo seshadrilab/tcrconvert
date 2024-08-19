@@ -9,8 +9,8 @@ col_ref = {'tenx': ('v_gene', 'j_gene', 'cdr3'),
 
 
 def convert_tcr(df,
-                fmt_from=['tenx', 'adaptive', 'adaptive_v2', 'imgt'],
-                fmt_to=['tenx', 'adaptive', 'adaptive_v2', 'imgt'],
+                fmt_from,  # ['tenx', 'adaptive', 'adaptive_v2', 'imgt']
+                fmt_to,  # ['tenx', 'adaptive', 'adaptive_v2', 'imgt']
                 cols_use=None, extract_tcr=False, convert_cols=False):
     '''Convert TCR gene names from one naming convention to another.
 
