@@ -34,12 +34,12 @@ extract_df = pd.DataFrame({'v_gene': ['TCRAV01-02*01', 'TCRBV06-01*01'],
     (adapt_df,'adaptive','tenx',None,False,True,tenx_df),
     (adapt_v2_df,'adaptive_v2','tenx',None,False,True,tenx_df),
     # Adaptive <-> IMGT
-    # (adapt_df,'adaptive','imgt',None,False,True,imgt_df),  # KeyError: 'imgt'
-    # (adapt_v2_df,'adaptive_v2','imgt',None,False,True,imgt_df),  # KeyError: 'imgt'
+    (adapt_df,'adaptive','imgt',None,False,True,imgt_df),
+    (adapt_v2_df,'adaptive_v2','imgt',None,False,True,imgt_df),
     (imgt_df,'imgt','adaptive',None,False,True,adapt_df),
     (imgt_df,'imgt','adaptive_v2',None,False,True,adapt_v2_df),
     # IMGT <-> 10X
-    # (tenx_df,'tenx','imgt',None,False,True,imgt_df),  # KeyError: 'imgt'
+    (tenx_df,'tenx','imgt',None,False,True,imgt_df),
     (imgt_df,'imgt','tenx',None,False,True,tenx_df),
     # Custom column names
     (custom_df,'imgt','tenx',['myV', 'myJ', 'myCDR3'],False,True,tenx_df),
