@@ -86,7 +86,8 @@ def convert_tcr(df,
 
     # Display genes we couldn't convert
     # TODO: have option to keep mangled gene names
-    print('These genes are not in the IMGT reference and have replaced with NA. '
+    if len(v_genes_bad + j_genes_bad) > 0:
+        print('These genes are not in the IMGT reference and have replaced with NA. '
           'Please repair gene names manually and re-run:\n',
           v_genes_bad + j_genes_bad)
 
