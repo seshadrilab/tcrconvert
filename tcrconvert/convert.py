@@ -4,7 +4,8 @@ from importlib.resources import files
 # Standard column names for different sources of TCR data
 col_ref = {'tenx': ('v_gene', 'j_gene', 'cdr3'),
            'adaptive': ('v_resolved', 'j_resolved', 'cdr3_amino_acid'),
-           'adaptive_v2': ('vMaxResolved', 'jMaxResolved', 'aminoAcid')}
+           'adaptive_v2': ('vMaxResolved', 'jMaxResolved', 'aminoAcid'),
+           'imgt': ('v_gene', 'j_gene', 'cdr3')}
 
 
 def convert_tcr(df,
