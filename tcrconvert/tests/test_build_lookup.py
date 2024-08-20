@@ -31,9 +31,9 @@ def test_pad_single_digit():
     assert build_lookup.pad_single_digit(s2) == 'TCRBV11-2'
 
 
-def test_main():
+def test_build_lookup_from_fastas():
     testdir = os.path.dirname(__file__) + '/data/'
-    build_lookup.main(testdir)
+    build_lookup.build_lookup_from_fastas(testdir)
 
     with open(testdir + 'lookup_from_tenx.csv') as lookup10x: 
         assert lookup10x.read() == 'tenx,imgt,adaptive,adaptive_v2\n' \

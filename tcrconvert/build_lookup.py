@@ -1,34 +1,6 @@
-
 import os
 import re
 import pandas as pd
-
-def main(data_dir):
-    '''Runs all functions necessary to make a lookup table.
-
-    :param data_dir: Directory containing IMGT reference fasta files
-    :type data_dir: str
-    :return: None
-    '''
-
-    # Extract IMGT gene names and put into a dataframe
-    lookup = extract_imgt_genes(data_dir)
-
-    # Create 10X column by removing allele info (e.g. *01)
-    lookup['tenx'] = lookup['imgt'].apply(lambda x: x[:-3])
-
-    # Create Adaptive columns by adding letters and 0's
-    lookup['adaptive'] = lookup['imgt'].apply(lambda x: x.replace('TR', 'TCR').replace('-', '-0'))
-    lookup['adaptive'] = lookup['adaptive'].apply(lambda x: pad_single_digit(x))
-    lookup['adaptive_v2'] = lookup['adaptive']
-
-    # If converting from 10X will just need the first *01 allele
-    from_tenx = lookup.groupby('tenx').first()
-
-    # Save
-    lookup.to_csv(data_dir + '/lookup.csv', index=False)
-    from_tenx.to_csv(data_dir + '/lookup_from_tenx.csv')
-
 
 def parse_imgt_fasta(infile):
     '''Extract gene names from an IMGT reference fasta.
@@ -95,7 +67,28 @@ def pad_single_digit(s):
         return s
 
 
-if __name__ == "__main__":
-    here = os.path.dirname(__file__)
-    data_dir = os.path.join(here, 'data/')
-    main(data_dir)
+def build_lookup_from_fastas(data_dir):
+    '''Runs all functions necessary to make a lookup table.
+
+    :param data_dir: Directory containing IMGT reference fasta files
+    :type data_dir: str
+    :return: None
+    '''
+
+    # Extract IMGT gene names and put into a dataframe
+    lookup = extract_imgt_genes(data_dir)
+
+    # Create 10X column by removing allele info (e.g. *01)
+    lookup['tenx'] = lookup['imgt'].apply(lambda x: x[:-3])
+
+    # Create Adaptive columns by adding letters and 0's
+    lookup['adaptive'] = lookup['imgt'].apply(lambda x: x.replace('TR', 'TCR').replace('-', '-0'))
+    lookup['adaptive'] = lookup['adaptive'].apply(lambda x: pad_single_digit(x))
+    lookup['adaptive_v2'] = lookup['adaptive']
+
+    # If converting from 10X will just need the first *01 allele
+    from_tenx = lookup.groupby('tenx').first()
+
+    # Save
+    lookup.to_csv(data_dir + '/lookup.csv', index=False)
+    from_tenx.to_csv(data_dir + '/lookup_from_tenx.csv')
