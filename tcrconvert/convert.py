@@ -2,10 +2,15 @@ import pandas as pd
 from importlib.resources import files
 
 # Standard column names for different sources of TCR data
-col_ref = {'tenx': ('v_gene', 'j_gene', 'cdr3'),
-           'adaptive': ('v_resolved', 'j_resolved', 'cdr3_amino_acid'),
-           'adaptive_v2': ('vMaxResolved', 'jMaxResolved', 'aminoAcid'),
-           'imgt': ('v_gene', 'j_gene', 'cdr3')}
+col_ref = {'adaptive': ('v_resolved', 'd_resolved', 'j_resolved', 'cdr3_amino_acid'),
+           'adaptive_v2': ('vMaxResolved', 'dMaxResolved', 'jMaxResolved', 'aminoAcid'),
+           'imgt': ('v_gene', 'd_gene', 'j_gene', 'cdr3'),
+           'tenx': ('v_gene', 'd_gene', 'j_gene', 'cdr3')}
+
+
+
+
+
 
 
 def convert_df(df,
@@ -55,32 +60,46 @@ def convert_df(df,
     else:
         cols_from = frm
 
+
+# 'v_gene', 'd_gene', 'j_gene', 'cdr3'
+
     # Column names to use for input and output
     # TODO: What if converting to imgt and want to update columns?
     if frm_cols:
         v_from = frm_cols[0]
-        j_from = frm_cols[1]
-        cdr3_from = frm_cols[2]
+        d_from = frm_cols[1]
+        j_from = frm_cols[2]
+        cdr3_from = frm_cols[3]
     else:
         v_from = col_ref[cols_from][0]
-        j_from = col_ref[cols_from][1]
-        cdr3_from = col_ref[cols_from][2]
+        d_from = col_ref[cols_from][1]
+        j_from = col_ref[cols_from][2]
+        cdr3_from = col_ref[cols_from][3]
 
     if rename_cols:
         v_to = col_ref[to][0]
-        j_to = col_ref[to][1]
-        cdr3_to = col_ref[to][2]
+        d_to = col_ref[to][1]
+        j_to = col_ref[to][2]
+        cdr3_to = col_ref[to][3]
     else:
         v_to = v_from
+        d_to = d_from
         j_to = j_from
         cdr3_to = cdr3_from
 
-    # Convert V and J genes
+    # Convert V genes
     v_genes = df[[v_from]].merge(lookup[[frm, to]], how='left',
                                  left_on=v_from, right_on=frm).\
         drop(columns=frm)
     v_genes_bad = v_genes[v_genes[to].isna()][v_from].tolist()
 
+    # Convert D genes
+    d_genes = df[[d_from]].merge(lookup[[frm, to]], how='left',
+                                 left_on=d_from, right_on=frm).\
+        drop(columns=frm)
+    d_genes_bad = d_genes[d_genes[to].isna()][d_from].tolist()
+
+    # Convert J genes
     j_genes = df[[j_from]].merge(lookup[[frm, to]], how='left',
                                  left_on=j_from, right_on=frm).\
         drop(columns=frm)
@@ -88,25 +107,28 @@ def convert_df(df,
 
     # Display genes we couldn't convert
     # TODO: have option to keep mangled gene names
-    if len(v_genes_bad + j_genes_bad) > 0:
+    if len(v_genes_bad + d_genes_bad + j_genes_bad) > 0:
         print('These genes are not in the IMGT reference and have replaced with NA. '
           'Please repair gene names manually and re-run:\n',
-          v_genes_bad + j_genes_bad)
+          v_genes_bad + d_genes_bad + j_genes_bad)
 
     # Consolidate converted data
     out = pd.DataFrame()
     out[v_to] = v_genes[to]
+    out[d_to] = d_genes[to]
     out[j_to] = j_genes[to]
     out[cdr3_to] = df[cdr3_from]
 
     # Swap out data in original dataframe
     out_df = df.copy()
     out_df[v_from] = out[v_to].values
+    out_df[d_from] = out[d_to].values
     out_df[j_from] = out[j_to].values
     out_df[cdr3_from] = out[cdr3_to].values
     out_df.rename(columns={v_from: v_to,
-                            j_from: j_to,
-                            cdr3_from: cdr3_to}, inplace = True)
+                           j_from: j_to,
+                           d_from: d_to,
+                           cdr3_from: cdr3_to}, inplace = True)
     return out_df
 
 
