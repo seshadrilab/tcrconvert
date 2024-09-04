@@ -2,10 +2,10 @@ import pandas as pd
 from importlib.resources import files
 
 # Standard column names for different sources of TCR data
-col_ref = {'adaptive': ('v_resolved', 'd_resolved', 'j_resolved'),
-           'adaptive_v2': ('vMaxResolved', 'dMaxResolved', 'jMaxResolved'),
-           'imgt': ('v_gene', 'd_gene', 'j_gene'),
-           'tenx': ('v_gene', 'd_gene', 'j_gene')}
+col_ref = {'adaptive': ('v_resolved', 'd_resolved', 'j_resolved', 'c_resolved'),
+           'adaptivev2': ('vMaxResolved', 'dMaxResolved', 'jMaxResolved', 'cMaxResolved'),
+           'imgt': ('v_gene', 'd_gene', 'j_gene', 'c_gene'),
+           'tenx': ('v_gene', 'd_gene', 'j_gene', 'c_gene')}
 
 
 # TODO: gracefully handle missing/NA values (shouldn't be printed as not in reference)
@@ -14,9 +14,9 @@ def convert_vdj(df, frm, to, frm_cols=None, species='human'):
 
     :param df: Dataframe of TCRs with gene names
     :type df: dataframe
-    :param frm: Starting format of TCR data ['tenx', 'adaptive', 'adaptive_v2', 'imgt']
+    :param frm: Starting format of TCR data ['tenx', 'adaptive', 'adaptivev2', 'imgt']
     :type frm: str
-    :param to: Format to convert TCR data to ['tenx', 'adaptive', 'adaptive_v2', 'imgt']
+    :param to: Format to convert TCR data to ['tenx', 'adaptive', 'adaptivev2', 'imgt']
     :type to: str
     :param frm_cols: List of current V, D and J gene column names
     :type frm_cols: list, optional

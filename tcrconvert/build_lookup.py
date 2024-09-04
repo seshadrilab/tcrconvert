@@ -84,11 +84,11 @@ def build_lookup_from_fastas(data_dir):
     # Create Adaptive columns by adding letters and 0's
     lookup['adaptive'] = lookup['imgt'].apply(lambda x: x.replace('TR', 'TCR').replace('-', '-0'))
     lookup['adaptive'] = lookup['adaptive'].apply(lambda x: pad_single_digit(x))
-    lookup['adaptive_v2'] = lookup['adaptive']
+    lookup['adaptivev2'] = lookup['adaptive']
 
     # If converting from 10X will just need the first *01 allele
     from_tenx = lookup.groupby('tenx').first()
 
-    # Save
-    lookup.to_csv(data_dir + '/lookup.csv', index=False)
-    from_tenx.to_csv(data_dir + '/lookup_from_tenx.csv')
+    # Remove duplicate rows and save
+    lookup.drop_duplicates().to_csv(data_dir + '/lookup.csv', index=False)
+    from_tenx.drop_duplicates().to_csv(data_dir + '/lookup_from_tenx.csv')
