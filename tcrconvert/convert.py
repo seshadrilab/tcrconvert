@@ -9,8 +9,9 @@ col_ref = {'adaptive': ('v_resolved', 'd_resolved', 'j_resolved', 'c_resolved'),
 
 
 # TODO: gracefully handle missing/NA values (shouldn't be printed as not in reference)
+# TODO: deal with situations where C, D or other column(s) are missing from input dataset (for now assume they'll be present)
 def convert_vdj(df, frm, to, frm_cols=None, species='human'):
-    '''Convert TCR V, D, and J gene names from one naming convention to another.
+    '''Convert TCR V, D, J and C gene names from one naming convention to another.
 
     :param df: Dataframe of TCRs with gene names
     :type df: dataframe
@@ -18,7 +19,7 @@ def convert_vdj(df, frm, to, frm_cols=None, species='human'):
     :type frm: str
     :param to: Format to convert TCR data to ['tenx', 'adaptive', 'adaptivev2', 'imgt']
     :type to: str
-    :param frm_cols: List of current V, D and J gene column names
+    :param frm_cols: List of custom V, D J, and C gene column names
     :type frm_cols: list, optional
     :param species: Name of data folder with desired lookup tables
     :type species: str, optional
@@ -47,14 +48,17 @@ def convert_vdj(df, frm, to, frm_cols=None, species='human'):
     else:
         cols_from = frm
 
+    # TODO: way to catch if user inputs fewer items than required
     if frm_cols:
         v_from = frm_cols[0]
         d_from = frm_cols[1]
         j_from = frm_cols[2]
+        c_from = frm_cols[3]
     else:
         v_from = col_ref[cols_from][0]
         d_from = col_ref[cols_from][1]
         j_from = col_ref[cols_from][2]
+        c_from = col_ref[cols_from][3]
 
     # Convert V genes
     v_genes = df[[v_from]].merge(lookup[[frm, to]], how='left',
@@ -74,17 +78,24 @@ def convert_vdj(df, frm, to, frm_cols=None, species='human'):
         drop(columns=frm)
     j_genes_bad = j_genes[j_genes[to].isna()][j_from].tolist()
 
+    # Convert C genes
+    c_genes = df[[c_from]].merge(lookup[[frm, to]], how='left',
+                                 left_on=c_from, right_on=frm).\
+        drop(columns=frm)
+    c_genes_bad = c_genes[c_genes[to].isna()][c_from].tolist()
+
     # Display genes we couldn't convert
-    # TODO: have option to keep mangled gene names
-    if len(v_genes_bad + d_genes_bad + j_genes_bad) > 0:
+    # TODO: still warn but keep mangled/missing in referece gene names
+    if len(v_genes_bad + d_genes_bad + j_genes_bad + c_genes_bad) > 0:
         print('Warning: These genes are not in the IMGT reference and have replaced with NA. '
           'Please fix the gene names and re-run:\n',
-          v_genes_bad + d_genes_bad + j_genes_bad)
+          v_genes_bad + d_genes_bad + j_genes_bad + c_genes_bad)
 
     # Swap out data in original dataframe
     out_df = df.copy()
     out_df[v_from] = v_genes[to].values
     out_df[d_from] = d_genes[to].values
     out_df[j_from] = j_genes[to].values
+    out_df[c_from] = c_genes[to].values
 
     return out_df
