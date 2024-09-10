@@ -89,6 +89,10 @@ def build_lookup_from_fastas(data_dir):
     # If converting from 10X will just need the first *01 allele
     from_tenx = lookup.groupby('tenx').first()
 
+    # Set Adaptive columns to NA for constant genes (Adaptive only captures VDJ)
+    lookup.loc[lookup['imgt'].str.contains('C'), ['adaptive', 'adaptivev2']] = 'NoData'
+    from_tenx.loc[from_tenx['imgt'].str.contains('C'), ['adaptive', 'adaptivev2']] = 'NoData'
+
     # Remove duplicate rows and save
     lookup.drop_duplicates().to_csv(data_dir + '/lookup.csv', index=False)
     from_tenx.drop_duplicates().to_csv(data_dir + '/lookup_from_tenx.csv')

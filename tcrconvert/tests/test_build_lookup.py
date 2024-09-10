@@ -36,7 +36,7 @@ def test_build_lookup_from_fastas():
     build_lookup.build_lookup_from_fastas(testdir)
 
     with open(testdir + 'lookup_from_tenx.csv') as lookup10x: 
-        assert lookup10x.read() == 'tenx,imgt,adaptive,adaptive_v2\n' \
+        assert lookup10x.read() == 'tenx,imgt,adaptive,adaptivev2\n' \
                                     'TRAJ1,TRAJ1*01,TCRAJ01*01,TCRAJ01*01\n' \
                                     'TRAJ10,TRAJ10*01,TCRAJ10*01,TCRAJ10*01\n' \
                                     'TRAJ11,TRAJ11*01,TCRAJ11*01,TCRAJ11*01\n' \
@@ -48,7 +48,7 @@ def test_build_lookup_from_fastas():
                                     'TRAV1-2,TRAV1-2*01,TCRAV01-02*01,TCRAV01-02*01\n'
 
     with open(testdir + 'lookup.csv') as lookup: 
-        assert lookup.read() == 'imgt,tenx,adaptive,adaptive_v2\n' \
+        assert lookup.read() == 'imgt,tenx,adaptive,adaptivev2\n' \
                                 'TRAJ1*01,TRAJ1,TCRAJ01*01,TCRAJ01*01\n' \
                                 'TRAJ10*01,TRAJ10,TCRAJ10*01,TCRAJ10*01\n' \
                                 'TRAJ11*01,TRAJ11,TCRAJ11*01,TCRAJ11*01\n' \

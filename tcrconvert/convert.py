@@ -2,8 +2,8 @@ import pandas as pd
 from importlib.resources import files
 
 # Standard column names for different sources of TCR data
-col_ref = {'adaptive': ('v_resolved', 'd_resolved', 'j_resolved', 'c_resolved'),
-           'adaptivev2': ('vMaxResolved', 'dMaxResolved', 'jMaxResolved', 'cMaxResolved'),
+col_ref = {'adaptive': ('v_resolved', 'd_resolved', 'j_resolved'),
+           'adaptivev2': ('vMaxResolved', 'dMaxResolved', 'jMaxResolved'),
            'imgt': ('v_gene', 'd_gene', 'j_gene', 'c_gene'),
            'tenx': ('v_gene', 'd_gene', 'j_gene', 'c_gene')}
 
@@ -39,6 +39,10 @@ def convert_vdj(df, frm, to, frm_cols=None, species='human'):
         lookup = pd.read_csv(lookup_f)
     except FileNotFoundError:
         print('Lookup table not found, please download IMGT reference FASTAs and run build_lookup_from_fastas()')
+
+    # Warn about no Adaptive C genes
+    if to == 'adaptive' or to == 'adaptivev2':
+        print('Warning: Adaptive only captures VDJ genes, any C genes will become NA.')
 
     # Figure out columns to use
     if frm == 'imgt' and not frm_cols:
