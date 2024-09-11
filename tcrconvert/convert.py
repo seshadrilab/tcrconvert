@@ -8,9 +8,7 @@ col_ref = {'adaptive': ('v_resolved', 'd_resolved', 'j_resolved'),
            'tenx': ('v_gene', 'd_gene', 'j_gene', 'c_gene')}
 
 
-# TODO: gracefully handle missing/NA values (shouldn't be printed as not in reference)
-# TODO: deal with situations where C, D or other column(s) are missing from input dataset (for now assume they'll be present)
-def convert_vdj(df, frm, to, frm_cols=None, species='human'):
+def convert_gene(df, frm, to, frm_cols=[], species='human'):
     '''Convert TCR V, D, J and C gene names from one naming convention to another.
 
     :param df: Dataframe of TCRs with gene names
