@@ -50,7 +50,7 @@ def extract_imgt_genes(data_dir):
 
 
 def pad_single_digit(s):
-    '''Add a '0' to single-digit gene names to match double-digit adaptive format.
+    '''Add a zero to single-digit gene names to match double-digit adaptive format.
 
     :param s: Gene name containing single-digit number(s)
     :type s: str

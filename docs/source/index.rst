@@ -4,25 +4,26 @@
    contain the root `toctree` directive.
 
 TCRconvert
-=========================================
+==========
 
 Convert TCR annotations between 10X, Adaptive, and IMGT formats
 ----------------------------------------------------------------
 
+The most popular TCR sequencing platforms (Adaptive and 10X) and the widely used [IMGT](https://www.imgt.org/IMGTindex/reference.php) reference all use different naming conventions for their TCR gene annotations. These are all the same gene:
+
+* 10X: `TRAV1-2`
+* Adaptive: `TCRAV01-02*01`
+* IMGT: `TRAV1-2*01`
+
+`tcrconvert` easily converts TCR annotations between formats.
+
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Contents:
 
-   getstarted
+   installation
+   usage
    datahandling
+   contributing
+   troubleshooting
    functions
-   api
-
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
