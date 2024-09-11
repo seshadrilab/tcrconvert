@@ -23,7 +23,7 @@ Becuase 10X does not provide allele-level information, all genes are assigned al
 
 
 Converting from IMGT
--------------------
+--------------------
 
 Becuase IMGT does not have standard column names, TCRconvert assumes 10X column names are used: 'v_gene', 'd_gene', 'j_gene', 'c_gene'. 
 If not, please specify using ``frm_cols=``.

@@ -24,6 +24,4 @@ The most popular TCR sequencing platforms (Adaptive and 10X) and the widely used
    installation
    usage
    datahandling
-   contributing
-   troubleshooting
    functions
