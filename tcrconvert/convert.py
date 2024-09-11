@@ -11,18 +11,20 @@ col_ref = {'adaptive': ('v_resolved', 'd_resolved', 'j_resolved'),
 def convert_gene(df, frm, to, frm_cols=[], species='human'):
     '''Convert TCR V, D, J and C gene names from one naming convention to another.
 
+    For AIRR use: frm_cols=['v_call', 'd_call', 'j_call', 'c_call']
+
     :param df: Dataframe of TCRs with gene names
-    :type df: dataframe
+    :type df: Pandas dataframe
     :param frm: Starting format of TCR data ['tenx', 'adaptive', 'adaptivev2', 'imgt']
     :type frm: str
     :param to: Format to convert TCR data to ['tenx', 'adaptive', 'adaptivev2', 'imgt']
     :type to: str
-    :param frm_cols: List of custom V, D J, and C gene column names
-    :type frm_cols: list, optional
+    :param frm_cols: List of custom gene column names. For AIRR use: ['v_call', 'd_call', 'j_call', 'c_call']
+    :type frm_cols: list of str, optional
     :param species: Name of data folder with desired lookup tables
     :type species: str, optional
     :return: Converted TCR data
-    :rtype: dataframe
+    :rtype: Pandas dataframe
     '''
 
     # Determine if we're using the 10X lookup table
