@@ -38,4 +38,4 @@ where = ["."]
 include = ["*"]
 
 [tool.setuptools.package-data]
-tcrconvert = ["data/*"]
+tcrconvert = ["data/**/*.csv"]
