@@ -1,4 +1,5 @@
 import pandas as pd
+import sys
 from importlib.resources import files
 
 # Standard column names for different sources of TCR data
@@ -39,6 +40,7 @@ def convert_gene(df, frm, to, frm_cols=[], species='human'):
         lookup = pd.read_csv(lookup_f)
     except FileNotFoundError:
         print('Lookup table not found, please download IMGT reference FASTAs and run build_lookup_from_fastas()')
+        sys.exit()  # Quit
 
     # Warn about no Adaptive C genes
     if to == 'adaptive' or to == 'adaptivev2':
