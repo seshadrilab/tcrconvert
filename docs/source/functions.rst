@@ -7,6 +7,8 @@ Functions
 
 .. autofunction:: build_lookup.extract_imgt_genes
 
+.. autofunction:: build_lookup.add_dash_one
+
 .. autofunction:: build_lookup.pad_single_digit
 
 .. autofunction:: build_lookup.build_lookup_from_fastas

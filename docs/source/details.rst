@@ -1,5 +1,5 @@
-Data Handling
-=============
+Details
+=======
 
 Here are some extra notes on how TCRconvert works.
 
@@ -38,8 +38,7 @@ Adaptive does not capture C genes, so all C genes become NA in the output data.
 AIRR data
 ---------
 
-The AIRR community specifies the columns to use in file of TCR data, but not the gene naming conventions. Those are still based on the TCR platform. 
-To use AIRR-formatted files, specify the AIRR column names using ``frm_cols=``.
+The AIRR community specifies column names, but not gene naming convention. To use AIRR-format files, specify their column names using ``frm_cols=``.
 
 
 Custom column names
@@ -48,10 +47,13 @@ Custom column names
 If you're not using standard 10X, Adaptive, or Adaptive V2 column names, please specify your column names using e.g. ``frm_cols=['myV', 'myD', 'myJ']``.
 
 
-Rhesus macaque TCRs
--------------------
+Gene names with "OR" or "DV"
+----------------------------
 
-Genes names for rhesus macaque were loaded from IMGT and `Gerdemann et al. (Front Immunol, 2022)<https://doi.org/10.3389/fimmu.2021.804932>`_.
+These are accounted for and can be seen in the ``lookup.csv`` tables.
 
-The rehsus macaque lookup table does not currently contain delta chain constant genes, so these are converted to NA.
 
+Multiple gene names, e.g. ``TCRAV01-02/12-02``
+----------------------------------------------
+
+These will become ``NA`` because they are not in the IMGT reference.
