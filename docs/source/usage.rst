@@ -1,4 +1,4 @@
 Usage
 =====
 
-usage.ipynb
+usage_nb.ipynb
