@@ -30,37 +30,192 @@ pip install .
 
 The lookup tables for translating gene names come pre-built from IMGT fasta files located under ``tcrconvert/data/``
 
-# Usage
+# Basic usage
 
-Load your 10X, Adaptive, or IMGT-formatted TCR data into a `pandas` dataframe. It may have come from files such as:
+**Load some 10X data**
 
-* 10X: `filtered_contig_annotations.csv`
-* Adaptive: `SAMPLE_TCRB.tsv`
-* IMGT: A custom CSV file
 
-Then, convert to your desired format:
-
-```
-import pandas as pd
+```python
 import tcrconvert
-
-df = pd.read_csv("filtered_contig_annotations.csv")
-converted = tcrconvert.convert_gene(df, frm='tenx', to='adaptive')    # From 10X to Adaptive
-```
-
-Availble formats to convert to or from are: `tenx`, `adaptive`, `adaptivev2`, or `imgt`
-
-
-To use Adaptive Immune Receptor Repertoire (AIRR) formatted files, simply specify the column names:
-
-```
 import pandas as pd
-import tcrconvert
 
-df = pd.read_csv("airr_rearrangement.tsv", sep='\t')
-converted = tcrconvert.convert_gene(df, frm='tenx', to='adaptive', 
-                                    frm_cols=['v_call', 'd_call', 'j_call', 'c_call'])
+tcr_file = '/Users/emmabishop/workspace/tcrconvert/tcrconvert/examples/example_10x.csv'
+
+tcrs = pd.read_csv(tcr_file)[['barcode', 'v_gene' , 'd_gene', 'j_gene', 'c_gene', 'cdr3']]
+tcrs
 ```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>barcode</th>
+      <th>v_gene</th>
+      <th>d_gene</th>
+      <th>j_gene</th>
+      <th>c_gene</th>
+      <th>cdr3</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>AAACCTGAGACCACGA-1</td>
+      <td>TRAV1-2</td>
+      <td>TRBD1</td>
+      <td>TRAJ12</td>
+      <td>TRAC</td>
+      <td>CAVMDSSYKLIF</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>AAACCTGAGACCACGA-1</td>
+      <td>TRBV6-1</td>
+      <td>TRBD2</td>
+      <td>TRBJ2-1</td>
+      <td>TRBC2</td>
+      <td>CASSGLAGGYNEQFF</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>AAACCTGAGGCTCTTA-1</td>
+      <td>TRBV6-4</td>
+      <td>TRBD2</td>
+      <td>TRBJ2-3</td>
+      <td>TRBC2</td>
+      <td>CASSGVAGGTDTQYF</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>AAACCTGAGGCTCTTA-1</td>
+      <td>TRAV1-2</td>
+      <td>TRBD1</td>
+      <td>TRAJ33</td>
+      <td>TRAC</td>
+      <td>CAVKDSNYQLIW</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>AAACCTGAGTGAACGC-1</td>
+      <td>TRBV2</td>
+      <td>TRBD1</td>
+      <td>TRBJ1-2</td>
+      <td>TRBC1</td>
+      <td>CASNQGLNYGYTF</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+**Convert gene names from the 10X format to the Adaptive format**
+
+
+```python
+new_tcrs = tcrconvert.convert_gene(tcrs, frm='tenx', to='adaptive')
+new_tcrs
+```
+
+    Warning: Converting from 10X which lacks allele info. Choosing *01 as allele for all genes.
+    Warning: Adaptive only captures VDJ genes, any C genes will become NA.
+
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>barcode</th>
+      <th>v_gene</th>
+      <th>d_gene</th>
+      <th>j_gene</th>
+      <th>c_gene</th>
+      <th>cdr3</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>AAACCTGAGACCACGA-1</td>
+      <td>TCRAV01-02*01</td>
+      <td>TCRBD01-01*01</td>
+      <td>TCRAJ12-01*01</td>
+      <td>&lt;NA&gt;</td>
+      <td>CAVMDSSYKLIF</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>AAACCTGAGACCACGA-1</td>
+      <td>TCRBV06-01*01</td>
+      <td>TCRBD02-01*01</td>
+      <td>TCRBJ02-01*01</td>
+      <td>&lt;NA&gt;</td>
+      <td>CASSGLAGGYNEQFF</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>AAACCTGAGGCTCTTA-1</td>
+      <td>TCRBV06-04*01</td>
+      <td>TCRBD02-01*01</td>
+      <td>TCRBJ02-03*01</td>
+      <td>&lt;NA&gt;</td>
+      <td>CASSGVAGGTDTQYF</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>AAACCTGAGGCTCTTA-1</td>
+      <td>TCRAV01-02*01</td>
+      <td>TCRBD01-01*01</td>
+      <td>TCRAJ33-01*01</td>
+      <td>&lt;NA&gt;</td>
+      <td>CAVKDSNYQLIW</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>AAACCTGAGTGAACGC-1</td>
+      <td>TCRBV02-01*01</td>
+      <td>TCRBD01-01*01</td>
+      <td>TCRBJ01-02*01</td>
+      <td>&lt;NA&gt;</td>
+      <td>CASNQGLNYGYTF</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 
 # Contributing
 
