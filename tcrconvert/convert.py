@@ -3,6 +3,7 @@ import sys
 from importlib.resources import files
 
 # Standard column names for different sources of TCR data
+# TODO: Generate 'resolved' column from 'gene' and 'allele' if missing in Adaptive data
 col_ref = {'adaptive': ('v_resolved', 'd_resolved', 'j_resolved'),
            'adaptivev2': ('vMaxResolved', 'dMaxResolved', 'jMaxResolved'),
            'imgt': ('v_gene', 'd_gene', 'j_gene', 'c_gene'),
@@ -48,7 +49,7 @@ def convert_gene(df, frm, to, frm_cols=[], species='human'):
 
     # Figure out columns to use
     if frm == 'imgt' and not frm_cols:
-        print('No column names provided for IMGT data, will use 10X column names:\n' 
+        print('No column names provided for IMGT data, will assume 10X column names:\n' 
                       + str(col_ref['tenx']))
         cols_from = 'tenx'
     if frm_cols:
@@ -65,10 +66,9 @@ def convert_gene(df, frm, to, frm_cols=[], species='human'):
     else:
         cols_from = col_ref[frm]
 
+    # TODO: Ensure all columns are in input dataframe
+
     # Loop through gene name columns, getting converted genes
-
-    # TODO: if from adaptive, add *01 to any gene lacking allele and note row #s where doing that
-
     new_genes = {}
     bad_genes = []
 
@@ -82,10 +82,10 @@ def convert_gene(df, frm, to, frm_cols=[], species='human'):
             continue
 
     # Display genes we couldn't convert
-    # TODO: still warn but keep mangled/missing in referece gene names
+    # TODO: still warn but keep original gene names instead of replace with NA
     if bad_genes:
         print('Warning: These genes are not in IMGT and will be replaced with NA.\n',
-                bad_genes
+                set(bad_genes)
         )
 
     # Swap out data in original dataframe
