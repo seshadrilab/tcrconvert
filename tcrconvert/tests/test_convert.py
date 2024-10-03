@@ -2,125 +2,120 @@ import pytest
 import pandas as pd
 import tcrconvert
 
-tenx_df = pd.DataFrame({'v_gene': ['TRAV12-1', 'TRBV16', 'TRGV3', 'TRDV3'],
-                        'd_gene': [pd.NA, 'TRBD2', pd.NA, 'TRDD2'],
-                        'j_gene': ['TRAJ12', 'TRBJ2-1', pd.NA, 'TRDJ2'],
-                        'c_gene': ['TRAC', 'TRBC1', 'TRGC1', pd.NA],
-                        'cdr3': ['CAVLIF', 'CASSGF', 'CASAAF', 'CASLLF']})
+imgt_df = pd.DataFrame({'v_gene': ['TRAV12-1*01', 'TRBV15*01'],
+                        'd_gene': [pd.NA, 'TRBD1*01'],
+                        'j_gene': ['TRAJ16*01', 'TRBJ2-5*01'],
+                        'c_gene': ['TRAC*01', 'TRBC2*01'],
+                        'cdr3': ['CAVLIF', 'CASSGF']})
 
-imgt_df = pd.DataFrame({'v_gene': ['TRAV12-1*01', 'TRBV16*02', 'TRGV3*01', 'TRDV3*01'],
-                        'd_gene': [pd.NA, 'TRBD2*01', pd.NA, 'TRDD2*01'],
-                        'j_gene': ['TRAJ12*01', 'TRBJ2-1*01', pd.NA, 'TRDJ2*01'],
-                        'c_gene': ['TRAC*01', 'TRBC1*01', 'TRGC1*01', pd.NA],
-                        'cdr3': ['CAVLIF', 'CASSGF', 'CASAAF', 'CASLLF']})
+tenx_df = pd.DataFrame({'v_gene': ['TRAV12-1', 'TRBV15'],
+                        'd_gene': [pd.NA, 'TRBD1'],
+                        'j_gene': ['TRAJ16', 'TRBJ2-5'],
+                        'c_gene': ['TRAC', 'TRBC2'],
+                        'cdr3': ['CAVLIF', 'CASSGF']})
 
-adapt_df = pd.DataFrame({'v_resolved': ['TCRAV12-01*01', 'TCRBV16*02', 'TCRGV03*01', 'TCRDV03*01'],
-                         'd_resolved': [pd.NA, 'TCRBD02*01', pd.NA,'TCRD0D02*01'],
-                         'j_resolved': ['TCRAJ12*01', 'TCRBJ02-01*01', pd.NA, 'TCRDJ02*01'],
-                         'cdr3_amino_acid': ['CAVLIF', 'CASSGF', 'CASAAF', 'CASLLF']})
+adapt_df = pd.DataFrame({'v_resolved': ['TCRAV12-01*01', 'TCRBV15-01*01'],
+                         'd_resolved': [pd.NA, 'TCRBD01-01*01'],
+                         'j_resolved': ['TCRAJ16-01*01', 'TCRBJ02-05*01'],
+                         'cdr3_amino_acid': ['CAVLIF', 'CASSGF']})
 
-adapt_v2_df = pd.DataFrame({'vMaxResolved': ['TCRAV12-01*01', 'TCRBV16*02', 'TCRGV03*01', 'TCRDV03*01'],
-                            'dMaxResolved': [pd.NA, 'TCRBD02*01', pd.NA, 'TCRD0D02*01'],
-                            'jMaxResolved': ['TCRAJ12*01', 'TCRBJ02-01*01', pd.NA, 'TCRDJ02*01'],
-                            'aminoAcid': ['CAVLIF', 'CASSGF', 'CASAAF', 'CASLLF']})
+adapt_v2_df = adapt_df.rename(columns={'v_resolved': 'vMaxResolved', 
+                                       'd_resolved': 'dMaxResolved',
+                                       'j_resolved': 'jMaxResolved',
+                                       'cdr3_amino_acid': 'aminoAcid'})
 
-tenx_to_imgt_df = pd.DataFrame({'v_gene': ['TRAV12-1*01', 'TRBV16*01', 'TRGV3*01','TRDV3*01'],
-                                'd_gene': [pd.NA, 'TRBD2*01', pd.NA, 'TRDD2*01'],
-                                'j_gene': ['TRAJ12*01', 'TRBJ2-1*01', pd.NA, 'TRDJ2*01'],
-                                'c_gene': ['TRAC*01', 'TRBC1*01', 'TRGC1*01', pd.NA],
-                                'cdr3': ['CAVLIF', 'CASSGF', 'CASAAF', 'CASLLF']})
+custom_df = imgt_df.rename(columns={'v_gene': 'myV',
+                                    'd_gene': 'myD',
+                                    'j_gene': 'myJ',
+                                    'c_gene': 'myC',
+                                    'cdr3': 'myCDR3'})
 
-tenx_to_adapt_df = pd.DataFrame({'v_gene': ['TCRAV12-01*01', 'TCRBV16*01', 'TCRGV03*01', 'TCRDV03*01'],
-                                 'd_gene': [pd.NA, 'TCRBD02*01', pd.NA, 'TCRD0D02*01'],
-                                 'j_gene': ['TCRAJ12*01', 'TCRBJ02-01*01', pd.NA, 'TCRDJ02*01'],
-                                 'c_gene': [pd.NA, pd.NA, pd.NA, pd.NA],
-                                 'cdr3': ['CAVLIF', 'CASSGF', 'CASAAF', 'CASLLF']})
+tenx_to_adapt_df = adapt_df.rename(columns={'v_resolved': 'v_gene', 
+                                            'd_resolved': 'd_gene',
+                                            'j_resolved': 'j_gene',
+                                            'cdr3_amino_acid': 'cdr3'})
+tenx_to_adapt_df.insert(3, 'c_gene', [pd.NA, pd.NA])
 
-imgt_to_adapt_df = pd.DataFrame({'v_gene': ['TCRAV12-01*01', 'TCRBV16*02', 'TCRGV03*01', 'TCRDV03*01'],
-                                 'd_gene': [pd.NA, 'TCRBD02*01', pd.NA, 'TCRD0D02*01'],
-                                 'j_gene': ['TCRAJ12*01', 'TCRBJ02-01*01', pd.NA, 'TCRDJ02*01'],
-                                 'c_gene': [pd.NA, pd.NA, pd.NA, pd.NA],
-                                 'cdr3': ['CAVLIF', 'CASSGF', 'CASAAF', 'CASLLF']})
+adapt_to_tenx_df = tenx_df.rename(columns={'v_gene': 'v_resolved',
+                                           'd_gene': 'd_resolved',
+                                           'j_gene': 'j_resolved',
+                                           'cdr3': 'cdr3_amino_acid'}).\
+                            drop(columns='c_gene')
 
-adapt_to_tenx_df = pd.DataFrame({'v_resolved': ['TRAV12-1', 'TRBV16', 'TRGV3', 'TRDV3'],
-                                 'd_resolved': [pd.NA, 'TRBD2', pd.NA, 'TRDD2'],
-                                 'j_resolved': ['TRAJ12', 'TRBJ2-1', pd.NA, 'TRDJ2'],
-                                 'cdr3_amino_acid': ['CAVLIF', 'CASSGF', 'CASAAF', 'CASLLF']})
+adapt_to_imgt_df = imgt_df.rename(columns={'v_gene': 'v_resolved',
+                                           'd_gene': 'd_resolved',
+                                           'j_gene': 'j_resolved',
+                                           'cdr3': 'cdr3_amino_acid'}).\
+                            drop(columns='c_gene')
 
-adapt_to_imgt_df = pd.DataFrame({'v_resolved': ['TRAV12-1*01', 'TRBV16*02', 'TRGV3*01', 'TRDV3*01'],
-                                 'd_resolved': [pd.NA, 'TRBD2*01', pd.NA, 'TRDD2*01'],
-                                 'j_resolved': ['TRAJ12*01', 'TRBJ2-1*01', pd.NA, 'TRDJ2*01'],
-                                 'cdr3_amino_acid': ['CAVLIF', 'CASSGF', 'CASAAF', 'CASLLF']})
+adaptv2_to_tenx_df = tenx_df.rename(columns={'v_gene': 'vMaxResolved',
+                                             'd_gene': 'dMaxResolved',
+                                             'j_gene': 'jMaxResolved',
+                                             'cdr3': 'aminoAcid'}).\
+                            drop(columns='c_gene')
 
-adaptv2_to_tenx_df = pd.DataFrame({'vMaxResolved': ['TRAV12-1', 'TRBV16', 'TRGV3', 'TRDV3'],
-                                   'dMaxResolved': [pd.NA, 'TRBD2', pd.NA, 'TRDD2'],
-                                   'jMaxResolved': ['TRAJ12', 'TRBJ2-1', pd.NA, 'TRDJ2'],
-                                   'aminoAcid': ['CAVLIF', 'CASSGF', 'CASAAF', 'CASLLF']})
+adaptv2_to_imgt_df = imgt_df.rename(columns={'v_gene': 'vMaxResolved',
+                                             'd_gene': 'dMaxResolved',
+                                             'j_gene': 'jMaxResolved',
+                                             'cdr3': 'aminoAcid'}).\
+                            drop(columns='c_gene')
 
-adaptv2_to_imgt_df = pd.DataFrame({'vMaxResolved': ['TRAV12-1*01', 'TRBV16*02', 'TRGV3*01', 'TRDV3*01'],
-                                   'dMaxResolved': [pd.NA, 'TRBD2*01', pd.NA, 'TRDD2*01'],
-                                   'jMaxResolved': ['TRAJ12*01', 'TRBJ2-1*01', pd.NA, 'TRDJ2*01'],
-                                   'aminoAcid': ['CAVLIF', 'CASSGF', 'CASAAF', 'CASLLF']})
- 
-custom_df = pd.DataFrame({'myV': ['TRAV12-1*01', 'TRBV16*02', 'TRGV3*01', 'TRDV3*01'],
-                          'myD': [pd.NA, 'TRBD2*01', pd.NA, 'TRDD2*01'],
-                          'myJ': ['TRAJ12*01', 'TRBJ2-1*01', pd.NA, 'TRDJ2*01'],
-                          'myC': ['TRAC*01', 'TRBC1*01', 'TRGC1*01', pd.NA],
-                          'myCDR3': ['CAVLIF', 'CASSGF', 'CASAAF', 'CASLLF']})
+custom_to_tenx_df = tenx_df.rename(columns={'v_gene': 'myV',
+                                            'd_gene': 'myD',
+                                            'j_gene': 'myJ',
+                                            'c_gene': 'myC',
+                                            'cdr3': 'myCDR3'})
 
-custom_to_tenx_df = pd.DataFrame({'myV': ['TRAV12-1', 'TRBV16', 'TRGV3', 'TRDV3'],
-                                  'myD': [pd.NA, 'TRBD2', pd.NA, 'TRDD2'],
-                                  'myJ': ['TRAJ12', 'TRBJ2-1', pd.NA, 'TRDJ2'],
-                                  'myC': ['TRAC', 'TRBC1', 'TRGC1', pd.NA],
-                                  'myCDR3': ['CAVLIF', 'CASSGF', 'CASAAF', 'CASLLF']})
+adapt_no_allele_df = pd.DataFrame({'v_resolved': ['TCRAV12-01', 'TCRBV15-01*01'],
+                                    'd_resolved': [pd.NA, 'TCRBD01-01'],
+                                    'j_resolved': ['TCRAJ16-01*01', 'TCRBJ02-05'],
+                                    'cdr3_amino_acid': ['CAVLIF', 'CASSGF']})
 
-# TODO: Test converting from all formats to themselves (e.g. tenx -> tenx)
-@pytest.mark.parametrize('df, frm, to, frm_cols, species, out', [
+@pytest.mark.parametrize('df, frm, to, species, frm_cols, out', [
     # 10X <-> Adaptive
-    (tenx_df, 'tenx', 'adaptive', None, 'human', tenx_to_adapt_df),
-    (tenx_df, 'tenx', 'adaptivev2', None, 'human', tenx_to_adapt_df),
-    (adapt_df, 'adaptive', 'tenx', None, 'human', adapt_to_tenx_df),
-    (adapt_v2_df, 'adaptivev2', 'tenx', None, 'human', adaptv2_to_tenx_df),
+    (tenx_df, 'tenx', 'adaptive', 'human', None, tenx_to_adapt_df),
+    (tenx_df, 'tenx', 'adaptivev2', 'human', None, tenx_to_adapt_df),
+    (adapt_df, 'adaptive', 'tenx', 'human', None, adapt_to_tenx_df),
+    (adapt_v2_df, 'adaptivev2', 'tenx', 'human', None, adaptv2_to_tenx_df),
     # 10X <-> IMGT
-    (tenx_df, 'tenx', 'imgt', None, 'human', tenx_to_imgt_df),
-    (imgt_df, 'imgt', 'tenx', None, 'human', tenx_df),
+    (tenx_df, 'tenx', 'imgt', 'human', None, imgt_df),
+    (imgt_df, 'imgt', 'tenx', 'human', None, tenx_df),
     # IMGT <-> Adaptive
-    (imgt_df, 'imgt', 'adaptive', None, 'human', imgt_to_adapt_df),
-    (imgt_df, 'imgt', 'adaptivev2', None, 'human', imgt_to_adapt_df),
-    (adapt_df, 'adaptive', 'imgt', None, 'human', adapt_to_imgt_df),
-    (adapt_v2_df, 'adaptivev2', 'imgt', None, 'human', adaptv2_to_imgt_df),
+    (imgt_df, 'imgt', 'adaptive', 'human', None, tenx_to_adapt_df),
+    (imgt_df, 'imgt', 'adaptivev2', 'human', None, tenx_to_adapt_df),
+    (adapt_df, 'adaptive', 'imgt', 'human', None, adapt_to_imgt_df),
+    (adapt_v2_df, 'adaptivev2', 'imgt', 'human', None, adaptv2_to_imgt_df),
     # Custom column names
-    (custom_df, 'imgt', 'tenx', ['myV', 'myD', 'myJ', 'myC'], 'human', custom_to_tenx_df),
+    (custom_df, 'imgt', 'tenx', 'human', ['myV', 'myD', 'myJ', 'myC'], custom_to_tenx_df),
     # MOUSE
-    (tenx_df, 'tenx', 'adaptive', None, 'mouse', tenx_to_adapt_df),
-    (tenx_df, 'tenx', 'adaptivev2', None, 'mouse', tenx_to_adapt_df),
-    (adapt_df, 'adaptive', 'tenx', None, 'mouse', adapt_to_tenx_df),
-    (adapt_v2_df, 'adaptivev2', 'tenx', None, 'mouse', adaptv2_to_tenx_df),
-    (tenx_df, 'tenx', 'imgt', None, 'mouse', tenx_to_imgt_df),
-    (imgt_df, 'imgt', 'tenx', None, 'mouse', tenx_df),
-    (imgt_df, 'imgt', 'adaptive', None, 'mouse', imgt_to_adapt_df),
-    (imgt_df, 'imgt', 'adaptivev2', None, 'mouse', imgt_to_adapt_df),
-    (adapt_df, 'adaptive', 'imgt', None, 'mouse', adapt_to_imgt_df),
-    (adapt_v2_df, 'adaptivev2', 'imgt', None, 'mouse', adaptv2_to_imgt_df),
-    (custom_df, 'imgt', 'tenx', ['myV', 'myD', 'myJ', 'myC'], 'mouse', custom_to_tenx_df),
+    (tenx_df, 'tenx', 'adaptive', 'mouse', None, tenx_to_adapt_df),
+    (tenx_df, 'tenx', 'adaptivev2', 'mouse', None, tenx_to_adapt_df),
+    (adapt_df, 'adaptive', 'tenx', 'mouse', None, adapt_to_tenx_df),
+    (adapt_v2_df, 'adaptivev2', 'tenx', 'mouse', None, adaptv2_to_tenx_df),
+    (tenx_df, 'tenx', 'imgt', 'mouse', None, imgt_df),
+    (imgt_df, 'imgt', 'tenx', 'mouse', None, tenx_df),
+    (imgt_df, 'imgt', 'adaptive', 'mouse', None, tenx_to_adapt_df),
+    (imgt_df, 'imgt', 'adaptivev2', 'mouse', None, tenx_to_adapt_df),
+    (adapt_df, 'adaptive', 'imgt', 'mouse', None, adapt_to_imgt_df),
+    (adapt_v2_df, 'adaptivev2', 'imgt', 'mouse', None, adaptv2_to_imgt_df),
+    (custom_df, 'imgt', 'tenx', 'mouse', ['myV', 'myD', 'myJ', 'myC'], custom_to_tenx_df),
     # RHESUS MACAQUE
-    (tenx_df, 'tenx', 'adaptive', None, 'macaque', tenx_to_adapt_df),
-    (tenx_df, 'tenx', 'adaptivev2', None, 'macaque', tenx_to_adapt_df),
-    (adapt_df, 'adaptive', 'tenx', None, 'macaque', adapt_to_tenx_df),
-    (adapt_v2_df, 'adaptivev2', 'tenx', None, 'macaque', adaptv2_to_tenx_df),
-    (tenx_df, 'tenx', 'imgt', None, 'macaque', tenx_to_imgt_df),
-    (imgt_df, 'imgt', 'tenx', None, 'macaque', tenx_df),
-    (imgt_df, 'imgt', 'adaptive', None, 'macaque', imgt_to_adapt_df),
-    (imgt_df, 'imgt', 'adaptivev2', None, 'macaque', imgt_to_adapt_df),
-    (adapt_df, 'adaptive', 'imgt', None, 'macaque', adapt_to_imgt_df),
-    (adapt_v2_df, 'adaptivev2', 'imgt', None, 'macaque', adaptv2_to_imgt_df),
-    (custom_df, 'imgt', 'tenx', ['myV', 'myD', 'myJ', 'myC'], 'macaque', custom_to_tenx_df)])
-def test_convert_gene(df, frm, to, frm_cols, species, out):
-    result = tcrconvert.convert_gene(df, frm, to, frm_cols, species)
+    (tenx_df, 'tenx', 'adaptive', 'macaque', None, tenx_to_adapt_df),
+    (tenx_df, 'tenx', 'adaptivev2', 'macaque', None, tenx_to_adapt_df),
+    (adapt_df, 'adaptive', 'tenx', 'macaque', None, adapt_to_tenx_df),
+    (adapt_v2_df, 'adaptivev2', 'tenx', 'macaque', None, adaptv2_to_tenx_df),
+    (tenx_df, 'tenx', 'imgt', 'macaque', None, imgt_df),
+    (imgt_df, 'imgt', 'tenx', 'macaque', None, tenx_df),
+    (imgt_df, 'imgt', 'adaptive', 'macaque', None, tenx_to_adapt_df),
+    (imgt_df, 'imgt', 'adaptivev2', 'macaque', None, tenx_to_adapt_df),
+    (adapt_df, 'adaptive', 'imgt', 'macaque', None, adapt_to_imgt_df),
+    (adapt_v2_df, 'adaptivev2', 'imgt', 'macaque', None, adaptv2_to_imgt_df),
+    (custom_df, 'imgt', 'tenx', 'macaque', ['myV', 'myD', 'myJ', 'myC'], custom_to_tenx_df),
+    # Some Adaptive genes without allele
+    (adapt_no_allele_df, 'adaptive', 'imgt', 'human', None, adapt_to_imgt_df)])
+def test_convert_gene(df, frm, to, species, frm_cols, out):
+    result = tcrconvert.convert_gene(df, frm, to, species, frm_cols)
     # Standardize the NA values so we can check for equality
-    result.fillna('blank', inplace=True)
-    out.fillna('blank', inplace=True)
-    pd.testing.assert_frame_equal(result, out)
-
-
-# TODO: Test bad gene names (mangled)
+    test_result = result.fillna('blank')
+    test_out = out.fillna('blank')
+    pd.testing.assert_frame_equal(test_result, test_out)
