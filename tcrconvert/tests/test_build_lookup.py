@@ -33,7 +33,7 @@ def test_pad_single_digit():
     s1 = 'TCRBV1-2'
     s2 = 'TCRBV11-2'
     assert build_lookup.pad_single_digit(s1) == 'TCRBV01-2'
-    assert build_lookup.pad_single_digit(s2) == 'TCRBV11-2'
+    assert build_lookup.pad_single_digit(s2) == s2
 
 
 def test_build_lookup_from_fastas():

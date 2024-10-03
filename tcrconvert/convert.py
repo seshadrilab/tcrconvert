@@ -10,7 +10,7 @@ col_ref = {'adaptive': ('v_resolved', 'd_resolved', 'j_resolved'),
            'tenx': ('v_gene', 'd_gene', 'j_gene', 'c_gene')}
 
 
-def convert_gene(df, frm, to, frm_cols=[], species='human'):
+def convert_gene(df, frm, to, species='human', frm_cols=[]):
     '''Convert TCR V, D, J and C gene names from one naming convention to another.
 
     For AIRR use: frm_cols=['v_call', 'd_call', 'j_call', 'c_call']
@@ -33,6 +33,10 @@ def convert_gene(df, frm, to, frm_cols=[], species='human'):
     if frm == 'tenx':
         lookup_f = files('tcrconvert') / 'data' / species / 'lookup_from_tenx.csv'
         print("Warning: Converting from 10X which lacks allele info. Choosing *01 as allele for all genes.")
+    elif frm == 'adaptive' or frm == 'adaptivev2':
+        lookup_f = files('tcrconvert') / 'data' / species / 'lookup_from_adaptive.csv'
+        if to == 'imgt':
+            print("Warning: Converting from Adaptive to IMGT. If a gene lacks allele, will choose *01 as allele.")
     else:
         lookup_f = files('tcrconvert') / 'data' / species / 'lookup.csv'
 
