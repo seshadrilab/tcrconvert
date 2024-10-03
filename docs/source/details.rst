@@ -16,6 +16,12 @@ Genes that are ``NA`` in the input dataframe will be ``NA`` in the output datafr
 Genes that are not in the lookup table (which is based on the IMGT reference) will be converted to ``NA``.
 
 
+Gamma-delta TCRs
+----------------
+
+Gamma and delta chain genes are included for all three species.
+
+
 Converting from 10X
 -------------------
 
