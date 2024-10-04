@@ -29,7 +29,16 @@ def convert_gene(df, frm, to, species='human', frm_cols=[]):
     :rtype: Pandas dataframe
     '''
 
-    # Determine if we're using the 10X lookup table
+    # Check that required input is ok
+    if frm == to:
+        logger.error('"frm" and "to" formats should be different.')
+        sys.exit(1)
+
+    if df.empty:
+        logger.error('Input dataframe is empty.')
+        sys.exit(1)
+
+    # Determine which lookup table to use
     if frm == 'tenx':
         lookup_f = files('tcrconvert') / 'data' / species / 'lookup_from_tenx.csv'
         print("Warning: Converting from 10X which lacks allele info. Choosing *01 as allele for all genes.")
