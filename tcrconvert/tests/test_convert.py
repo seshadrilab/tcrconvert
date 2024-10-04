@@ -100,17 +100,17 @@ adapt_no_allele_df = pd.DataFrame({'v_resolved': ['TCRAV12-01', 'TCRBV15-01*01']
     (adapt_v2_df, 'adaptivev2', 'imgt', 'mouse', None, adaptv2_to_imgt_df),
     (custom_df, 'imgt', 'tenx', 'mouse', ['myV', 'myD', 'myJ', 'myC'], custom_to_tenx_df),
     # RHESUS MACAQUE
-    (tenx_df, 'tenx', 'adaptive', 'macaque', None, tenx_to_adapt_df),
-    (tenx_df, 'tenx', 'adaptivev2', 'macaque', None, tenx_to_adapt_df),
-    (adapt_df, 'adaptive', 'tenx', 'macaque', None, adapt_to_tenx_df),
-    (adapt_v2_df, 'adaptivev2', 'tenx', 'macaque', None, adaptv2_to_tenx_df),
-    (tenx_df, 'tenx', 'imgt', 'macaque', None, imgt_df),
-    (imgt_df, 'imgt', 'tenx', 'macaque', None, tenx_df),
-    (imgt_df, 'imgt', 'adaptive', 'macaque', None, tenx_to_adapt_df),
-    (imgt_df, 'imgt', 'adaptivev2', 'macaque', None, tenx_to_adapt_df),
-    (adapt_df, 'adaptive', 'imgt', 'macaque', None, adapt_to_imgt_df),
-    (adapt_v2_df, 'adaptivev2', 'imgt', 'macaque', None, adaptv2_to_imgt_df),
-    (custom_df, 'imgt', 'tenx', 'macaque', ['myV', 'myD', 'myJ', 'myC'], custom_to_tenx_df),
+    (tenx_df, 'tenx', 'adaptive', 'rhesus', None, tenx_to_adapt_df),
+    (tenx_df, 'tenx', 'adaptivev2', 'rhesus', None, tenx_to_adapt_df),
+    (adapt_df, 'adaptive', 'tenx', 'rhesus', None, adapt_to_tenx_df),
+    (adapt_v2_df, 'adaptivev2', 'tenx', 'rhesus', None, adaptv2_to_tenx_df),
+    (tenx_df, 'tenx', 'imgt', 'rhesus', None, imgt_df),
+    (imgt_df, 'imgt', 'tenx', 'rhesus', None, tenx_df),
+    (imgt_df, 'imgt', 'adaptive', 'rhesus', None, tenx_to_adapt_df),
+    (imgt_df, 'imgt', 'adaptivev2', 'rhesus', None, tenx_to_adapt_df),
+    (adapt_df, 'adaptive', 'imgt', 'rhesus', None, adapt_to_imgt_df),
+    (adapt_v2_df, 'adaptivev2', 'imgt', 'rhesus', None, adaptv2_to_imgt_df),
+    (custom_df, 'imgt', 'tenx', 'rhesus', ['myV', 'myD', 'myJ', 'myC'], custom_to_tenx_df),
     # Some Adaptive genes without allele
     (adapt_no_allele_df, 'adaptive', 'imgt', 'human', None, adapt_to_imgt_df)])
 def test_convert_gene(df, frm, to, species, frm_cols, out):
