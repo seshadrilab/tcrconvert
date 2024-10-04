@@ -75,8 +75,8 @@ def convert_gene(df, frm, to, species='human', frm_cols=[]):
             logger.error('These columns are not in the input dataframe: %s', str(missing_cols))
             sys.exit(1)
         else:
-            logger.info('Using these custom column names: %s',
-                  str(frm_cols))
+            logger.info('Using these custom column names: %s', str(frm_cols))
+            cols_from = frm_cols
     else:
         cols_from = col_ref[frm]
 
