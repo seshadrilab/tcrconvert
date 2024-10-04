@@ -63,3 +63,9 @@ Multiple gene names, e.g. ``TCRAV01-02/12-02``
 ----------------------------------------------
 
 These will become ``NA`` because they are not in the IMGT reference.
+
+
+Non-human species
+----------------------------------------------
+
+IMGT reference FASTAs and gene tables were used to gather Rhesus macaque and mouse genes. Mouse genes inlcude those for "Mouse" and "Mouse C57BL/6J" in IMGT.
