@@ -22,7 +22,13 @@ Check out the full documentation here: [tcrconvert.readthedocs.io](https://tcrco
 
 `tcrconvert` requires `pandas`.
 
-You can install using `pip`. Clone this repo, then from the top-level folder run:
+You can install from GitHub using `pip`:
+
+```
+pip install git+https://github.com/seshadrilab/tcrconvert
+```
+
+Or clone this repo and from the top-level folder run:
 
 ```
 pip install .
