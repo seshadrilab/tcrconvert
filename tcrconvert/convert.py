@@ -104,9 +104,8 @@ def convert_gene(df, frm, to, species='human', frm_cols=[]):
     out_df = df.copy()
     for col in new_genes:
         out_df[col] = new_genes[col][to].values
-    
+
     # Replace NoData and np.nan with pd.NA
     out_df = out_df.replace('NoData', pd.NA).fillna(pd.NA)
-    out_df = out_df
 
     return out_df
