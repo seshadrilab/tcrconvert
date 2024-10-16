@@ -1,6 +1,7 @@
 import pytest
 import pandas as pd
-import tcrconvert
+from importlib.resources import files
+from tcrconvert import convert
 
 imgt_df = pd.DataFrame({'v_gene': ['TRAV12-1*01', 'TRBV15*01'],
                         'd_gene': [pd.NA, 'TRBD1*01'],
@@ -114,8 +115,28 @@ adapt_no_allele_df = pd.DataFrame({'v_resolved': ['TCRAV12-01', 'TCRBV15-01*01']
     # Some Adaptive genes without allele
     (adapt_no_allele_df, 'adaptive', 'imgt', 'human', None, adapt_to_imgt_df)])
 def test_convert_gene(df, frm, to, species, frm_cols, out):
-    result = tcrconvert.convert_gene(df, frm, to, species, frm_cols)
+    result = convert.convert_gene(df, frm, to, species, frm_cols)
     # Standardize the NA values so we can check for equality
     test_result = result.fillna('blank')
     test_out = out.fillna('blank')
     pd.testing.assert_frame_equal(test_result, test_out)
+
+
+def test_choose_lookup():
+    # Using 'human' for all these examples
+    lookup_tenx = files('tcrconvert') / 'data' / 'human' / 'lookup_from_tenx.csv'
+    lookup_adapt = files('tcrconvert') / 'data' / 'human'  / 'lookup_from_adaptive.csv'
+    lookup_imgt = files('tcrconvert') / 'data' / 'human' / 'lookup.csv'
+
+    # Species that doesn't exist
+    with pytest.raises(FileNotFoundError):
+        convert.choose_lookup('tenx', 'imgt', 'non-existent-species')
+
+    # From different 'frm' formats
+    assert convert.choose_lookup('tenx', 'imgt') == lookup_tenx
+    assert convert.choose_lookup('adaptivev2', 'imgt') == lookup_adapt
+    assert convert.choose_lookup('imgt', 'tenx') == lookup_imgt
+
+
+def test_which_frm_cols():
+    pass
