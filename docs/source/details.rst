@@ -1,71 +1,70 @@
-Details
-=======
+FAQ
+=====
 
-Here are some extra notes on how TCRconvert works.
+What gene columns are required for TCRconvert?
+------------------------------------------------
 
-Missing V, D, J, and/or C columns
----------------------------------
-
-TCRconvert converts data for the gene columns that are in your data, not all gene columns are required.
+TCRconvert expects at least one column to be converted (V, D, J, and/or C genes). Not all gene columns are required.
 
 
-Missing genes
--------------
+What happens if my input data has missing genes?
+--------------------------------------------------
 
-Genes that are ``NA`` in the input dataframe will be ``NA`` in the output dataframe. 
-Genes that are not in the lookup table (which is based on the IMGT reference) will be converted to ``NA``.
-
-
-Gamma-delta TCRs
-----------------
-
-Gamma and delta chain genes are included for all three species.
+Genes marked as ``NA`` in the input dataframe will also appear as ``NA`` in the output. 
+If any genes are not found in the lookup table (which is based on the IMGT reference), they will be converted to ``NA``.
 
 
-Converting from 10X
--------------------
+Are gamma-delta TCRs supported?
+----------------------------------
 
-Becuase 10X does not provide allele-level information, all genes are assigned allele ``*01``.
-
-
-Converting from IMGT
---------------------
-
-Becuase IMGT does not have standard column names, TCRconvert assumes 10X column names are used: 'v_gene', 'd_gene', 'j_gene', 'c_gene'. 
-If not, please specify using ``frm_cols=``.
+Yes, gamma and delta chain genes for human, mouse, and rhesus macaque are supported.
 
 
-Converting to Adaptive
-----------------------
+How does TCRconvert handle the lack of allele information from 10X?
+---------------------------------------------------------------------
 
-Adaptive does not capture C genes, so all C genes become NA in the output data.
-
-
-AIRR data
----------
-
-The AIRR community specifies column names, but not gene naming convention. To use AIRR-format files, specify their column names using ``frm_cols=``.
+Since 10X does not provide allele-level information, all genes are assigned the allele ``*01``.
 
 
-Custom column names
--------------------
+How does TCRconvert handle the lack of constant (C) genes from Adaptive?
+--------------------------------------------------------------------------
 
-If you're not using standard 10X, Adaptive, or Adaptive V2 column names, please specify your column names using e.g. ``frm_cols=['myV', 'myD', 'myJ']``.
-
-
-Gene names with "OR" or "DV"
-----------------------------
-
-These are accounted for and can be seen in the ``lookup.csv`` tables.
+Adaptive does not capture C genes, so all C genes in the output data will be set to ``NA``.
 
 
-Multiple gene names, e.g. ``TCRAV01-02/12-02``
-----------------------------------------------
+What column names are expected if I'm converting data from IMGT?
+------------------------------------------------------------------
 
-These will become ``NA`` because they are not in the IMGT reference.
+IMGT does not use standard column names, so TCRconvert assumes that the 10X column names (``v_gene``, ``d_gene``, ``j_gene``, ``c_gene``) are used. 
+If your data uses different names, specify them using the ``frm_cols=`` parameter.
 
 
-Non-human species
-----------------------------------------------
+How can I use AIRR-format files?
+----------------------------------
 
-IMGT reference FASTAs and gene tables were used to gather Rhesus macaque and mouse genes. Mouse genes inlcude those for "Mouse" and "Mouse C57BL/6J" in IMGT.
+Specify the AIRR column names you're using with ``frm_cols=`` and the gene naming convention with ``frm=``.
+
+
+What if I have custom column names?
+-------------------------------------
+
+If you're using non-standard column names that do not match 10X, Adaptive, or Adaptive V2 formats, specify your column names using ``frm_cols=``.
+
+
+How are gene names with "OR" or "DV" handled?
+-----------------------------------------------
+
+Gene names containing "OR" or "DV" are accounted for and can be found in the ``lookup.csv`` tables.
+
+
+What happens to multiple gene names like ``TCRAV01-02/12-02``?
+----------------------------------------------------------------
+
+These gene names will be converted to ``NA`` because they are not included in the IMGT reference.
+
+
+Are non-human species supported?
+----------------------------------
+
+Yes, IMGT reference FASTAs and gene tables were used to include genes for Rhesus macaque and mouse. 
+Mouse genes cover both "Mouse" and "Mouse C57BL/6J" as listed in IMGT.
