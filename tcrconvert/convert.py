@@ -99,6 +99,12 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], quiet=False):
     :rtype: pandas dataframe
     '''
 
+    # Set logging level
+    if quiet:
+        logger.setLevel(logging.ERROR)
+    else:
+        logger.setLevel(logging.WARNING)
+
     # Check that required input is ok
     if frm == to:
         logger.error('"frm" and "to" formats should be different.')
