@@ -30,3 +30,4 @@ with data frames TCRconvert saves researchers time and prevents errors from with
    usage
    faq
    functions
+   contributing
