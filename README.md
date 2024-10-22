@@ -8,15 +8,18 @@
 
 **Convert human T-cell receptor (TCR) annotations between 10X, Adaptive, and IMGT formats.**
 
-The most popular TCR sequencing platforms (Adaptive and 10X) and the widely used [IMGT](https://www.imgt.org/IMGTindex/reference.php) reference all use different naming conventions for their TCR gene annotations. These are all the same gene:
+The naming conventions for T-cell receptor (TCR) genes differ between sequencing 
+platforms and the IMGT reference. For example, the naming of TCR alpha chain variable \
+gene segment 1-2 allele 1 by the 10X and Adaptive platforms and in IMGT:
 
-* 10X: `TRAV1-2`
-* Adaptive: `TCRAV01-02*01`
-* IMGT: `TRAV1-2*01`
+* **10X**: TRAV1-2
+* **Adaptive**: TCRAV01-02*01
+* **IMGT**: TRAV1-2*01
 
-`tcrconvert` easily converts TCR annotations between formats.
+TCRconvert enhances TCR dataset interoperability by providing reliable format conversion across 10X, Adaptive, and IMGT-formatted data. Unlike existing tools that limit conversions to only two formats or require custom objects, TCRconvert works directly with data frames TCRconvert saves researchers time and prevents errors from with manual conversions. 
 
-Check out the full documentation here: [tcrconvert.readthedocs.io](https://tcrconvert.readthedocs.io/en/latest/)
+
+For full documentation, visit [tcrconvert.readthedocs.io](https://tcrconvert.readthedocs.io/en/latest/)
 
 # Installation
 
