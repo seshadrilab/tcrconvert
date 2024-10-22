@@ -1,7 +1,11 @@
 Functions
-=========
+===========
 
 .. autofunction:: convert.convert_gene
+
+.. autofunction:: convert.choose_lookup
+
+.. autofunction:: convert.which_frm_cols
 
 .. autofunction:: build_lookup.parse_imgt_fasta
 

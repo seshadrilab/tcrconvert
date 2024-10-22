@@ -14,16 +14,16 @@ col_ref = {'adaptive': ('v_resolved', 'd_resolved', 'j_resolved'),
 
 
 def choose_lookup(frm, to, species='human'):
-    '''Determine which lookup table to use and load it into a dataframe.
+    '''Determine which lookup table to use.
 
-    :param frm: Starting format of TCR data ['tenx', 'adaptive', 'adaptivev2', 'imgt']
+    :param frm: Input format of TCR data 
     :type frm: str
-    :param to: Format to convert TCR data to ['tenx', 'adaptive', 'adaptivev2', 'imgt']
+    :param to: Output format of TCR data ``['tenx', 'adaptive', 'adaptivev2', 'imgt']``
     :type to: str
-    :param species: Name of data folder with desired lookup tables
+    :param species: Species folder name under ``tcrconvert/data/``
     :type species: str, optional
-    :return: Lookup table
-    :rtype: Pandas dataframe
+    :return: Path to correct lookup table
+    :rtype: str
     '''
 
     # Determine which lookup table to use
@@ -48,13 +48,15 @@ def choose_lookup(frm, to, species='human'):
 def which_frm_cols(df, frm, frm_cols):
     '''Determine input columns to use for converting gene names.
 
+    For AIRR use: ``frm_cols=['v_call', 'd_call', 'j_call', 'c_call']``
+
     :param df: Dataframe of TCRs with gene names
-    :type df: Pandas dataframe
-    :param frm: Starting format of TCR data ['tenx', 'adaptive', 'adaptivev2', 'imgt']
+    :type df: pandas dataframe
+    :param frm: Input format of TCR data ``['tenx', 'adaptive', 'adaptivev2', 'imgt']``
     :type frm: str
-    :param frm_cols: List of custom gene column names. For AIRR use: ['v_call', 'd_call', 'j_call', 'c_call']
+    :param frm_cols: List of custom gene column names.
     :type frm_cols: list of str, optional
-    :return: List indicating which column names to use
+    :return: List of column names to use
     :rtype: list of str
     '''
 
@@ -76,23 +78,25 @@ def which_frm_cols(df, frm, frm_cols):
     return cols_from
 
 
-def convert_gene(df, frm, to, species='human', frm_cols=[]):
-    '''Convert TCR V, D, J and C gene names from one naming convention to another.
+def convert_gene(df, frm, to, species='human', frm_cols=[], quiet=False):
+    '''Convert T-cell receptor V, D, J, and/or C gene names from one naming convention to another.
 
-    For AIRR use: frm_cols=['v_call', 'd_call', 'j_call', 'c_call']
+    For AIRR use: ``frm_cols=['v_call', 'd_call', 'j_call', 'c_call']``
 
     :param df: Dataframe of TCRs with gene names
-    :type df: Pandas dataframe
-    :param frm: Starting format of TCR data ['tenx', 'adaptive', 'adaptivev2', 'imgt']
+    :type df: pandas dataframe
+    :param frm: Input format of TCR data ``['tenx', 'adaptive', 'adaptivev2', 'imgt']``
     :type frm: str
-    :param to: Format to convert TCR data to ['tenx', 'adaptive', 'adaptivev2', 'imgt']
+    :param to: Output format of TCR data ``['tenx', 'adaptive', 'adaptivev2', 'imgt']``
     :type to: str
-    :param frm_cols: List of custom gene column names. For AIRR use: ['v_call', 'd_call', 'j_call', 'c_call']
+    :param frm_cols: Custom V/D/J/C gene column names.
     :type frm_cols: list of str, optional
-    :param species: Name of data folder with desired lookup tables
+    :param species: Species folder name under ``tcrconvert/data/``.
     :type species: str, optional
+    :param quiet: Whether to suppress warning messages.
+    :type quiet: bool, optional
     :return: Converted TCR data
-    :rtype: Pandas dataframe
+    :rtype: pandas dataframe
     '''
 
     # Check that required input is ok

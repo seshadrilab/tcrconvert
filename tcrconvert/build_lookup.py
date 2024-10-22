@@ -3,12 +3,12 @@ import re
 import pandas as pd
 
 def parse_imgt_fasta(infile):
-    '''Extract gene names from an IMGT reference fasta.
+    '''Extract gene names from a reference FASTA.
 
-    :param infile: IMGT reference fasta for TRAV, TRAJ, TRBV, or TRBJ
+    :param infile: Path to FASTA file
     :type infile: str
     :return: Gene names
-    :rtype: list
+    :rtype: list of str
     '''
     
     # Read the file and extract lines starting with ">"
@@ -26,12 +26,12 @@ def parse_imgt_fasta(infile):
 
 
 def extract_imgt_genes(data_dir):
-    '''Extract gene names from all IMGT reference fasta files in a folder.
+    '''Extract gene names from all reference FASTA files in a folder.
 
-    :param data_dir: Directory containing IMGT reference fasta files
+    :param data_dir: Path to directory containing FASTA files
     :type data_dir: str
     :return: Gene names
-    :rtype: dataframe
+    :rtype: pandas dataframe
     '''
 
     fastas = []
@@ -50,13 +50,14 @@ def extract_imgt_genes(data_dir):
 
 
 def add_dash_one(s):
-    '''Add a '-01' to genes without gene-level designatinon in IMGT (e.g. human TRBV2)
+    '''Add a ``-01`` to genes without gene-level designatinon in IMGT (e.g. human TRBV2)
 
     :param s: Gene name
     :type s: str
-    :return: Gene name containing '-01' only if no '-' originally
+    :return: Gene name
     :rtype: str
     '''
+
     if '-' not in s:
         # Add -1 before allele
         return s.replace('*', '-01*')
@@ -71,6 +72,7 @@ def pad_single_digit(s):
     :return: Gene name containing double-digit numbers
     :rtype: str
     '''
+
     # Use regex to find a single digit preceded by letters and followed by a hyphen or asterisk
     updated_string = re.sub(r'([A-Za-z]+)(\d)([-\*])', r'\g<1>0\g<2>\g<3>', s)
     return updated_string
