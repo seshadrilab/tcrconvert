@@ -24,6 +24,12 @@ def choose_lookup(frm, to, species='human'):
     :type species: str, optional
     :return: Path to correct lookup table
     :rtype: str
+
+    :Example:
+
+    >>> import tcrconvert
+    >>> tcrconvert.choose_lookup('tenx', 'imgt')
+    '/path/to/data/human/lookup_from_tenx.csv'
     '''
 
     # Determine which lookup table to use
@@ -48,16 +54,22 @@ def choose_lookup(frm, to, species='human'):
 def which_frm_cols(df, frm, frm_cols):
     '''Determine input columns to use for converting gene names.
 
-    For AIRR use: ``frm_cols=['v_call', 'd_call', 'j_call', 'c_call']``
-
-    :param df: Dataframe of TCRs with gene names
-    :type df: pandas dataframe
+    :param df: Dataframe containing TCR gene names
+    :type df: DataFrame
     :param frm: Input format of TCR data ``['tenx', 'adaptive', 'adaptivev2', 'imgt']``
     :type frm: str
-    :param frm_cols: List of custom gene column names.
+    :param frm_cols: Custom column names to use
     :type frm_cols: list of str, optional
-    :return: List of column names to use
+    :return: Column names to use
     :rtype: list of str
+
+    :Example:
+
+    >>> import pandas as pd
+    >>> import tcrconvert
+    >>> df = pd.read_csv('path/to/10x_tcrs.csv')
+    >>> tcrconvert.which_frm_cols(df, 'tenx')
+    ['v_gene', 'd_gene', 'j_gene', 'c_gene']
     '''
 
     if frm == 'imgt' and not frm_cols:
@@ -81,10 +93,8 @@ def which_frm_cols(df, frm, frm_cols):
 def convert_gene(df, frm, to, species='human', frm_cols=[], quiet=False):
     '''Convert T-cell receptor V, D, J, and/or C gene names from one naming convention to another.
 
-    For AIRR use: ``frm_cols=['v_call', 'd_call', 'j_call', 'c_call']``
-
-    :param df: Dataframe of TCRs with gene names
-    :type df: pandas dataframe
+    :param df: Dataframe containing TCR gene names
+    :type df: DataFrame
     :param frm: Input format of TCR data ``['tenx', 'adaptive', 'adaptivev2', 'imgt']``
     :type frm: str
     :param to: Output format of TCR data ``['tenx', 'adaptive', 'adaptivev2', 'imgt']``
@@ -96,7 +106,21 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], quiet=False):
     :param quiet: Whether to suppress warning messages.
     :type quiet: bool, optional
     :return: Converted TCR data
-    :rtype: pandas dataframe
+    :rtype: DataFrame
+
+    :Example:
+
+    >>> import pandas as pd
+    >>> import tcrconvert
+    >>> tenx_df = pd.read_csv('path/to/10x_tcrs.csv')
+    >>> tenx_df
+            v_gene  d_gene   j_gene  c_gene    cdr3
+    0     TRAV12-1    <NA>   TRAJ16    TRAC  CAVLIF
+    1       TRBV15   TRBD1  TRBJ2-5   TRBC2  CASSGF
+    >>> tcrconvert.convert_gene(tenx_df, 'tenx', 'adaptive')
+              v_gene         d_gene         j_gene  c_gene    cdr3
+    0  TCRAV12-01*01           <NA>  TCRAJ16-01*01    <NA>  CAVLIF
+    1  TCRBV15-01*01  TCRBD01-01*01  TCRBJ02-05*01    <NA>  CASSGF
     '''
 
     # Set logging level

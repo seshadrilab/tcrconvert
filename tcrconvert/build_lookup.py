@@ -9,6 +9,16 @@ def parse_imgt_fasta(infile):
     :type infile: str
     :return: Gene names
     :rtype: list of str
+
+    :Example:
+
+    Given a FASTA file containing this header:
+
+    ``>SomeText|TRBV10-1*02|MoreText|``
+
+    >>> import tcrconvert
+    >>> tcrconver.parse_imgt_fasta('path/to/fasta')
+    ['TRBV10-1*02']
     '''
     
     # Read the file and extract lines starting with ">"
@@ -31,7 +41,21 @@ def extract_imgt_genes(data_dir):
     :param data_dir: Path to directory containing FASTA files
     :type data_dir: str
     :return: Gene names
-    :rtype: pandas dataframe
+    :rtype: DataFrame
+
+    :Example:
+
+    Given a folder with FASTA files containing these headers:
+
+    ``>SomeText|TRBV10-1*02|MoreText|``
+
+    ``>SomeText|TRAJ10*01|MoreText|``
+
+    >>> import tcrconvert
+    >>> tcrconvert.extract_imgt_genes('path/to/fasta/dir/')
+              imgt
+    0  TRBV10-1*02
+    1    TRAJ10*01
     '''
 
     fastas = []
@@ -50,12 +74,18 @@ def extract_imgt_genes(data_dir):
 
 
 def add_dash_one(s):
-    '''Add a ``-01`` to genes without gene-level designatinon in IMGT (e.g. human TRBV2)
+    '''Add a ``-01`` to genes without IMGT gene-level designatinon.
 
     :param s: Gene name
     :type s: str
     :return: Gene name
     :rtype: str
+
+    :Example:
+
+    >>> import tcrconvert
+    >>> tcrconvert.add_dash_one('TRBV2*01')
+    'TRBV2-01*01'
     '''
 
     if '-' not in s:
@@ -65,12 +95,18 @@ def add_dash_one(s):
 
 
 def pad_single_digit(s):
-    '''Add a zero to single-digit gene names to match double-digit adaptive format.
+    '''Add a zero to single-digit gene-level designatinon in gene names.
 
-    :param s: Gene name containing double and/or single-digit numbers
+    :param s: Gene name
     :type s: str
-    :return: Gene name containing double-digit numbers
+    :return: Gene name
     :rtype: str
+
+    :Example:
+
+    >>> import tcrconvert
+    >>> tcrconvert.pad_single_digit('TCRBV1-2')
+    'TCRBV01-2'
     '''
 
     # Use regex to find a single digit preceded by letters and followed by a hyphen or asterisk
@@ -79,11 +115,20 @@ def pad_single_digit(s):
 
 
 def build_lookup_from_fastas(data_dir):
-    '''Runs all functions necessary to make a lookup table.
+    '''Create these lookup tables within in a given directory that contains FASTA files:
 
-    :param data_dir: Directory containing IMGT reference fasta files
+    - lookup.csv
+    - lookup_from_tenx.csv
+    - lookup_from_adaptive.csv
+
+    :param data_dir: Directory containing FASTA files
     :type data_dir: str
     :return: None
+
+    :Example:
+
+    >>> import tcrconvert
+    >>> tcrconvert.build_lookup_from_fastas('path/to/fasta/dir/')
     '''
 
     # Extract IMGT gene names and put into a dataframe
