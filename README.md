@@ -21,7 +21,7 @@ across 10X, Adaptive, and IMGT-formatted data. Unlike existing tools that limit 
 to only two formats or require custom objects, TCRconvert works directly with data 
 frames TCRconvert saves researchers time and prevents errors from with manual conversions. 
 
-TCRconvert takes a Pandas DataFrame as input and produces a Pandas DataFrame with converted gene names as output.
+TCRconvert takes a Pandas DataFrame with at least one column of gene names as input. It produces a Pandas DataFrame with converted gene names as output.
 
 For full documentation, visit [tcrconvert.readthedocs.io](https://tcrconvert.readthedocs.io/en/latest/)
 
