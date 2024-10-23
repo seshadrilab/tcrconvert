@@ -24,6 +24,8 @@ with data frames TCRconvert saves researchers time and prevents errors from with
 
 TCRconvert takes a Pandas DataFrame with at least one column of gene names as input. It produces a Pandas DataFrame with converted gene names as output.
 
+View on `GitHub <https://github.com/seshadrilab/tcrconvert>`_.
+
 .. toctree::
    :maxdepth: 1
    :caption: Contents:
