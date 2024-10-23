@@ -139,4 +139,16 @@ def test_choose_lookup():
 
 
 def test_which_frm_cols():
-    pass
+    col_ref = {'adaptive': ['v_resolved', 'd_resolved', 'j_resolved'],
+               'adaptivev2': ['vMaxResolved', 'dMaxResolved', 'jMaxResolved'],
+               'imgt': ['v_gene', 'd_gene', 'j_gene', 'c_gene'],
+               'tenx': ['v_gene', 'd_gene', 'j_gene', 'c_gene']}
+
+    assert convert.which_frm_cols(adapt_df, 'adaptive') == col_ref['adaptive']
+    assert convert.which_frm_cols(adapt_v2_df, 'adaptivev2') == col_ref['adaptivev2']
+    assert convert.which_frm_cols(imgt_df, 'imgt') == col_ref['imgt']
+    assert convert.which_frm_cols(tenx_df, 'tenx') == col_ref['tenx']
+
+    # Custom columns
+    custom_col = ['myV', 'myD', 'myJ', 'myC']
+    assert convert.which_frm_cols(custom_df, 'tenx', frm_cols=custom_col) == custom_col
