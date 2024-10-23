@@ -122,6 +122,16 @@ def test_convert_gene(df, frm, to, species, frm_cols, out):
     pd.testing.assert_frame_equal(test_result, test_out)
 
 
+def test_convert_gene_input():
+    # Same input and output format
+    with pytest.raises(ValueError):
+        convert.convert_gene(tenx_df, 'tenx', 'tenx')
+
+    # Empty dataframe
+    with pytest.raises(ValueError):
+        convert.convert_gene(pd.DataFrame, 'tenx', 'imgt')
+
+
 def test_choose_lookup():
     # Using 'human' for all these examples
     lookup_tenx = files('tcrconvert') / 'data' / 'human' / 'lookup_from_tenx.csv'
@@ -152,3 +162,7 @@ def test_which_frm_cols():
     # Custom columns
     custom_col = ['myV', 'myD', 'myJ', 'myC']
     assert convert.which_frm_cols(custom_df, 'tenx', frm_cols=custom_col) == custom_col
+
+    # Non-existent column
+    with pytest.raises(ValueError):
+        convert.which_frm_cols(tenx_df, 'tenx', frm_cols=['v_gene', 'j_gene', 'x_gene'])
