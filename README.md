@@ -27,7 +27,7 @@ For full documentation, visit [tcrconvert.readthedocs.io](https://tcrconvert.rea
 
 # Installation
 
-`tcrconvert` requires `pandas`.
+TCRconvert runs on Windows, Mac OS, and Linux and requires `python >=3.9` and `pandas >= 1.5.0`.
 
 You can install from GitHub using `pip`:
 
