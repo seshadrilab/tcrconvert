@@ -7,10 +7,10 @@ logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 # Standard column names for different sources of TCR data
-col_ref = {'adaptive': ('v_resolved', 'd_resolved', 'j_resolved'),
-           'adaptivev2': ('vMaxResolved', 'dMaxResolved', 'jMaxResolved'),
-           'imgt': ('v_gene', 'd_gene', 'j_gene', 'c_gene'),
-           'tenx': ('v_gene', 'd_gene', 'j_gene', 'c_gene')}
+col_ref = {'adaptive': ['v_resolved', 'd_resolved', 'j_resolved'],
+           'adaptivev2': ['vMaxResolved', 'dMaxResolved', 'jMaxResolved'],
+           'imgt': ['v_gene', 'd_gene', 'j_gene', 'c_gene'],
+           'tenx': ['v_gene', 'd_gene', 'j_gene', 'c_gene']}
 
 
 def choose_lookup(frm, to, species='human'):
@@ -51,7 +51,7 @@ def choose_lookup(frm, to, species='human'):
         raise(FileNotFoundError)
 
 
-def which_frm_cols(df, frm, frm_cols):
+def which_frm_cols(df, frm, frm_cols=[]):
     '''Determine input columns to use for converting gene names.
 
     :param df: Dataframe containing TCR gene names
