@@ -20,7 +20,9 @@ gene segment 1-2 allele 1 by the 10X and Adaptive platforms and in IMGT:
 TCRconvert enhances TCR dataset interoperability by providing reliable format conversion 
 across 10X, Adaptive, and IMGT-formatted data. Unlike existing tools that limit 
 conversions to only two formats or require custom objects, TCRconvert works directly 
-with data frames TCRconvert saves researchers time and prevents errors from with manual conversions. 
+with data frames TCRconvert saves researchers time and prevents errors from with manual conversions.
+
+TCRconvert takes a Pandas DataFrame with at least one column of gene names as input. It produces a Pandas DataFrame with converted gene names as output.
 
 .. toctree::
    :maxdepth: 1
