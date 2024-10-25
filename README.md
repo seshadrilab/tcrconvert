@@ -10,7 +10,7 @@
 
 The naming conventions for T-cell receptor (TCR) genes differ between sequencing 
 platforms and the IMGT reference. For example, the naming of TCR alpha chain variable 
-gene segment 1-2 allele 1 by the 10X and Adaptive platforms and in IMGT:
+gene segment 1-2 allele 1:
 
 * **10X**: TRAV1-2
 * **Adaptive**: TCRAV01-02*01
@@ -19,7 +19,7 @@ gene segment 1-2 allele 1 by the 10X and Adaptive platforms and in IMGT:
 TCRconvert enhances TCR dataset interoperability by providing reliable format conversion 
 across 10X, Adaptive, and IMGT-formatted data. Unlike existing tools that limit conversions 
 to only two formats or require custom objects, TCRconvert works directly with data 
-frames TCRconvert saves researchers time and prevents errors from with manual conversions. 
+frames. TCRconvert saves researchers time and prevents errors from manual conversion.
 
 TCRconvert takes a Pandas DataFrame with at least one column of gene names as input. It produces a Pandas DataFrame with converted gene names as output.
 
@@ -27,7 +27,7 @@ For full documentation, visit [tcrconvert.readthedocs.io](https://tcrconvert.rea
 
 # Installation
 
-TCRconvert runs on Windows, Mac OS, and Linux and requires `python >=3.9` and `pandas >= 1.5.0`.
+TCRconvert runs on Windows, macOS, and Linux and requires `python >=3.9` and `pandas >= 1.5.0`.
 
 You can install from GitHub using `pip`:
 
