@@ -39,3 +39,6 @@ include = ["*"]
 
 [tool.setuptools.package-data]
 tcrconvert = ["data/**/*.csv"]
+
+[project.scripts]
+tcrconvert = "tcrconvert.cli:entry_point"
