@@ -179,7 +179,7 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], quiet=False):
     return out_df
 
 
-@click.command()
+@click.command(name='convert-gene', no_args_is_help=True)
 @click.option('--infile', help='Path to input CSV or TSV file containing TCR gene names')
 @click.option('--outfile', help='Path to output CSV or TSV file to save converted data')
 @click.option('--frm', help="Input format of TCR data: 'tenx', 'adaptive', 'adaptivev2', or 'imgt'")
@@ -191,25 +191,9 @@ def convert_gene_cli(infile, outfile, frm, to, species, frm_cols, quiet):
     '''Run command-line interface to convert T-cell receptor V, D, J, and/or C 
     gene names from one naming convention to another.
 
-    :param infile: Path to CSV or TSV file containing TCR gene names
-    :type infile: str
-    :param outfile: Path to CSV or TSV file to save converted data
-    :type outfile: str
-    :param frm: Input format of TCR data: 'tenx', 'adaptive', 'adaptivev2', or 'imgt'
-    :type frm: str
-    :param to: Output format of TCR data: 'tenx', 'adaptive', 'adaptivev2', or 'imgt'
-    :type to: str
-    :param species: Species folder name under 'tcrconvert/data/'.
-    :type species: str, optional
-    :param frm_cols: List of custom V/D/J/C gene column names.
-    :type frm_cols: str, optional
-    :param quiet: Whether to suppress warning messages.
-    :type quiet: bool, optional
-    :return: None
-
     :Example:
 
-    $ python convert.py --infile 10x_tcrs.csv --outfile converted.tsv --frm tenx --to adaptive --species mouse --frm_cols ['myV', 'myD', 'myJ'] --quiet
+    $ tcrconvert convert-gene --infile 10x_tcrs.csv --outfile converted.tsv --frm tenx --to adaptive --species mouse --frm_cols ['myV', 'myD', 'myJ'] --quiet
     '''
 
     # Check that input and output paths are CSV/TSV
@@ -235,7 +219,3 @@ def convert_gene_cli(infile, outfile, frm, to, species, frm_cols, quiet):
         out_df.to_csv(outfile)
     elif outfile.endswith('tsv'):
         out_df.to_csv(outfile, sep='\t')
-
-
-if __name__ == '__main__':
-    convert_gene_cli()
