@@ -1,6 +1,8 @@
 import pandas as pd
 from importlib.resources import files
 import logging
+import click
+import ast
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(message)s')
@@ -175,3 +177,65 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], quiet=False):
     out_df = out_df.replace('NoData', pd.NA).fillna(pd.NA)
 
     return out_df
+
+
+@click.command()
+@click.option('--infile', help='Path to input CSV or TSV file containing TCR gene names')
+@click.option('--outfile', help='Path to output CSV or TSV file to save converted data')
+@click.option('--frm', help="Input format of TCR data: 'tenx', 'adaptive', 'adaptivev2', or 'imgt'")
+@click.option('--to', help="Output format of TCR data: 'tenx', 'adaptive', 'adaptivev2', or 'imgt'")
+@click.option('--species', default='human', help="Species folder name under 'tcrconvert/data/'")
+@click.option('--frm_cols', default='[]', help='List of custom V/D/J/C gene column names.')
+@click.option('--quiet', is_flag=True, default=False, help='Whether to suppress warning messages.')
+def convert_gene_cli(infile, outfile, frm, to, species, frm_cols, quiet):
+    '''Run command-line interface to convert T-cell receptor V, D, J, and/or C 
+    gene names from one naming convention to another.
+
+    :param infile: Path to CSV or TSV file containing TCR gene names
+    :type infile: str
+    :param outfile: Path to CSV or TSV file to save converted data
+    :type outfile: str
+    :param frm: Input format of TCR data: 'tenx', 'adaptive', 'adaptivev2', or 'imgt'
+    :type frm: str
+    :param to: Output format of TCR data: 'tenx', 'adaptive', 'adaptivev2', or 'imgt'
+    :type to: str
+    :param species: Species folder name under 'tcrconvert/data/'.
+    :type species: str, optional
+    :param frm_cols: List of custom V/D/J/C gene column names.
+    :type frm_cols: str, optional
+    :param quiet: Whether to suppress warning messages.
+    :type quiet: bool, optional
+    :return: None
+
+    :Example:
+
+    $ python convert.py --infile 10x_tcrs.csv --outfile converted.tsv --frm tenx --to adaptive --species mouse --frm_cols ['myV', 'myD', 'myJ'] --quiet
+    '''
+
+    # Check that input and output paths are CSV/TSV
+    if not infile.endswith(('csv', 'tsv')):
+        logger.error('"infile" must be a .csv or .tsv file')
+        raise(ValueError)
+
+    if not outfile.endswith(('csv', 'tsv')):
+        logger.error('"outfile" must be a .csv or .tsv file')
+        raise(ValueError)
+
+    # Load data
+    if infile.endswith('csv'):
+        df = pd.read_csv(infile)
+    elif infile.endswith('tsv'):
+        df = pd.read_csv(infile, sep='\t')
+
+    # Convert gene names
+    out_df = convert_gene(df, frm, to, species, ast.literal_eval(frm_cols), quiet)
+
+    # Save output
+    if outfile.endswith('csv'):
+        out_df.to_csv(outfile)
+    elif outfile.endswith('tsv'):
+        out_df.to_csv(outfile, sep='\t')
+
+
+if __name__ == '__main__':
+    convert_gene_cli()
