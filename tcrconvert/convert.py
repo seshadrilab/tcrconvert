@@ -101,10 +101,10 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], quiet=False):
     :type frm: str
     :param to: Output format of TCR data ``['tenx', 'adaptive', 'adaptivev2', 'imgt']``
     :type to: str
-    :param frm_cols: Custom V/D/J/C gene column names.
-    :type frm_cols: list of str, optional
     :param species: Species folder name under ``tcrconvert/data/``.
     :type species: str, optional
+    :param frm_cols: Custom V/D/J/C gene column names.
+    :type frm_cols: list of str, optional
     :param quiet: Whether to suppress warning messages.
     :type quiet: bool, optional
     :return: Converted TCR data
