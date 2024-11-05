@@ -1,6 +1,7 @@
 import os
 import re
 import pandas as pd
+import click
 
 def parse_imgt_fasta(infile):
     '''Extract gene names from a reference FASTA.
@@ -114,8 +115,10 @@ def pad_single_digit(s):
     return updated_string
 
 
+@click.command(name='build-lookup', no_args_is_help=True)
+@click.argument('data_dir')
 def build_lookup_from_fastas(data_dir):
-    '''Create these lookup tables within in a given directory that contains FASTA files:
+    '''Create lookup tables within in a given directory that contains FASTA files:
 
     - lookup.csv
     - lookup_from_tenx.csv
