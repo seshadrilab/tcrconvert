@@ -115,8 +115,6 @@ def pad_single_digit(s):
     return updated_string
 
 
-@click.command(name='build-lookup', no_args_is_help=True)
-@click.argument('data_dir')
 def build_lookup_from_fastas(data_dir):
     '''Create lookup tables within in a given directory that contains FASTA files:
 
@@ -182,3 +180,16 @@ def build_lookup_from_fastas(data_dir):
     lookup.drop_duplicates().to_csv(data_dir + '/lookup.csv', index=False)
     from_tenx.drop_duplicates().to_csv(data_dir + '/lookup_from_tenx.csv', index=False)
     from_adaptive.drop_duplicates().to_csv(data_dir + '/lookup_from_adaptive.csv', index=False)
+
+
+@click.command(name='build-lookup', no_args_is_help=True)
+@click.argument('data_dir')
+def build_lookup_from_fastas_cli(data_dir):
+    '''Run command-line interface to create lookup tables within a folder of FASTA files.
+
+    :Example:
+
+    $ tcrconvert build-lookup path/to/fastas/
+    '''
+
+    build_lookup_from_fastas(data_dir)
