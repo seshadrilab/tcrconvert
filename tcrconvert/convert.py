@@ -220,6 +220,6 @@ def convert_gene_cli(infile, outfile, frm, to, species, frm_cols, quiet):
 
     # Save output
     if outfile.endswith('csv'):
-        out_df.to_csv(outfile)
+        out_df.to_csv(outfile, index=False)
     elif outfile.endswith('tsv'):
-        out_df.to_csv(outfile, sep='\t')
+        out_df.to_csv(outfile, sep='\t', index=False)
