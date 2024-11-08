@@ -46,7 +46,7 @@ def test_convert_gene_cli_errors():
 
     # Input not CSV/TSV
     with pytest.raises(ValueError):
-        result = CliRunner().invoke(entry_point, [
+        CliRunner().invoke(entry_point, [
             'convert-gene',
             '--infile', badinfile,
             '--outfile', out_tsv,
@@ -61,7 +61,7 @@ def test_convert_gene_cli_errors():
 
     # Output not CSV/TSV
     with pytest.raises(ValueError):
-        result = CliRunner().invoke(entry_point, [
+        CliRunner().invoke(entry_point, [
             'convert-gene',
             '--infile', in_csv,
             '--outfile', badoutfile,
