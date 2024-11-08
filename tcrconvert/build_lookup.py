@@ -182,10 +182,11 @@ def build_lookup_from_fastas(data_dir):
     from_adaptive.drop_duplicates().to_csv(data_dir + '/lookup_from_adaptive.csv', index=False)
 
 
+# Command-line version of build_lookup_from_fastas()
 @click.command(name='build-lookup', no_args_is_help=True)
 @click.argument('data_dir')
 def build_lookup_from_fastas_cli(data_dir):
-    '''Run command-line interface to create lookup tables within a folder of FASTA files.
+    '''Create lookup tables from within a folder of FASTA files.
 
     :Example:
 

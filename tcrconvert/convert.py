@@ -2,7 +2,6 @@ import pandas as pd
 from importlib.resources import files
 import logging
 import click
-import ast
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(message)s')
@@ -179,21 +178,24 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], quiet=False):
     return out_df
 
 
+# Command-line version of convert_gene()
 @click.command(name='convert-gene', no_args_is_help=True)
-@click.option('--infile', help='Path to input CSV or TSV file containing TCR gene names')
-@click.option('--outfile', help='Path to output CSV or TSV file to save converted data')
-@click.option('--frm', help="Input format of TCR data: 'tenx', 'adaptive', 'adaptivev2', or 'imgt'")
-@click.option('--to', help="Output format of TCR data: 'tenx', 'adaptive', 'adaptivev2', or 'imgt'")
-@click.option('--species', default='human', help="Species folder name under 'tcrconvert/data/'")
-@click.option('--frm_cols', default='[]', help='List of custom V/D/J/C gene column names.')
-@click.option('--quiet', is_flag=True, default=False, help='Whether to suppress warning messages.')
+@click.option('-i', '--infile', help='Path to input CSV or TSV', required=True)
+@click.option('-o', '--outfile', help='Path to output CSV or TSV', required=True)
+@click.option('-f', '--frm', help='Input format of TCR data', required=True,
+              type=click.Choice(['tenx', 'adaptive', 'adaptivev2', 'imgt'], case_sensitive=False))
+@click.option('-t', '--to', help='Output format of TCR data', required=True,
+              type=click.Choice(['tenx', 'adaptive', 'adaptivev2', 'imgt'], case_sensitive=False))
+@click.option('-s', '--species', default='human', help="Species folder name under 'tcrconvert/data/'", show_default=True)
+@click.option('-c', '--frm_cols', default=[], help='List of custom V/D/J/C gene column names.', show_default=True,
+              multiple=True)
+@click.option('-q', '--quiet', is_flag=True, default=False, help='Whether to suppress warning messages.', show_default=True)
 def convert_gene_cli(infile, outfile, frm, to, species, frm_cols, quiet):
-    '''Run command-line interface to convert T-cell receptor V, D, J, and/or C 
-    gene names from one naming convention to another.
+    '''Convert T-cell receptor V/D/J/C gene names.
 
-    :Example:
+    Example uisng custom input columns "myV, myD, myJ":
 
-    $ tcrconvert convert-gene --infile 10x_tcrs.csv --outfile converted.tsv --frm tenx --to adaptive --species mouse --frm_cols ['myV', 'myD', 'myJ'] --quiet
+    $ tcrconvert convert-gene --infile 10x_tcrs.csv --outfile converted.tsv --frm tenx --to adaptive --species mouse -c myV -c myD -c myJ --quiet
     '''
 
     # Check that input and output paths are CSV/TSV
