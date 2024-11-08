@@ -1,0 +1,2 @@
+myVgene,myDgene,myJgene,myCgene,myCDR3,antigen
+TRAV1-2,TRBD1,TRAJ12,TRAC,CAVMDSSYKLIF,Flu
