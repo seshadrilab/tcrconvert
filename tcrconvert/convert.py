@@ -164,8 +164,9 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], quiet=False):
 
     # Display genes we couldn't convert
     if bad_genes:
-        logger.warning('These genes are not in IMGT and will be replaced with NA:\n %s',
-                str(set(bad_genes)))
+        sorted_list = sorted(list(set(bad_genes)))
+        logger.warning('These genes are not in IMGT for this species and will be replaced with NA:\n %s',
+                str(sorted_list))
 
     # Swap out data in original dataframe
     out_df = df.copy()
@@ -214,7 +215,8 @@ def convert_gene_cli(infile, outfile, frm, to, species, frm_cols, quiet):
         df = pd.read_csv(infile, sep='\t')
 
     # Convert gene names
-    out_df = convert_gene(df, frm, to, species, ast.literal_eval(frm_cols), quiet)
+    # Cast frm_cols as list because will be read in from command line as tuple
+    out_df = convert_gene(df, frm, to, species, list(frm_cols), quiet)
 
     # Save output
     if outfile.endswith('csv'):
