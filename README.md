@@ -6,22 +6,17 @@
 [![tests](https://github.com/seshadrilab/tcrconvert/actions/workflows/pytest.yml/badge.svg)](https://github.com/seshadrilab/tcrconvert/actions/workflows/pytest.yml)
 [![Documentation Status](https://readthedocs.org/projects/tcrconvert/badge/?version=latest)](https://tcrconvert.readthedocs.io/en/latest/?badge=latest)
 
-**Convert human T-cell receptor (TCR) annotations between 10X, Adaptive, and IMGT formats.**
+**Rename T-cell receptor genes between 10X, Adaptive, and IMGT formats**
 
-The naming conventions for T-cell receptor (TCR) genes differ between sequencing 
-platforms and the IMGT reference. For example, the naming of TCR alpha chain variable 
-gene segment 1-2 allele 1:
+TCRconvert takes T-cell receptor (TCR) data containing V, D, J, and/or C genes from 10X, Adaptive, or other sequencing platforms and renames them from any of these formats to any other one:
 
 * **10X**: TRAV1-2
 * **Adaptive**: TCRAV01-02*01
 * **IMGT**: TRAV1-2*01
 
-TCRconvert enhances TCR dataset interoperability by providing reliable format conversion 
-across 10X, Adaptive, and IMGT-formatted data. Unlike existing tools that limit conversions 
-to only two formats or require custom objects, TCRconvert works directly with data 
-frames. TCRconvert saves researchers time and prevents errors from manual conversion.
+TCRconvert works with human, mouse, and rhesus macaque data out-of-the-box, but users can also add their own species (see [Using a custom reference](https://tcrconvert.readthedocs.io/en/latest/usage.html#Using-a-custom-reference)).
 
-TCRconvert takes a Pandas DataFrame with at least one column of gene names as input. It produces a Pandas DataFrame with converted gene names as output.
+TCRconvert helps researchers unify TCR datasets by converting them to a standard naming convention. It is fast, reliable, and prevents errors from manual conversions. Unlike other tools that require custom objects, TCRconvert works directly with Pandas DataFrames and CSV/TSV files.
 
 For full documentation, visit [tcrconvert.readthedocs.io](https://tcrconvert.readthedocs.io/en/latest/)
 
@@ -29,7 +24,9 @@ For full documentation, visit [tcrconvert.readthedocs.io](https://tcrconvert.rea
 
 TCRconvert runs on Windows, macOS, and Linux and requires `python >=3.9`, `pandas >= 1.5.0`, and `click >= 8.1.7`.
 
-You can install from GitHub using `pip`:
+TCRconvert runs on Windows, macOS, and Linux.
+
+Install from GitHub using `pip`:
 
 ```
 pip install git+https://github.com/seshadrilab/tcrconvert
