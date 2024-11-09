@@ -4,34 +4,57 @@
    contain the root `toctree` directive.
 
 TCRconvert
-==========
+===========
 
-Convert TCR annotations between 10X, Adaptive, and IMGT formats
-----------------------------------------------------------------
+Rename T-cell receptor genes between 10X, Adaptive, and IMGT formats
+---------------------------------------------------------------------
 
-The naming conventions for T-cell receptor (TCR) genes differ between sequencing 
-platforms and the IMGT reference. For example, the naming of TCR alpha chain variable 
-gene segment 1-2 allele 1:
+TCRconvert takes T-cell receptor (TCR) data containing V, D, J, and/or C genes 
+from 10X, Adaptive, or other sequencing platforms and renames them from any of 
+these formats to any other one:
 
-* 10X: TRAV1-2
-* Adaptive: TCRAV01-02*01
-* IMGT: TRAV1-2*01
+* **10X**: TRAV1-2
+* **Adaptive**: TCRAV01-02*01
+* **IMGT**: TRAV1-2*01
 
-TCRconvert enhances TCR dataset interoperability by providing reliable format conversion 
-across 10X, Adaptive, and IMGT-formatted data. Unlike existing tools that limit conversions 
-to only two formats or require custom objects, TCRconvert works directly with data 
-frames. TCRconvert saves researchers time and prevents errors from manual conversion.
+TCRconvert works with human, mouse, and rhesus macaque data out-of-the-box, but 
+users can also add their own species (see `Using a custom reference <https://tcrconvert.readthedocs.io/en/latest/usage.html#Using-a-custom-reference>`_).
 
-TCRconvert takes a Pandas DataFrame with at least one column of gene names as input. It produces a Pandas DataFrame with converted gene names as output.
+TCRconvert helps researchers unify TCR datasets by converting them to a standard 
+naming convention. It is fast, reliable, and prevents errors from manual conversions. 
+Unlike other tools that require custom objects, TCRconvert works directly with 
+Pandas DataFrames and CSV/TSV files.
+
+**You can use it two ways:**
+
+**1. As a library**:
+
+.. code-block:: python
+
+   import tcrconvert
+
+   tcrconvert.convert_gene()  # Convert gene names
+   tcrconvert.build_lookup_from_fastas()  # Create a custom reference
+
+
+**2. As a command-line tool**:
+
+.. code-block:: console
+
+   $ tcrconvert convert-gene  # Convert gene names
+   $ tcrconvert build-lookup  # Create a custom reference
+
 
 View on `GitHub <https://github.com/seshadrilab/tcrconvert>`_.
+
 
 .. toctree::
    :maxdepth: 1
    :caption: Contents:
 
    installation
-   usage
+   usage_library
+   usage_cli
    faq
    functions
    contributing
