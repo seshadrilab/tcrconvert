@@ -18,11 +18,31 @@ TCRconvert works with human, mouse, and rhesus macaque data out-of-the-box, but 
 
 TCRconvert helps researchers unify TCR datasets by converting them to a standard naming convention. It is fast, reliable, and prevents errors from manual conversions. Unlike other tools that require custom objects, TCRconvert works directly with Pandas DataFrames and CSV/TSV files.
 
-For full documentation, visit [tcrconvert.readthedocs.io](https://tcrconvert.readthedocs.io/en/latest/)
+**You can use it two ways:**
+
+**1. As a library**:
+```python
+import tcrconvert
+
+tcrconvert.convert_gene()  # Convert gene names
+tcrconvert.build_lookup_from_fastas()  # Create a custom reference
+```
+
+**2. As a command-line tool**:
+```bash
+$ tcrconvert convert-gene  # Convert gene names
+$ tcrconvert build-lookup  # Create a custom reference
+```
+
+For full documentation visit [tcrconvert.readthedocs.io](https://tcrconvert.readthedocs.io/en/latest/)
 
 # Installation
 
-TCRconvert runs on Windows, macOS, and Linux and requires `python >=3.9`, `pandas >= 1.5.0`, and `click >= 8.1.7`.
+Requirements:
+
+* `python >=3.9`
+* `pandas >= 1.5.0`
+* `click >= 8.1.7`
 
 TCRconvert runs on Windows, macOS, and Linux.
 
@@ -38,9 +58,7 @@ Or clone this repo and from the top-level folder run:
 pip install .
 ```
 
-The lookup tables for translating gene names come pre-built from IMGT fasta files located under ``tcrconvert/data/``
-
-# Basic usage
+# Basic usage (library)
 
 **Load some 10X data**
 
@@ -201,6 +219,53 @@ new_tcrs
   </tbody>
 </table>
 </div>
+
+
+# Basic usage (command-line)
+
+TCRconvert takes a `.csv` or `.tsv` file with at least one column of gene names as input. It produces a `.csv` or `.tsv` file with converted gene names as output.
+
+**Inspect our input 10X data**
+
+
+```
+$ cat ~/workspace/tcrconvert/tcrconvert/data/examples/example_10x.csv
+```
+
+    barcode,is_cell,contig_id,high_confidence,length,chain,v_gene,d_gene,j_gene,c_gene,full_length,productive,cdr3,cdr3_nt,reads,umis,raw_clonotype_id,raw_consensus_id
+    AAACCTGAGACCACGA-1,TRUE,AAACCTGAGACCACGA-1_contig_1,TRUE,521,TRA,TRAV1-2,TRBD1,TRAJ12,TRAC,TRUE,TRUE,CAVMDSSYKLIF,TGTGCTGTGATGGATAGCAGCTATAAATTGATCTTC,1569,2,clonotype16,clonotype16_consensus_1
+    AAACCTGAGACCACGA-1,TRUE,AAACCTGAGACCACGA-1_contig_3,TRUE,584,TRB,TRBV6-1,TRBD2,TRBJ2-1,TRBC2,TRUE,TRUE,CASSGLAGGYNEQFF,TGTGCCAGCAGTGGACTAGCGGGGGGCTACAATGAGCAGTTCTTC,5238,7,clonotype16,clonotype16_consensus_2
+    AAACCTGAGGCTCTTA-1,TRUE,AAACCTGAGGCTCTTA-1_contig_1,TRUE,551,TRB,TRBV6-4,TRBD2,TRBJ2-3,TRBC2,TRUE,TRUE,CASSGVAGGTDTQYF,TGTGCCAGCAGTGGGGTAGCGGGAGGCACAGATACGCAGTATTTT,3846,4,clonotype26,clonotype26_consensus_2
+    AAACCTGAGGCTCTTA-1,TRUE,AAACCTGAGGCTCTTA-1_contig_2,TRUE,518,TRA,TRAV1-2,TRBD1,TRAJ33,TRAC,TRUE,TRUE,CAVKDSNYQLIW,TGTGCTGTGAAGGATAGCAACTATCAGTTAATCTGG,2019,2,clonotype26,clonotype26_consensus_1
+    AAACCTGAGTGAACGC-1,TRUE,AAACCTGAGTGAACGC-1_contig_1,TRUE,674,TRB,TRBV2,TRBD1,TRBJ1-2,TRBC1,TRUE,TRUE,CASNQGLNYGYTF,TGTGCCAGCAATCAGGGCCTTAACTATGGCTACACCTTC,3002,6,clonotype81,clonotype81_consensus_2
+
+
+**Convert gene names from 10X to Adaptive**
+
+
+```
+$ tcrconvert convert-gene \
+    -i ~/workspace/tcrconvert/tcrconvert/data/examples/example_10x.csv \
+    -o ~/workspace/tcrconvert/tcrconvert/data/examples/converted_adapt.tsv \
+    --frm tenx \
+    --to adaptive
+```
+
+    WARNING - Adaptive only captures VDJ genes, any C genes will become NA.
+    WARNING - Converting from 10X which lacks allele info. Choosing *01 as allele for all genes.
+
+
+
+```
+$ cat ~/workspace/tcrconvert/tcrconvert/data/examples/converted_adapt.tsv
+```
+
+    barcode	is_cell	contig_id	high_confidence	length	chain	v_gene	d_gene	j_gene	c_gene	full_length	productive	cdr3	cdr3_nt	reads	umis	raw_clonotype_id	raw_consensus_id
+    AAACCTGAGACCACGA-1	TRUE	AAACCTGAGACCACGA-1_contig_1	TRUE	521	TRA	TCRAV01-02*01	TCRBD01-01*01	TCRAJ12-01*01		TRUE	TRUE	CAVMDSSYKLIF	TGTGCTGTGATGGATAGCAGCTATAAATTGATCTTC	1569	2	clonotype16	clonotype16_consensus_1
+    AAACCTGAGACCACGA-1	TRUE	AAACCTGAGACCACGA-1_contig_3	TRUE	584	TRB	TCRBV06-01*01	TCRBD02-01*01	TCRBJ02-01*01		TRUE	TRUE	CASSGLAGGYNEQFF	TGTGCCAGCAGTGGACTAGCGGGGGGCTACAATGAGCAGTTCTTC	5238	7	clonotype16	clonotype16_consensus_2
+    AAACCTGAGGCTCTTA-1	TRUE	AAACCTGAGGCTCTTA-1_contig_1	TRUE	551	TRB	TCRBV06-04*01	TCRBD02-01*01	TCRBJ02-03*01		TRUE	TRUE	CASSGVAGGTDTQYF	TGTGCCAGCAGTGGGGTAGCGGGAGGCACAGATACGCAGTATTTT	3846	4	clonotype26	clonotype26_consensus_2
+    AAACCTGAGGCTCTTA-1	TRUE	AAACCTGAGGCTCTTA-1_contig_2	TRUE	518	TRA	TCRAV01-02*01	TCRBD01-01*01	TCRAJ33-01*01		TRUE	TRUE	CAVKDSNYQLIW	TGTGCTGTGAAGGATAGCAACTATCAGTTAATCTGG	2019	2	clonotype26	clonotype26_consensus_1
+    AAACCTGAGTGAACGC-1	TRUE	AAACCTGAGTGAACGC-1_contig_1	TRUE	674	TRB	TCRBV02-01*01	TCRBD01-01*01	TCRBJ01-02*01		TRUE	TRUE	CASNQGLNYGYTF	TGTGCCAGCAATCAGGGCCTTAACTATGGCTACACCTTC	3002	6	clonotype81	clonotype81_consensus_2
 
 # Contributing
 
