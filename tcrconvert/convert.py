@@ -209,10 +209,12 @@ def convert_gene_cli(infile, outfile, frm, to, species, frm_cols, quiet):
         raise(ValueError)
 
     # Load data
+    # For our purposes, read in every column as string so that boolean values
+    # don't get converted from uppercase to capitalized, etc.
     if infile.endswith('csv'):
-        df = pd.read_csv(infile)
+        df = pd.read_csv(infile, dtype=str)
     elif infile.endswith('tsv'):
-        df = pd.read_csv(infile, sep='\t')
+        df = pd.read_csv(infile, sep='\t', dtype=str)
 
     # Convert gene names
     # Cast frm_cols as list because will be read in from command line as tuple
