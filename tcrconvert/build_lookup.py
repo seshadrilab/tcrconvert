@@ -190,7 +190,9 @@ def build_lookup_from_fastas_cli(data_dir):
 
     :Example:
 
-    $ tcrconvert build-lookup path/to/fastas/
+    .. code-block:: bash
+
+       $ tcrconvert build-lookup path/to/fastas/
     '''
 
     build_lookup_from_fastas(data_dir)

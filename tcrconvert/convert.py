@@ -194,9 +194,13 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], quiet=False):
 def convert_gene_cli(infile, outfile, frm, to, species, frm_cols, quiet):
     '''Convert T-cell receptor V/D/J/C gene names.
 
-    Example uisng custom input columns "myV, myD, myJ":
+    :Example:
 
-    $ tcrconvert convert-gene --infile 10x_tcrs.csv --outfile converted.tsv --frm tenx --to adaptive --species mouse -c myV -c myD -c myJ --quiet
+    Example uisng custom input columns 'myV', 'myD', 'myJ'
+
+    .. code-block:: bash
+
+       $ tcrconvert convert-gene --infile 10x_tcrs.csv --outfile converted.tsv --frm tenx --to adaptive --species mouse -c myV -c myD -c myJ --quiet
     '''
 
     # Check that input and output paths are CSV/TSV
