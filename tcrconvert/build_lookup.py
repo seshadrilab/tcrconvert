@@ -68,7 +68,7 @@ def extract_imgt_genes(data_dir):
     fastas = []
     for file in os.listdir(data_dir):
         if file.endswith('.fa') | file.endswith('.fasta'):
-            fastas.append(data_dir + file)
+            fastas.append(data_dir + "/" + file)
 
     # Extract gene names and put into a dataframe
     imgt = []
