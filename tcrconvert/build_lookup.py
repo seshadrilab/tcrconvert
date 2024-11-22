@@ -196,17 +196,26 @@ def build_lookup_from_fastas(data_dir, custom=False):
     from_adapt['adaptivev2'] = from_adapt['adaptive']
     from_adaptive = pd.concat([lookup2, from_adapt])[['adaptive', 'adaptivev2', 'imgt', 'tenx']]
 
+    # Determine where to save tables
+    if custom:
+        user_dir = user_data_dir("tcrconvert", "Emma Bishop")
+        os.makedirs(user_dir, exist_ok=True)
+        write_dir = user_dir
+    else:
+        write_dir = data_dir
+
     # Remove any duplicate rows and save
-    lookup.drop_duplicates().to_csv(data_dir + '/lookup.csv', index=False)
-    from_tenx.drop_duplicates().to_csv(data_dir + '/lookup_from_tenx.csv', index=False)
-    from_adaptive.drop_duplicates().to_csv(data_dir + '/lookup_from_adaptive.csv', index=False)
+    lookup.drop_duplicates().to_csv(write_dir + '/lookup.csv', index=False)
+    from_tenx.drop_duplicates().to_csv(write_dir + '/lookup_from_tenx.csv', index=False)
+    from_adaptive.drop_duplicates().to_csv(write_dir + '/lookup_from_adaptive.csv', index=False)
 
 
 # Command-line version of build_lookup_from_fastas()
 @click.command(name='build-lookup', no_args_is_help=True)
 @click.argument('data_dir')
-def build_lookup_from_fastas_cli(data_dir):
-    '''Create lookup tables from within a folder of FASTA files.
+@click.option('-c', '--custom', is_flag=True, default=False, help='Whether this is a custom reference.', show_default=True)
+def build_lookup_from_fastas_cli(data_dir, custom):
+    '''Create lookup tables from FASTA files (files ending in .fa or .fasta) in a given folder.
 
     :Example:
 
@@ -215,4 +224,4 @@ def build_lookup_from_fastas_cli(data_dir):
        $ tcrconvert build-lookup path/to/fastas/
     '''
 
-    build_lookup_from_fastas(data_dir)
+    build_lookup_from_fastas(data_dir, custom)
