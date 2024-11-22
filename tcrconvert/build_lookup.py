@@ -121,15 +121,17 @@ def pad_single_digit(s):
     return updated_string
 
 
-def build_lookup_from_fastas(data_dir):
-    '''Create lookup tables within in a given directory that contains FASTA files:
+def build_lookup_from_fastas(data_dir, custom=False):
+    '''Create lookup tables from FASTA files (files ending in .fa or .fasta) in a given folder:
 
     - lookup.csv
     - lookup_from_tenx.csv
     - lookup_from_adaptive.csv
 
-    :param data_dir: Directory containing FASTA files
+    :param data_dir: Directory containing FASTA files (.fa or .fasta)
     :type data_dir: str
+    :param custom: Whether this is a custom reference
+    :type custom: bool, optional
     :return: None
 
     :Example:
