@@ -139,6 +139,18 @@ def build_lookup_from_fastas(data_dir, custom=False):
     >>> import tcrconvert
     >>> tcrconvert.build_lookup_from_fastas('path/to/fasta/dir/')
     '''
+    data_dir = os.path.abspath(data_dir)
+
+    # Check that input directory exists and has at least one .fa or .fasta file
+    if not os.path.isdir(data_dir):
+        logger.error(f"'{data_dir}' doesn't exist or isn't a folder.")
+        raise ValueError()
+
+    # Check for at least one valid file
+    valid_files = [f for f in os.listdir(data_dir) if f.endswith(('.fa', '.fasta'))]
+    if not valid_files:
+        logger.error(f"There are no FASTA files (files that end with '.fa' or '.fasta') in '{data_dir}'")
+        raise ValueError()
 
     # Extract IMGT gene names and put into a dataframe
     lookup = extract_imgt_genes(data_dir)
