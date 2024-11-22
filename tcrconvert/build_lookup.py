@@ -2,6 +2,12 @@ import os
 import re
 import pandas as pd
 import click
+import logging
+from platformdirs import user_data_dir
+
+# Set up logging
+logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 def parse_imgt_fasta(infile):
     '''Extract gene names from a reference FASTA.
