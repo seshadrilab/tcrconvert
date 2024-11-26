@@ -41,8 +41,8 @@ Pandas DataFrames and CSV/TSV files.
 
 .. code-block:: console
 
-   $ tcrconvert convert-gene -i 10x.csv -o adaptive.tsv --frm tenx --to adaptive # Convert gene names
-   $ tcrconvert build-lookup path/to/fasta_dir/ # Create a custom reference
+   $ tcrconvert convert -i 10x.csv -o adaptive.tsv --frm tenx --to adaptive # Convert gene names
+   $ tcrconvert build path/to/fasta_dir/ # Create a custom reference
 
 
 View on `GitHub <https://github.com/seshadrilab/tcrconvert>`_.

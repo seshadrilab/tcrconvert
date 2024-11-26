@@ -30,8 +30,8 @@ tcrconvert.build_lookup_from_fastas('path/to/fasta_dir/')  # Create a custom ref
 
 **2. As a command-line tool**:
 ```bash
-$ tcrconvert convert-gene -i 10x.csv -o adaptive.tsv --frm tenx --to adaptive # Convert gene names
-$ tcrconvert build-lookup path/to/fasta_dir/ # Create a custom reference
+$ tcrconvert convert -i 10x.csv -o adaptive.tsv --frm tenx --to adaptive # Convert gene names
+$ tcrconvert build path/to/fasta_dir/ # Create a custom reference
 ```
 
 For full documentation visit [tcrconvert.readthedocs.io](https://tcrconvert.readthedocs.io/en/latest/)
@@ -244,7 +244,7 @@ $ cat ~/workspace/tcrconvert/tcrconvert/data/examples/example_10x.csv
 
 
 ```
-$ tcrconvert convert-gene \
+$ tcrconvert convert \
     -i ~/workspace/tcrconvert/tcrconvert/data/examples/example_10x.csv \
     -o ~/workspace/tcrconvert/tcrconvert/data/examples/converted_adapt.tsv \
     --frm tenx \

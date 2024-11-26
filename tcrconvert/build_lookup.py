@@ -183,7 +183,7 @@ def build_lookup_from_fastas(data_dir):
 
 
 # Command-line version of build_lookup_from_fastas()
-@click.command(name='build-lookup', no_args_is_help=True)
+@click.command(name='build', no_args_is_help=True)
 @click.argument('data_dir')
 def build_lookup_from_fastas_cli(data_dir):
     '''Create lookup tables from within a folder of FASTA files.
@@ -192,7 +192,7 @@ def build_lookup_from_fastas_cli(data_dir):
 
     .. code-block:: bash
 
-       $ tcrconvert build-lookup path/to/fastas/
+       $ tcrconvert build path/to/fastas/
     '''
 
     build_lookup_from_fastas(data_dir)
