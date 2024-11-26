@@ -196,7 +196,7 @@ def convert_gene_cli(infile, outfile, frm, to, species, frm_cols, quiet):
 
     :Example:
 
-    Example uisng custom input columns 'myV', 'myD', 'myJ'
+    Example using custom input columns 'myV', 'myD', 'myJ'
 
     .. code-block:: bash
 
