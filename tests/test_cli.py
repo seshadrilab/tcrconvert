@@ -10,7 +10,7 @@ out_tsv = os.path.dirname(os.path.abspath(tcrconvert.__file__)) + '/data/example
 
 def test_convert_gene_cli(caplog):
     result = CliRunner().invoke(entry_point, [
-        'convert-gene',
+        'convert',
         '--infile', in_csv,
         '--outfile', out_tsv,
         '--frm', 'tenx',
@@ -47,7 +47,7 @@ def test_convert_gene_cli_errors():
     # Input not CSV/TSV
     with pytest.raises(ValueError):
         CliRunner().invoke(entry_point, [
-            'convert-gene',
+            'convert',
             '--infile', badinfile,
             '--outfile', out_tsv,
             '--frm', 'tenx',
@@ -62,7 +62,7 @@ def test_convert_gene_cli_errors():
     # Output not CSV/TSV
     with pytest.raises(ValueError):
         CliRunner().invoke(entry_point, [
-            'convert-gene',
+            'convert',
             '--infile', in_csv,
             '--outfile', badoutfile,
             '--frm', 'tenx',
