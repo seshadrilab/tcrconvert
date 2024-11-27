@@ -74,11 +74,11 @@ def extract_imgt_genes(data_dir):
     return lookup_sorted
 
 
-def add_dash_one(s):
+def add_dash_one(gene_str):
     '''Add a ``-01`` to genes without IMGT gene-level designatinon.
 
-    :param s: Gene name
-    :type s: str
+    :param gene_str: Gene name
+    :type gene_str: str
     :return: Gene name
     :rtype: str
 
@@ -89,17 +89,17 @@ def add_dash_one(s):
     'TRBV2-01*01'
     '''
 
-    if '-' not in s:
+    if '-' not in gene_str:
         # Add -1 before allele
-        return s.replace('*', '-01*')
-    return s
+        return gene_str.replace('*', '-01*')
+    return gene_str
 
 
-def pad_single_digit(s):
+def pad_single_digit(gene_str):
     '''Add a zero to single-digit gene-level designatinon in gene names.
 
-    :param s: Gene name
-    :type s: str
+    :param gene_str: Gene name
+    :type gene_str: str
     :return: Gene name
     :rtype: str
 
@@ -111,7 +111,7 @@ def pad_single_digit(s):
     '''
 
     # Use regex to find a single digit preceded by letters and followed by a hyphen or asterisk
-    updated_string = re.sub(r'([A-Za-z]+)(\d)([-\*])', r'\g<1>0\g<2>\g<3>', s)
+    updated_string = re.sub(r'([A-Za-z]+)(\d)([-\*])', r'\g<1>0\g<2>\g<3>', gene_str)
     return updated_string
 
 
