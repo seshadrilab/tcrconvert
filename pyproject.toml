@@ -8,7 +8,8 @@ version = "0.1"
 dependencies = ["pandas>=1.5.0", "click>=8.1.7"]
 requires-python = ">= 3.9"
 authors = [
-    {name = "Emma Bishop", email = "emmab5@uw.edu"}
+  { name="Emma Bishop"},
+  { email="emmab5@uw.edu"}
 ]
 description = "Convert TCRs between 10X, Adaptive, and IMGT formats."
 readme = "README.md"
@@ -28,7 +29,7 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://example.com"
+Homepage = "https://tcrconvert.readthedocs.io/en/latest/"
 Documentation = "https://tcrconvert.readthedocs.io/en/latest/"
 Repository = "https://github.com/seshadrilab/tcrconvert.git"
 Issues = "https://github.com/seshadrilab/tcrconvert/issues"
