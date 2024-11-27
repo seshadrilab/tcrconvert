@@ -1,0 +1,13 @@
+build/*
+docs/build/*
+docs/source/generated/*
+env/
+tests/_pycache__/
+tcrconvert.egg-info/*
+tcrconvert/__pycache__/*
+tcrconvert/tests/__pycache__/*
+venv/
+*.pyc
+*.egg
+*.fa
+*.fasta
