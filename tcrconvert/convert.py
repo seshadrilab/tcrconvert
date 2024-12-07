@@ -135,7 +135,7 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], quiet=False):
         logger.error('"frm" and "to" formats should be different.')
         raise(ValueError)
     if df.empty:
-        logger.error('Input dataframe is empty.')
+        logger.error('Input data is empty.')
         raise(ValueError)
 
     # Warn about no Adaptive C genes if needed
@@ -181,7 +181,7 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], quiet=False):
 
 # Command-line version of convert_gene()
 @click.command(name='convert', no_args_is_help=True)
-@click.option('-i', '--infile', help='Path to input CSV or TSV', required=True)
+@click.option('-i', '--infile', help='Path to input CSV or TSV', required=True, type=click.Path(exists=True))
 @click.option('-o', '--outfile', help='Path to output CSV or TSV', required=True)
 @click.option('-f', '--frm', help='Input format of TCR data', required=True,
               type=click.Choice(['tenx', 'adaptive', 'adaptivev2', 'imgt'], case_sensitive=False))
@@ -205,12 +205,10 @@ def convert_gene_cli(infile, outfile, frm, to, species, frm_cols, quiet):
 
     # Check that input and output paths are CSV/TSV
     if not infile.endswith(('csv', 'tsv')):
-        logger.error('"infile" must be a .csv or .tsv file')
-        raise(ValueError)
+        raise click.BadParameter('"infile" must be a .csv or .tsv file')
 
     if not outfile.endswith(('csv', 'tsv')):
-        logger.error('"outfile" must be a .csv or .tsv file')
-        raise(ValueError)
+        raise click.BadParameter('"outfile" must be a .csv or .tsv file')
 
     # Load data
     # For our purposes, read in every column as string so that boolean values

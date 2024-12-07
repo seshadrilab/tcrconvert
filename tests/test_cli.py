@@ -45,8 +45,7 @@ def test_convert_gene_cli_errors():
     badoutfile = os.path.dirname(__file__) + '/data/badoutput.txt'
 
     # Input not CSV/TSV
-    with pytest.raises(ValueError):
-        CliRunner().invoke(entry_point, [
+    result_in = CliRunner().invoke(entry_point, [
             'convert',
             '--infile', badinfile,
             '--outfile', out_tsv,
@@ -58,10 +57,12 @@ def test_convert_gene_cli_errors():
             '-c', 'myJgene',
             '-c', 'myCgene'
         ], catch_exceptions=False)
+    
+    assert result_in.exit_code != 0
+    assert '"infile" must be a .csv or .tsv file' in result_in.output
 
     # Output not CSV/TSV
-    with pytest.raises(ValueError):
-        CliRunner().invoke(entry_point, [
+    result_out = CliRunner().invoke(entry_point, [
             'convert',
             '--infile', in_csv,
             '--outfile', badoutfile,
@@ -73,3 +74,6 @@ def test_convert_gene_cli_errors():
             '-c', 'myJgene',
             '-c', 'myCgene'
         ], catch_exceptions=False)
+
+    assert result_out.exit_code != 0
+    assert '"outfile" must be a .csv or .tsv file' in result_out.output

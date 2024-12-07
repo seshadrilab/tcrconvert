@@ -184,7 +184,7 @@ def build_lookup_from_fastas(data_dir):
 
 # Command-line version of build_lookup_from_fastas()
 @click.command(name='build', no_args_is_help=True)
-@click.argument('data_dir')
+@click.argument('data_dir', type=click.Path(exists=True))
 def build_lookup_from_fastas_cli(data_dir):
     '''Create lookup tables from within a folder of FASTA files.
 
