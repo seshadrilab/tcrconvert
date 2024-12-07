@@ -1,5 +1,4 @@
 import os
-import pytest
 from click.testing import CliRunner
 import tcrconvert
 from tcrconvert.cli import entry_point
