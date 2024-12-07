@@ -1,6 +1,7 @@
 import os
 import re
 import pandas as pd
+import click
 
 def parse_imgt_fasta(infile):
     '''Extract gene names from a reference FASTA.
@@ -73,11 +74,11 @@ def extract_imgt_genes(data_dir):
     return lookup_sorted
 
 
-def add_dash_one(s):
+def add_dash_one(gene_str):
     '''Add a ``-01`` to genes without IMGT gene-level designatinon.
 
-    :param s: Gene name
-    :type s: str
+    :param gene_str: Gene name
+    :type gene_str: str
     :return: Gene name
     :rtype: str
 
@@ -88,17 +89,17 @@ def add_dash_one(s):
     'TRBV2-01*01'
     '''
 
-    if '-' not in s:
+    if '-' not in gene_str:
         # Add -1 before allele
-        return s.replace('*', '-01*')
-    return s
+        return gene_str.replace('*', '-01*')
+    return gene_str
 
 
-def pad_single_digit(s):
+def pad_single_digit(gene_str):
     '''Add a zero to single-digit gene-level designatinon in gene names.
 
-    :param s: Gene name
-    :type s: str
+    :param gene_str: Gene name
+    :type gene_str: str
     :return: Gene name
     :rtype: str
 
@@ -110,12 +111,12 @@ def pad_single_digit(s):
     '''
 
     # Use regex to find a single digit preceded by letters and followed by a hyphen or asterisk
-    updated_string = re.sub(r'([A-Za-z]+)(\d)([-\*])', r'\g<1>0\g<2>\g<3>', s)
+    updated_string = re.sub(r'([A-Za-z]+)(\d)([-\*])', r'\g<1>0\g<2>\g<3>', gene_str)
     return updated_string
 
 
 def build_lookup_from_fastas(data_dir):
-    '''Create these lookup tables within in a given directory that contains FASTA files:
+    '''Create lookup tables within in a given directory that contains FASTA files:
 
     - lookup.csv
     - lookup_from_tenx.csv
@@ -179,3 +180,19 @@ def build_lookup_from_fastas(data_dir):
     lookup.drop_duplicates().to_csv(data_dir + '/lookup.csv', index=False)
     from_tenx.drop_duplicates().to_csv(data_dir + '/lookup_from_tenx.csv', index=False)
     from_adaptive.drop_duplicates().to_csv(data_dir + '/lookup_from_adaptive.csv', index=False)
+
+
+# Command-line version of build_lookup_from_fastas()
+@click.command(name='build', no_args_is_help=True)
+@click.argument('data_dir', type=click.Path(exists=True))
+def build_lookup_from_fastas_cli(data_dir):
+    '''Create lookup tables from within a folder of FASTA files.
+
+    :Example:
+
+    .. code-block:: bash
+
+       $ tcrconvert build path/to/fastas/
+    '''
+
+    build_lookup_from_fastas(data_dir)

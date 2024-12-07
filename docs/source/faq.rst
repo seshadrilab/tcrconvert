@@ -47,21 +47,21 @@ What column names should I use for my IMGT-formatted data?
 ------------------------------------------------------------
 
 IMGT does not have standard column names, so it's assumed that the 10X names are used: (``v_gene``, ``d_gene``, ``j_gene``, ``c_gene``). 
-To use other names, specify them as a list with ``frm_cols=``.
+To use other names, specify them as a list with ``frm_cols``.
 
 
 Can I input AIRR files?
 -------------------------
 
-Yes, just specify the AIRR column names, e.g. ``frm_cols=[‘v_call’, ‘d_call’, ‘j_call’, ‘c_call’]``. 
-Specify the current gene naming convention with ``frm=``.
+Yes, just specify the AIRR column names (``v_call``, ``d_call``, ``j_call``, ``c_call``) using ``frm_cols``. 
+You must still specify the input naming convention with ``frm``.
 
 
 What if I have custom column names?
 -------------------------------------
 
 If you're using non-standard column names that do not match 10X, Adaptive, or 
-Adaptive V2 formats, specify them as a list with ``frm_cols=``.
+Adaptive V2 formats, specify them with ``frm_cols``.
 
 
 What about odd names (e.g. ``TRAV14DV4``, ``TCRAV01-02/12-02``)?

@@ -7,6 +7,8 @@ Functions
 
 .. autofunction:: convert.which_frm_cols
 
+.. autofunction:: convert.convert_gene_cli
+
 .. autofunction:: build_lookup.parse_imgt_fasta
 
 .. autofunction:: build_lookup.extract_imgt_genes
@@ -16,3 +18,5 @@ Functions
 .. autofunction:: build_lookup.pad_single_digit
 
 .. autofunction:: build_lookup.build_lookup_from_fastas
+
+.. autofunction:: build_lookup.build_lookup_from_fastas_cli
