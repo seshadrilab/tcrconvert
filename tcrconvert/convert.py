@@ -215,17 +215,13 @@ def convert_gene_cli(infile, outfile, frm, to, species, frm_cols, quiet):
     # Load data
     # For our purposes, read in every column as string so that boolean values
     # don't get converted from uppercase to capitalized, etc.
-    if infile.endswith('csv'):
-        df = pd.read_csv(infile, dtype=str)
-    elif infile.endswith('tsv'):
-        df = pd.read_csv(infile, sep='\t', dtype=str)
+    sep_in = ',' if infile.endswith('csv') else '\t'
+    df = pd.read_csv(infile, sep=sep_in, dtype=str)
 
     # Convert gene names
     # Cast frm_cols as list because will be read in from command line as tuple
     out_df = convert_gene(df, frm, to, species, list(frm_cols), quiet)
 
     # Save output
-    if outfile.endswith('csv'):
-        out_df.to_csv(outfile, index=False)
-    elif outfile.endswith('tsv'):
-        out_df.to_csv(outfile, sep='\t', index=False)
+    sep_out = ',' if outfile.endswith('csv') else '\t'
+    out_df.to_csv(outfile, sep=sep_out, index=False)
