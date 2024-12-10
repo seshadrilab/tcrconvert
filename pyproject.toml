@@ -40,7 +40,7 @@ include = ["tcrconvert*"]
 exclude = ["build*", "dist*", "*.egg-info*"]
 
 [tool.setuptools.package-data]
-tcrconvert = ["data/**/*.csv"]
+tcrconvert = ["examples/*"]
 
 [project.scripts]
 tcrconvert = "tcrconvert.cli:entry_point"
