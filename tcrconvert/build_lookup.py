@@ -61,15 +61,12 @@ def extract_imgt_genes(data_dir):
     >>> import tcrconvert
     >>> fastadir = tcrconvert.get_example_path('fasta_dir') + '/'
     >>> tcrconvert.build_lookup.extract_imgt_genes(fastadir)
-    imgt
-    0	TRAV1*01
-    1	TRAV1*01
-    2	TRAV14/DV4*01
-    3	TRAV14/DV4*01
-    4	TRAV38-2/DV8*01
-    5	TRAV38-2/DV8*01
-    6	TRBV29/OR9-2*01
-    7	TRBVA/OR9-2*01
+                  imgt
+    0         TRAV1*01
+    1    TRAV14/DV4*01
+    2  TRAV38-2/DV8*01
+    3  TRBV29/OR9-2*01
+    4   TRBVA/OR9-2*01
     '''
 
     fastas = []
