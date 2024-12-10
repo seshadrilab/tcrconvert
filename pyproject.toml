@@ -36,7 +36,8 @@ Issues = "https://github.com/seshadrilab/tcrconvert/issues"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["*"]
+include = ["tcrconvert*"]
+exclude = ["build*", "dist*", "*.egg-info*"]
 
 [tool.setuptools.package-data]
 tcrconvert = ["data/**/*.csv"]
