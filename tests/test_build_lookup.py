@@ -1,4 +1,3 @@
-import os
 import pandas as pd
 from tcrconvert import build_lookup, utils
 
