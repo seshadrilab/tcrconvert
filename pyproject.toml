@@ -36,11 +36,11 @@ Issues = "https://github.com/seshadrilab/tcrconvert/issues"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["tcrconvert*"]
+include = ["tcrconvert*", "examples", "data"]
 exclude = ["build*", "dist*", "*.egg-info*"]
 
 [tool.setuptools.package-data]
-tcrconvert = ["examples/*"]
+tcrconvert = ["examples/**/*", "data/**/*"]
 
 [project.scripts]
 tcrconvert = "tcrconvert.cli:entry_point"
