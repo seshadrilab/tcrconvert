@@ -1,14 +1,13 @@
 import os
 from click.testing import CliRunner
-import tcrconvert
-from tcrconvert.cli import entry_point
+from tcrconvert import cli, utils
 
-in_csv = os.path.dirname(os.path.abspath(tcrconvert.__file__)) + '/data/examples/example_columns.csv'
-out_tsv = os.path.dirname(os.path.abspath(tcrconvert.__file__)) + '/data/examples/converted.tsv'
+in_csv = utils.get_example_path('customcols.csv')
+out_tsv = utils.get_example_path('converted_custom_adapt.tsv')
 
 
 def test_convert_gene_cli(caplog):
-    result = CliRunner().invoke(entry_point, [
+    result = CliRunner().invoke(cli.entry_point, [
         'convert',
         '--infile', in_csv,
         '--outfile', out_tsv,
@@ -44,7 +43,7 @@ def test_convert_gene_cli_errors():
     badoutfile = os.path.dirname(__file__) + '/data/badoutput.txt'
 
     # Input not CSV/TSV
-    result_in = CliRunner().invoke(entry_point, [
+    result_in = CliRunner().invoke(cli.entry_point, [
             'convert',
             '--infile', badinfile,
             '--outfile', out_tsv,
@@ -61,7 +60,7 @@ def test_convert_gene_cli_errors():
     assert '"infile" must be a .csv or .tsv file' in result_in.output
 
     # Output not CSV/TSV
-    result_out = CliRunner().invoke(entry_point, [
+    result_out = CliRunner().invoke(cli.entry_point, [
             'convert',
             '--infile', in_csv,
             '--outfile', badoutfile,

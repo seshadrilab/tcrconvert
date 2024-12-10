@@ -15,11 +15,14 @@ def parse_imgt_fasta(infile):
 
     Given a FASTA file containing this header:
 
-    ``>SomeText|TRBV10-1*02|MoreText|``
+    >SomeText|TRAV1*01|MoreText|
+    >SomeText|TRAV14/DV4*01|MoreText|
+    >SomeText|TRAV38-2/DV8*01|MoreText|
 
     >>> import tcrconvert
-    >>> tcrconver.parse_imgt_fasta('path/to/fasta')
-    ['TRBV10-1*02']
+    >>> fasta = tcrconvert.get_example_path('fasta_dir/test_trav.fa')
+    >>> tcrconvert.build_lookup.parse_imgt_fasta(fasta)
+    ['TRAV1*01', 'TRAV14/DV4*01', 'TRAV38-2/DV8*01']
     '''
     
     # Read the file and extract lines starting with ">"
@@ -48,15 +51,25 @@ def extract_imgt_genes(data_dir):
 
     Given a folder with FASTA files containing these headers:
 
-    ``>SomeText|TRBV10-1*02|MoreText|``
+    >SomeText|TRAV1*01|MoreText|
+    >SomeText|TRAV14/DV4*01|MoreText|
+    >SomeText|TRAV38-2/DV8*01|MoreText|
 
-    ``>SomeText|TRAJ10*01|MoreText|``
+    >SomeText|TRBV29/OR9-2*01|MoreText|
+    >SomeText|TRBVA/OR9-2*01|MoreText|
 
     >>> import tcrconvert
-    >>> tcrconvert.extract_imgt_genes('path/to/fasta/dir/')
-              imgt
-    0  TRBV10-1*02
-    1    TRAJ10*01
+    >>> fastadir = tcrconvert.get_example_path('fasta_dir') + '/'
+    >>> tcrconvert.build_lookup.extract_imgt_genes(fastadir)
+    imgt
+    0	TRAV1*01
+    1	TRAV1*01
+    2	TRAV14/DV4*01
+    3	TRAV14/DV4*01
+    4	TRAV38-2/DV8*01
+    5	TRAV38-2/DV8*01
+    6	TRBV29/OR9-2*01
+    7	TRBVA/OR9-2*01
     '''
 
     fastas = []
@@ -129,7 +142,8 @@ def build_lookup_from_fastas(data_dir):
     :Example:
 
     >>> import tcrconvert
-    >>> tcrconvert.build_lookup_from_fastas('path/to/fasta/dir/')
+    >>> fastadir = tcrconvert.get_example_path('fasta_dir') + '/'
+    >>> tcrconvert.build_lookup.build_lookup_from_fastas(fastadir)
     '''
 
     # Extract IMGT gene names and put into a dataframe
@@ -192,7 +206,7 @@ def build_lookup_from_fastas_cli(data_dir):
 
     .. code-block:: bash
 
-       $ tcrconvert build path/to/fastas/
+       $ tcrconvert build tcrconvert/examples/fasta_dir/
     '''
 
     build_lookup_from_fastas(data_dir)

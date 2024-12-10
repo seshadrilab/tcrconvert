@@ -68,8 +68,9 @@ def which_frm_cols(df, frm, frm_cols=[]):
 
     >>> import pandas as pd
     >>> import tcrconvert
-    >>> df = pd.read_csv('path/to/10x_tcrs.csv')
-    >>> tcrconvert.which_frm_cols(df, 'tenx')
+    >>> tcr_file = tcrconvert.get_example_path('tenx.csv')
+    >>> df = pd.read_csv(tcr_file)
+    >>> tcrconvert.convert.which_frm_cols(df, 'tenx')
     ['v_gene', 'd_gene', 'j_gene', 'c_gene']
     '''
 
@@ -113,15 +114,22 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], quiet=False):
 
     >>> import pandas as pd
     >>> import tcrconvert
-    >>> tenx_df = pd.read_csv('path/to/10x_tcrs.csv')
-    >>> tenx_df
-            v_gene  d_gene   j_gene  c_gene    cdr3
-    0     TRAV12-1    <NA>   TRAJ16    TRAC  CAVLIF
-    1       TRBV15   TRBD1  TRBJ2-5   TRBC2  CASSGF
-    >>> tcrconvert.convert_gene(tenx_df, 'tenx', 'adaptive')
-              v_gene         d_gene         j_gene  c_gene    cdr3
-    0  TCRAV12-01*01           <NA>  TCRAJ16-01*01    <NA>  CAVLIF
-    1  TCRBV15-01*01  TCRBD01-01*01  TCRBJ02-05*01    <NA>  CASSGF
+    >>> original = pd.read_csv(tcrconvert.get_example_path('tenx.csv'))
+    >>> original[['v_gene', 'd_gene', 'j_gene', 'c_gene', 'cdr3']]
+    v_gene	d_gene	j_gene	c_gene	cdr3
+    0	TRAV1-2	TRBD1	TRAJ12	TRAC	CAVMDSSYKLIF
+    1	TRBV6-1	TRBD2	TRBJ2-1	TRBC2	CASSGLAGGYNEQFF
+    2	TRBV6-4	TRBD2	TRBJ2-3	TRBC2	CASSGVAGGTDTQYF
+    3	TRAV1-2	TRBD1	TRAJ33	TRAC	CAVKDSNYQLIW
+    4	TRBV2	TRBD1	TRBJ1-2	TRBC1	CASNQGLNYGYTF
+    >>> converted = tcrconvert.convert_gene(original, 'tenx', 'adaptive', quiet=True)
+    >>> converted[['v_gene', 'd_gene', 'j_gene', 'c_gene', 'cdr3']]
+    v_gene	d_gene	j_gene	c_gene	cdr3
+    0	TCRAV01-02*01	TCRBD01-01*01	TCRAJ12-01*01	<NA>	CAVMDSSYKLIF
+    1	TCRBV06-01*01	TCRBD02-01*01	TCRBJ02-01*01	<NA>	CASSGLAGGYNEQFF
+    2	TCRBV06-04*01	TCRBD02-01*01	TCRBJ02-03*01	<NA>	CASSGVAGGTDTQYF
+    3	TCRAV01-02*01	TCRBD01-01*01	TCRAJ33-01*01	<NA>	CAVKDSNYQLIW
+    4	TCRBV02-01*01	TCRBD01-01*01	TCRBJ01-02*01	<NA>	CASNQGLNYGYTF
     '''
 
     # Set logging level
@@ -200,7 +208,15 @@ def convert_gene_cli(infile, outfile, frm, to, species, frm_cols, quiet):
 
     .. code-block:: bash
 
-       $ tcrconvert convert --infile 10x_tcrs.csv --outfile converted.tsv --frm tenx --to adaptive --species mouse -c myV -c myD -c myJ --quiet
+       $ tcrconvert convert --infile tcrconvert/examples/customcols.csv \
+                            --outfile tcrconvert/examples/custom2adapt.tsv \
+                            --frm tenx \
+                            --to adaptive \
+                            --species mouse \
+                            -c myV \
+                            -c myD \
+                            -c myJ \
+                            --quiet
     '''
 
     # Check that input and output paths are CSV/TSV
