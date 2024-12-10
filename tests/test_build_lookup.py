@@ -16,21 +16,21 @@ def test_extract_imgt_genes():
                                     'TRAV38-2/DV8*01',
                                     'TRBV29/OR9-2*01',
                                     'TRBVA/OR9-2*01']})
-    pd.testing.assert_frame_equal(testdf, outdf)
+    pd.testing.assert_frame_equal(df, outdf)
 
 
 def test_add_dash_one():
-    s1 = 'TRBV2*01'
-    s2 = 'TRBV1-01*01'
-    assert build_lookup.add_dash_one(s1) == 'TRBV2-01*01'
-    assert build_lookup.add_dash_one(s2) == s2
+    gene_str1 = 'TRBV2*01'
+    gene_str2 = 'TRBV1-01*01'
+    assert build_lookup.add_dash_one(gene_str1) == 'TRBV2-01*01'
+    assert build_lookup.add_dash_one(gene_str2) == gene_str2
 
 
 def test_pad_single_digit():
-    s1 = 'TCRBV1-2'
-    s2 = 'TCRBV11-2'
-    assert build_lookup.pad_single_digit(s1) == 'TCRBV01-2'
-    assert build_lookup.pad_single_digit(s2) == s2
+    gene_str1 = 'TCRBV1-2'
+    gene_str2 = 'TCRBV11-2'
+    assert build_lookup.pad_single_digit(gene_str1) == 'TCRBV01-2'
+    assert build_lookup.pad_single_digit(gene_str2) == gene_str2
 
 
 def test_build_lookup_from_fastas():
