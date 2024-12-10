@@ -10,11 +10,11 @@ Testing
 It's essential that you write tests for any new code that performs actions (not documentation changes). 
 You should also run the current test suite to ensure your code doesn't break anything.
 
-To get started, first install the necessary testing and documentation dependencies listed in ``requirements-dev.txt``:
+To get started, first install the necessary testing and documentation dependencies listed in ``pyproject.toml``:
 
 .. code-block:: console
 
-   $ pip install -r requirements-dev.txt
+   $ pip install .[dev]
 
 Then you can run tests using ``pytest`` from the root of the GitHub repository:
 
