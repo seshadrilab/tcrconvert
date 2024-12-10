@@ -15,7 +15,7 @@ col_ref = {'adaptive': ['v_resolved', 'd_resolved', 'j_resolved'],
 
 
 def choose_lookup(frm, to, species='human'):
-    '''Determine which lookup table to use.
+    '''Determine which lookup table to use and get filepath.
 
     :param frm: Input format of TCR data 
     :type frm: str
@@ -29,8 +29,8 @@ def choose_lookup(frm, to, species='human'):
     :Example:
 
     >>> import tcrconvert
-    >>> tcrconvert.choose_lookup('tenx', 'imgt')
-    '/path/to/data/human/lookup_from_tenx.csv'
+    >>> tcrconvert.convert.choose_lookup('imgt', 'adaptive')
+    PosixPath('/home/emmabishop/workspace/tcrconvert/tcrconvert/data/human/lookup.csv')
     '''
 
     # Determine which lookup table to use

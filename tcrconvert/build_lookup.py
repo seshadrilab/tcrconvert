@@ -98,7 +98,7 @@ def add_dash_one(gene_str):
     :Example:
 
     >>> import tcrconvert
-    >>> tcrconvert.add_dash_one('TRBV2*01')
+    >>> tcrconvert.build_lookup.add_dash_one('TRBV2*01')
     'TRBV2-01*01'
     '''
 
@@ -119,7 +119,7 @@ def pad_single_digit(gene_str):
     :Example:
 
     >>> import tcrconvert
-    >>> tcrconvert.pad_single_digit('TCRBV1-2')
+    >>> tcrconvert.build_lookup.pad_single_digit('TCRBV1-2')
     'TCRBV01-2'
     '''
 
@@ -129,7 +129,7 @@ def pad_single_digit(gene_str):
 
 
 def build_lookup_from_fastas(data_dir):
-    '''Create lookup tables within in a given directory that contains FASTA files:
+    '''Create these lookup tables within in a given directory that contains FASTA files:
 
     - lookup.csv
     - lookup_from_tenx.csv
