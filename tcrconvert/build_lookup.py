@@ -1,6 +1,7 @@
 import os
 import re
 import pandas as pd
+import click
 
 def parse_imgt_fasta(infile):
     '''Extract gene names from a reference FASTA.
@@ -14,11 +15,14 @@ def parse_imgt_fasta(infile):
 
     Given a FASTA file containing this header:
 
-    ``>SomeText|TRBV10-1*02|MoreText|``
+    >SomeText|TRAV1*01|MoreText|
+    >SomeText|TRAV14/DV4*01|MoreText|
+    >SomeText|TRAV38-2/DV8*01|MoreText|
 
     >>> import tcrconvert
-    >>> tcrconver.parse_imgt_fasta('path/to/fasta')
-    ['TRBV10-1*02']
+    >>> fasta = tcrconvert.get_example_path('fasta_dir/test_trav.fa')
+    >>> tcrconvert.build_lookup.parse_imgt_fasta(fasta)
+    ['TRAV1*01', 'TRAV14/DV4*01', 'TRAV38-2/DV8*01']
     '''
     
     # Read the file and extract lines starting with ">"
@@ -47,15 +51,22 @@ def extract_imgt_genes(data_dir):
 
     Given a folder with FASTA files containing these headers:
 
-    ``>SomeText|TRBV10-1*02|MoreText|``
+    >SomeText|TRAV1*01|MoreText|
+    >SomeText|TRAV14/DV4*01|MoreText|
+    >SomeText|TRAV38-2/DV8*01|MoreText|
 
-    ``>SomeText|TRAJ10*01|MoreText|``
+    >SomeText|TRBV29/OR9-2*01|MoreText|
+    >SomeText|TRBVA/OR9-2*01|MoreText|
 
     >>> import tcrconvert
-    >>> tcrconvert.extract_imgt_genes('path/to/fasta/dir/')
-              imgt
-    0  TRBV10-1*02
-    1    TRAJ10*01
+    >>> fastadir = tcrconvert.get_example_path('fasta_dir') + '/'
+    >>> tcrconvert.build_lookup.extract_imgt_genes(fastadir)
+                  imgt
+    0         TRAV1*01
+    1    TRAV14/DV4*01
+    2  TRAV38-2/DV8*01
+    3  TRBV29/OR9-2*01
+    4   TRBVA/OR9-2*01
     '''
 
     fastas = []
@@ -73,44 +84,44 @@ def extract_imgt_genes(data_dir):
     return lookup_sorted
 
 
-def add_dash_one(s):
+def add_dash_one(gene_str):
     '''Add a ``-01`` to genes without IMGT gene-level designatinon.
 
-    :param s: Gene name
-    :type s: str
+    :param gene_str: Gene name
+    :type gene_str: str
     :return: Gene name
     :rtype: str
 
     :Example:
 
     >>> import tcrconvert
-    >>> tcrconvert.add_dash_one('TRBV2*01')
+    >>> tcrconvert.build_lookup.add_dash_one('TRBV2*01')
     'TRBV2-01*01'
     '''
 
-    if '-' not in s:
+    if '-' not in gene_str:
         # Add -1 before allele
-        return s.replace('*', '-01*')
-    return s
+        return gene_str.replace('*', '-01*')
+    return gene_str
 
 
-def pad_single_digit(s):
+def pad_single_digit(gene_str):
     '''Add a zero to single-digit gene-level designatinon in gene names.
 
-    :param s: Gene name
-    :type s: str
+    :param gene_str: Gene name
+    :type gene_str: str
     :return: Gene name
     :rtype: str
 
     :Example:
 
     >>> import tcrconvert
-    >>> tcrconvert.pad_single_digit('TCRBV1-2')
+    >>> tcrconvert.build_lookup.pad_single_digit('TCRBV1-2')
     'TCRBV01-2'
     '''
 
     # Use regex to find a single digit preceded by letters and followed by a hyphen or asterisk
-    updated_string = re.sub(r'([A-Za-z]+)(\d)([-\*])', r'\g<1>0\g<2>\g<3>', s)
+    updated_string = re.sub(r'([A-Za-z]+)(\d)([-\*])', r'\g<1>0\g<2>\g<3>', gene_str)
     return updated_string
 
 
@@ -128,7 +139,8 @@ def build_lookup_from_fastas(data_dir):
     :Example:
 
     >>> import tcrconvert
-    >>> tcrconvert.build_lookup_from_fastas('path/to/fasta/dir/')
+    >>> fastadir = tcrconvert.get_example_path('fasta_dir') + '/'
+    >>> tcrconvert.build_lookup.build_lookup_from_fastas(fastadir)
     '''
 
     # Extract IMGT gene names and put into a dataframe
@@ -179,3 +191,19 @@ def build_lookup_from_fastas(data_dir):
     lookup.drop_duplicates().to_csv(data_dir + '/lookup.csv', index=False)
     from_tenx.drop_duplicates().to_csv(data_dir + '/lookup_from_tenx.csv', index=False)
     from_adaptive.drop_duplicates().to_csv(data_dir + '/lookup_from_adaptive.csv', index=False)
+
+
+# Command-line version of build_lookup_from_fastas()
+@click.command(name='build', no_args_is_help=True)
+@click.argument('data_dir', type=click.Path(exists=True))
+def build_lookup_from_fastas_cli(data_dir):
+    '''Create lookup tables from within a folder of FASTA files.
+
+    :Example:
+
+    .. code-block:: bash
+
+       $ tcrconvert build tcrconvert/examples/fasta_dir/
+    '''
+
+    build_lookup_from_fastas(data_dir)

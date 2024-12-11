@@ -1,6 +1,7 @@
 import pandas as pd
 from importlib.resources import files
 import logging
+import click
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(message)s')
@@ -14,7 +15,7 @@ col_ref = {'adaptive': ['v_resolved', 'd_resolved', 'j_resolved'],
 
 
 def choose_lookup(frm, to, species='human'):
-    '''Determine which lookup table to use.
+    '''Determine which lookup table to use and get filepath.
 
     :param frm: Input format of TCR data 
     :type frm: str
@@ -28,8 +29,8 @@ def choose_lookup(frm, to, species='human'):
     :Example:
 
     >>> import tcrconvert
-    >>> tcrconvert.choose_lookup('tenx', 'imgt')
-    '/path/to/data/human/lookup_from_tenx.csv'
+    >>> tcrconvert.convert.choose_lookup('imgt', 'adaptive')
+    PosixPath('/home/emmabishop/anaconda3/envs/tcrconvert/lib/python3.12/site-packages/tcrconvert/data/human/lookup.csv')
     '''
 
     # Determine which lookup table to use
@@ -67,8 +68,9 @@ def which_frm_cols(df, frm, frm_cols=[]):
 
     >>> import pandas as pd
     >>> import tcrconvert
-    >>> df = pd.read_csv('path/to/10x_tcrs.csv')
-    >>> tcrconvert.which_frm_cols(df, 'tenx')
+    >>> tcr_file = tcrconvert.get_example_path('tenx.csv')
+    >>> df = pd.read_csv(tcr_file)
+    >>> tcrconvert.convert.which_frm_cols(df, 'tenx')
     ['v_gene', 'd_gene', 'j_gene', 'c_gene']
     '''
 
@@ -99,10 +101,10 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], quiet=False):
     :type frm: str
     :param to: Output format of TCR data ``['tenx', 'adaptive', 'adaptivev2', 'imgt']``
     :type to: str
-    :param frm_cols: Custom V/D/J/C gene column names.
-    :type frm_cols: list of str, optional
     :param species: Species folder name under ``tcrconvert/data/``.
     :type species: str, optional
+    :param frm_cols: Custom V/D/J/C gene column names.
+    :type frm_cols: list of str, optional
     :param quiet: Whether to suppress warning messages.
     :type quiet: bool, optional
     :return: Converted TCR data
@@ -112,15 +114,22 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], quiet=False):
 
     >>> import pandas as pd
     >>> import tcrconvert
-    >>> tenx_df = pd.read_csv('path/to/10x_tcrs.csv')
-    >>> tenx_df
-            v_gene  d_gene   j_gene  c_gene    cdr3
-    0     TRAV12-1    <NA>   TRAJ16    TRAC  CAVLIF
-    1       TRBV15   TRBD1  TRBJ2-5   TRBC2  CASSGF
-    >>> tcrconvert.convert_gene(tenx_df, 'tenx', 'adaptive')
-              v_gene         d_gene         j_gene  c_gene    cdr3
-    0  TCRAV12-01*01           <NA>  TCRAJ16-01*01    <NA>  CAVLIF
-    1  TCRBV15-01*01  TCRBD01-01*01  TCRBJ02-05*01    <NA>  CASSGF
+    >>> original = pd.read_csv(tcrconvert.get_example_path('tenx.csv'))
+    >>> original[['v_gene', 'd_gene', 'j_gene', 'c_gene', 'cdr3']]
+        v_gene d_gene   j_gene c_gene             cdr3
+    0  TRAV1-2  TRBD1   TRAJ12   TRAC     CAVMDSSYKLIF
+    1  TRBV6-1  TRBD2  TRBJ2-1  TRBC2  CASSGLAGGYNEQFF
+    2  TRBV6-4  TRBD2  TRBJ2-3  TRBC2  CASSGVAGGTDTQYF
+    3  TRAV1-2  TRBD1   TRAJ33   TRAC     CAVKDSNYQLIW
+    4    TRBV2  TRBD1  TRBJ1-2  TRBC1    CASNQGLNYGYTF
+    >>> converted = tcrconvert.convert_gene(original, 'tenx', 'adaptive', quiet=True)
+    >>> converted[['v_gene', 'd_gene', 'j_gene', 'c_gene', 'cdr3']]
+              v_gene         d_gene         j_gene c_gene             cdr3
+    0  TCRAV01-02*01  TCRBD01-01*01  TCRAJ12-01*01   <NA>     CAVMDSSYKLIF
+    1  TCRBV06-01*01  TCRBD02-01*01  TCRBJ02-01*01   <NA>  CASSGLAGGYNEQFF
+    2  TCRBV06-04*01  TCRBD02-01*01  TCRBJ02-03*01   <NA>  CASSGVAGGTDTQYF
+    3  TCRAV01-02*01  TCRBD01-01*01  TCRAJ33-01*01   <NA>     CAVKDSNYQLIW
+    4  TCRBV02-01*01  TCRBD01-01*01  TCRBJ01-02*01   <NA>    CASNQGLNYGYTF
     '''
 
     # Set logging level
@@ -134,7 +143,7 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], quiet=False):
         logger.error('"frm" and "to" formats should be different.')
         raise(ValueError)
     if df.empty:
-        logger.error('Input dataframe is empty.')
+        logger.error('Input data is empty.')
         raise(ValueError)
 
     # Warn about no Adaptive C genes if needed
@@ -163,8 +172,9 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], quiet=False):
 
     # Display genes we couldn't convert
     if bad_genes:
-        logger.warning('These genes are not in IMGT and will be replaced with NA:\n %s',
-                str(set(bad_genes)))
+        sorted_list = sorted(list(set(bad_genes)))
+        logger.warning('These genes are not in IMGT for this species and will be replaced with NA:\n %s',
+                str(sorted_list))
 
     # Swap out data in original dataframe
     out_df = df.copy()
@@ -175,3 +185,63 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], quiet=False):
     out_df = out_df.replace('NoData', pd.NA).fillna(pd.NA)
 
     return out_df
+
+
+# Command-line version of convert_gene()
+@click.command(name='convert', no_args_is_help=True)
+@click.option('-i', '--infile', help='Path to input CSV or TSV', required=True, type=click.Path(exists=True))
+@click.option('-o', '--outfile', help='Path to output CSV or TSV', required=True)
+@click.option('-f', '--frm', help='Input format of TCR data', required=True,
+              type=click.Choice(['tenx', 'adaptive', 'adaptivev2', 'imgt'], case_sensitive=False))
+@click.option('-t', '--to', help='Output format of TCR data', required=True,
+              type=click.Choice(['tenx', 'adaptive', 'adaptivev2', 'imgt'], case_sensitive=False))
+@click.option('-s', '--species', default='human', help="Species folder name under 'tcrconvert/data/'", show_default=True)
+@click.option('-c', '--frm_cols', default=[], help='List of custom V/D/J/C gene column names.', show_default=True,
+              multiple=True)
+@click.option('-q', '--quiet', is_flag=True, default=False, help='Whether to suppress warning messages.', show_default=True)
+def convert_gene_cli(infile, outfile, frm, to, species, frm_cols, quiet):
+    '''Convert T-cell receptor V/D/J/C gene names.
+
+    :Example:
+
+    Example using custom input columns 'myV', 'myD', 'myJ'
+
+    .. code-block:: bash
+
+       $ tcrconvert convert --infile tcrconvert/examples/customcols.csv \
+                            --outfile tcrconvert/examples/custom2adapt.tsv \
+                            --frm tenx \
+                            --to adaptive \
+                            --species mouse \
+                            -c myV \
+                            -c myD \
+                            -c myJ \
+                            --quiet
+    '''
+
+    # Check that input and output paths are CSV/TSV
+    if not infile.endswith(('csv', 'tsv')):
+        raise click.BadParameter('"infile" must be a .csv or .tsv file')
+
+    if not outfile.endswith(('csv', 'tsv')):
+        raise click.BadParameter('"outfile" must be a .csv or .tsv file')
+
+    # Load data
+    # For our purposes, read in every column as string so that boolean values
+    # don't get converted from uppercase to capitalized, etc.
+    if not quiet:
+        click.echo(f'Reading input file {infile}')
+    sep_in = ',' if infile.endswith('csv') else '\t'
+    df = pd.read_csv(infile, sep=sep_in, dtype=str)
+
+    # Convert gene names
+    # Cast frm_cols as list because will be read in from command line as tuple
+    if not quiet:
+        click.echo(f'Converting gene names from {frm} to {to}')
+    out_df = convert_gene(df, frm, to, species, list(frm_cols), quiet)
+
+    # Save output
+    if not quiet:
+        click.echo(f'Writing output to {outfile}')
+    sep_out = ',' if outfile.endswith('csv') else '\t'
+    out_df.to_csv(outfile, sep=sep_out, index=False)

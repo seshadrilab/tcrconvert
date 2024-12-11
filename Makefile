@@ -4,6 +4,7 @@ all: install
 
 install:
 	pip install .
+	rm -rf build *.egg-info
 
 test:
 	pytest
