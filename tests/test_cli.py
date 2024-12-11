@@ -3,7 +3,47 @@ from click.testing import CliRunner
 from tcrconvert import cli, utils
 
 in_csv = utils.get_example_path('customcols.csv')
-out_tsv = utils.get_example_path('converted_custom_adapt.tsv')
+out_tsv = os.path.dirname(__file__) + '/data/custom2adapt.tsv'
+
+
+def test_build_lookup_from_fastas_cli():
+    fastadir = utils.get_example_path('fasta_dir') + '/'
+
+    result = CliRunner().invoke(cli.entry_point, [
+        'build',
+        fastadir
+    ], catch_exceptions=False)
+
+    assert result.exit_code == 0
+
+    with open(fastadir + 'lookup_from_adaptive.csv') as lookupadapt:
+        assert lookupadapt.read() == 'adaptive,adaptivev2,imgt,tenx\n' \
+                                     'TCRAV01-01*01,TCRAV01-01*01,TRAV1*01,TRAV1\n' \
+                                     'TCRAV14-01*01,TCRAV14-01*01,TRAV14/DV4*01,TRAV14DV4\n' \
+                                     'TCRAV38-02*01,TCRAV38-02*01,TRAV38-2/DV8*01,TRAV38-2DV8\n' \
+                                     'TCRBV29-or09_02*01,TCRBV29-or09_02*01,TRBV29/OR9-2*01,TRBV29/OR9-2\n' \
+                                     'TCRBVA-or09_02*01,TCRBVA-or09_02*01,TRBVA/OR9-2*01,TRBVA/OR9-2\n' \
+                                     'TCRAV01-01,TCRAV01-01,TRAV1*01,TRAV1\n' \
+                                     'TCRAV14-01,TCRAV14-01,TRAV14/DV4*01,TRAV14DV4\n' \
+                                     'TCRAV38-02,TCRAV38-02,TRAV38-2/DV8*01,TRAV38-2DV8\n' \
+                                     'TCRBV29-or09_02,TCRBV29-or09_02,TRBV29/OR9-2*01,TRBV29/OR9-2\n' \
+                                     'TCRBVA-or09_02,TCRBVA-or09_02,TRBVA/OR9-2*01,TRBVA/OR9-2\n'
+
+    with open(fastadir + 'lookup_from_tenx.csv') as lookup10x:
+        assert lookup10x.read() == 'tenx,imgt,adaptive,adaptivev2\n' \
+                                   'TRAV1,TRAV1*01,TCRAV01-01*01,TCRAV01-01*01\n' \
+                                   'TRAV14DV4,TRAV14/DV4*01,TCRAV14-01*01,TCRAV14-01*01\n' \
+                                   'TRAV38-2DV8,TRAV38-2/DV8*01,TCRAV38-02*01,TCRAV38-02*01\n' \
+                                   'TRBV29/OR9-2,TRBV29/OR9-2*01,TCRBV29-or09_02*01,TCRBV29-or09_02*01\n' \
+                                   'TRBVA/OR9-2,TRBVA/OR9-2*01,TCRBVA-or09_02*01,TCRBVA-or09_02*01\n'
+
+    with open(fastadir + 'lookup.csv') as lookup:
+        assert lookup.read() == 'imgt,tenx,adaptive,adaptivev2\n' \
+                                'TRAV1*01,TRAV1,TCRAV01-01*01,TCRAV01-01*01\n' \
+                                'TRAV14/DV4*01,TRAV14DV4,TCRAV14-01*01,TCRAV14-01*01\n' \
+                                'TRAV38-2/DV8*01,TRAV38-2DV8,TCRAV38-02*01,TCRAV38-02*01\n' \
+                                'TRBV29/OR9-2*01,TRBV29/OR9-2,TCRBV29-or09_02*01,TCRBV29-or09_02*01\n' \
+                                'TRBVA/OR9-2*01,TRBVA/OR9-2,TCRBVA-or09_02*01,TCRBVA-or09_02*01\n'
 
 
 def test_convert_gene_cli(caplog):
