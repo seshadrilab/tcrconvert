@@ -13,3 +13,11 @@ build:
 # Build documentation in the "docs/" directory with Sphinx
 sphinx:
   configuration: docs/source/conf.py
+
+# Specifically install the "docs" optional dependencies from the pyproject.toml
+python:
+  install:
+    - method: pip
+      path: .
+      extra_requirements:
+        - docs
