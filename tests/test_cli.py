@@ -1,9 +1,10 @@
 import os
+import tempfile
 from click.testing import CliRunner
 from tcrconvert import cli, utils
 
 in_csv = utils.get_example_path('customcols.csv')
-out_tsv = os.path.dirname(__file__) + '/data/custom2adapt.tsv'
+out_tsv = tempfile.gettempdir() + '/custom2adapt.tsv'
 
 
 def test_build_lookup_from_fastas_cli():
