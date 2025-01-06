@@ -76,16 +76,15 @@ def which_frm_cols(df, frm, frm_cols=[]):
 
     if frm == 'imgt' and not frm_cols:
         cols_from = col_ref['tenx']
-        logger.info('No column names provided for IMGT data, will assume 10X column names: %s',
-                    str(cols_from))
+        logger.info(f'No column names provided for IMGT data, will assume 10X column names: {str(cols_from)}')
     if frm_cols:
         missing_cols = set(frm_cols) - set(df.columns)
         if missing_cols:
-            logger.error('These columns are not in the input dataframe: %s', str(missing_cols))
+            logger.error(f'These columns are not in the input dataframe: {str(missing_cols)}')
             raise(ValueError)
         else:
             cols_from = frm_cols
-            logger.info('Using these custom column names: %s', str(cols_from))
+            logger.info(f'Using these custom column names: {str(cols_from)}')
     else:
         cols_from = col_ref[frm]
     
@@ -173,8 +172,7 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], quiet=False):
     # Display genes we couldn't convert
     if bad_genes:
         sorted_list = sorted(list(set(bad_genes)))
-        logger.warning('These genes are not in IMGT for this species and will be replaced with NA:\n %s',
-                str(sorted_list))
+        logger.warning(f'These genes are not in IMGT for this species and will be replaced with NA:\n {str(sorted_list)}')
 
     # Swap out data in original dataframe
     out_df = df.copy()
