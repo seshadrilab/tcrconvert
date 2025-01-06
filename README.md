@@ -278,3 +278,7 @@ If you run into problems or need help running TCRconvert please file an issue on
 # Contact
 
 For other questions please contact Emma Bishop: `emmab5` at `uw` dot `edu`
+
+# Acknowledgments
+
+This project was created with support from the Fred Hutchinson Cancer Center Translational Data Science Integrated Research Center (TDS IRC) through the 2024 Data Scientist Collaboration Grant.
