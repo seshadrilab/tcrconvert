@@ -14,9 +14,9 @@ authors = [
 description = "Convert TCRs between 10X, Adaptive, and IMGT formats."
 readme = "README.md"
 license = {text = "MIT"}
-keywords = ["TCR", "Adaptive", "10X", "IMGT", "T cell receptor", "convert"]
+keywords = ["TCR", "Adaptive", "10X", "IMGT", "T cell receptor", "T cell", "convert"]
 classifiers = [
-  "Development Status :: 3 - Alpha",
+  "Development Status :: 4 - Beta",
   "Intended Audience :: Science/Research",
   "Topic :: Scientific/Engineering :: Bio-Informatics",
   "License :: OSI Approved :: MIT License",
