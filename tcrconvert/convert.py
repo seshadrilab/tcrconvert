@@ -17,7 +17,7 @@ col_ref = {'adaptive': ['v_resolved', 'd_resolved', 'j_resolved'],
 def choose_lookup(frm, to, species='human'):
     '''Determine which lookup table to use and get filepath.
 
-    :param frm: Input format of TCR data 
+    :param frm: Input format of TCR data ``['tenx', 'adaptive', 'adaptivev2', 'imgt']``
     :type frm: str
     :param to: Output format of TCR data ``['tenx', 'adaptive', 'adaptivev2', 'imgt']``
     :type to: str

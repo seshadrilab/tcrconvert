@@ -85,11 +85,11 @@ def extract_imgt_genes(data_dir):
 
 
 def add_dash_one(gene_str):
-    '''Add a ``-01`` to genes without IMGT gene-level designatinon.
+    '''Add a ``-01`` to genes without IMGT gene-level designation.
 
     :param gene_str: Gene name
     :type gene_str: str
-    :return: Gene name
+    :return: Updated gene name
     :rtype: str
 
     :Example:

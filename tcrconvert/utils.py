@@ -5,7 +5,7 @@ def get_example_path(file_name):
 
     :param file_name: Name of the example file or directory
     :type file_name: str
-    :return: Path to example file
+    :return: Path to example file or directory
     :rtype: str
 
     :Example:
