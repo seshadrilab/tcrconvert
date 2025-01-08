@@ -41,8 +41,8 @@ For full documentation visit [tcrconvert.readthedocs.io](https://tcrconvert.read
 Requirements:
 
 * `python >=3.9`
-* `pandas >= 1.5.0`
-* `click >= 8.1.7`
+* `pandas >=1.5.0`
+* `click >=8.1.7`
 
 TCRconvert runs on Windows, macOS, and Linux.
 
@@ -67,7 +67,7 @@ pip install .
 import tcrconvert
 import pandas as pd
 
-tcr_file = '/Users/emmabishop/workspace/tcrconvert/tcrconvert/examples/example_10x.csv'
+tcr_file = 'tcrconvert/examples/tenx.csv'
 
 tcrs = pd.read_csv(tcr_file)[['barcode', 'v_gene' , 'd_gene', 'j_gene', 'c_gene', 'cdr3']]
 tcrs
@@ -229,7 +229,7 @@ TCRconvert takes a `.csv` or `.tsv` file with at least one column of gene names 
 
 
 ```
-$ cat ~/workspace/tcrconvert/tcrconvert/data/examples/example_10x.csv
+$ cat tcrconvert/examples/tenx.csv
 ```
 
     barcode,is_cell,contig_id,high_confidence,length,chain,v_gene,d_gene,j_gene,c_gene,full_length,productive,cdr3,cdr3_nt,reads,umis,raw_clonotype_id,raw_consensus_id
@@ -245,8 +245,8 @@ $ cat ~/workspace/tcrconvert/tcrconvert/data/examples/example_10x.csv
 
 ```
 $ tcrconvert convert \
-    -i ~/workspace/tcrconvert/tcrconvert/data/examples/example_10x.csv \
-    -o ~/workspace/tcrconvert/tcrconvert/data/examples/converted_adapt.tsv \
+    -i tcrconvert/examples/tenx.csv \
+    -o tcrconvert/examples/tenx2adapt.tsv \
     --frm tenx \
     --to adaptive
 ```
@@ -257,7 +257,7 @@ $ tcrconvert convert \
 
 
 ```
-$ cat ~/workspace/tcrconvert/tcrconvert/data/examples/converted_adapt.tsv
+$ cat tcrconvert/examples/tenx2adapt.tsv
 ```
 
     barcode	is_cell	contig_id	high_confidence	length	chain	v_gene	d_gene	j_gene	c_gene	full_length	productive	cdr3	cdr3_nt	reads	umis	raw_clonotype_id	raw_consensus_id
