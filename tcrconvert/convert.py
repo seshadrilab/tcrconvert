@@ -36,11 +36,11 @@ def choose_lookup(frm, to, species='human'):
     # Determine which lookup table to use
     if frm == 'tenx':
         lookup_f = files('tcrconvert') / 'data' / species / 'lookup_from_tenx.csv'
-        logger.warning('Converting from 10X which lacks allele info. Choosing *01 as allele for all genes.')
+        logger.info('Converting from 10X which lacks allele info. Choosing *01 as allele for all genes.')
     elif frm == 'adaptive' or frm == 'adaptivev2':
         lookup_f = files('tcrconvert') / 'data' / species / 'lookup_from_adaptive.csv'
         if to == 'imgt':
-            logger.warning('Converting from Adaptive to IMGT. If a gene lacks allele, will choose *01 as allele.')
+            logger.info('Converting from Adaptive to IMGT. If a gene lacks allele, will choose *01 as allele.')
     else:
         lookup_f = files('tcrconvert') / 'data' / species / 'lookup.csv'
 
@@ -137,7 +137,7 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], quiet=False):
     else:
         logger.setLevel(logging.WARNING)
 
-    # Check that required input is ok
+    # Check that input is ok
     if frm == to:
         logger.error('"frm" and "to" formats should be different.')
         raise(ValueError)
@@ -147,13 +147,13 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], quiet=False):
 
     # Warn about no Adaptive C genes if needed
     if to == 'adaptive' or to == 'adaptivev2':
-        logger.warning('Adaptive only captures VDJ genes, any C genes will become NA.')
+        logger.info('Adaptive only captures VDJ genes, any C genes will become NA.')
 
     # Load lookup table
     lookup_f = choose_lookup(frm, to, species)
     lookup = pd.read_csv(lookup_f)
 
-    # Figure out columns to use
+    # Determine columns to use
     cols_from = which_frm_cols(df, frm, frm_cols)
 
     # Loop over gene columns, doing a pandas merge to get converted gene names
@@ -165,6 +165,7 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], quiet=False):
             new_genes[col] = df[[col]].\
                 merge(lookup[[frm, to]], how='left', left_on=col, right_on=frm).\
                 drop(columns=frm)
+            # Note genes where the merge produced an NA on the 'to' format side
             bad_genes = bad_genes + new_genes[col][new_genes[col][to].isna()][col].dropna().tolist()
         else:
             continue

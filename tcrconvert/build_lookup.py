@@ -173,7 +173,8 @@ def build_lookup_from_fastas(data_dir):
     lookup['adaptive'] = lookup['adaptive'].apply(lambda x: pad_single_digit(x))
     lookup['adaptivev2'] = lookup['adaptive']
 
-    # Set Adaptive columns to NA for constant genes (Adaptive only captures VDJ)
+    # Set Adaptive columns to 'NoData' for constant genes (Adaptive only captures VDJ)
+    # 'NoData' gets converted to NA by convert.convert_gene()
     lookup.loc[lookup['imgt'].str.contains('C'), ['adaptive', 'adaptivev2']] = 'NoData'
 
     # If converting from 10X will just need the first *01 allele
