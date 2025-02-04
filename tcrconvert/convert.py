@@ -204,7 +204,7 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], quiet=False):
               type=click.Choice(['tenx', 'adaptive', 'adaptivev2', 'imgt'], case_sensitive=False))
 @click.option('-t', '--to', help='Output format of TCR data', required=True,
               type=click.Choice(['tenx', 'adaptive', 'adaptivev2', 'imgt'], case_sensitive=False))
-@click.option('-s', '--species', default='human', help="Species folder name under 'tcrconvert/data/'", show_default=True)
+@click.option('-s', '--species', default='human', help='Species name.', show_default=True)
 @click.option('-c', '--frm_cols', default=[], help='List of custom V/D/J/C gene column names.', show_default=True,
               multiple=True)
 @click.option('-q', '--quiet', is_flag=True, default=False, help='Whether to suppress warning messages.', show_default=True)

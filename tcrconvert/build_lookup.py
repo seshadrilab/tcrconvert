@@ -222,15 +222,16 @@ def build_lookup_from_fastas(data_dir, species):
 
 # Command-line version of build_lookup_from_fastas()
 @click.command(name='build', no_args_is_help=True)
-@click.argument('data_dir', type=click.Path(exists=True))
-def build_lookup_from_fastas_cli(data_dir):
+@click.option('-i', '--input', help='Path to folder of FASTA files', required=True, type=click.Path(exists=True))
+@click.option('-s', '--species', help='Species name.', required=True)
+def build_lookup_from_fastas_cli(input, species):
     '''Create lookup tables from within a folder of FASTA files.
 
     :Example:
 
     .. code-block:: bash
 
-       $ tcrconvert build tcrconvert/examples/fasta_dir/
+       $ tcrconvert build -i tcrconvert/examples/fasta_dir/ -s rabbit
     '''
 
-    build_lookup_from_fastas(data_dir)
+    build_lookup_from_fastas(input, species)
