@@ -2,6 +2,13 @@ import os
 import re
 import pandas as pd
 import click
+import platformdirs
+import logging
+
+# Set up logging
+logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+
 
 def parse_imgt_fasta(infile):
     '''Extract gene names from a reference FASTA.
@@ -125,23 +132,36 @@ def pad_single_digit(gene_str):
     return updated_string
 
 
-def build_lookup_from_fastas(data_dir):
-    '''Create these lookup tables within in a given directory that contains FASTA files:
+def build_lookup_from_fastas(data_dir, species):
+    '''Create these lookup tables from a directory of FASTA files:
 
     - lookup.csv
     - lookup_from_tenx.csv
     - lookup_from_adaptive.csv
 
+    The lookup tables are stored in an application data folder via platformdirs. For example:
+
+    - MacOS: ~/Library/Application Support/tcrconvert/<species>
+    - Windows: C:/Documents and Settings/<User>/Application Data/Local Settings/Emma Bishop/tcrconvert/<species>
+    - Linux: ~/.local/share/tcrconvert/<species>
+
     :param data_dir: Directory containing FASTA files
     :type data_dir: str
+    :param species: Name of species that will be used when running TCRconvert with these lookup tables
+    :type species: str
     :return: None
 
     :Example:
 
     >>> import tcrconvert
     >>> fastadir = tcrconvert.get_example_path('fasta_dir') + '/'
-    >>> tcrconvert.build_lookup.build_lookup_from_fastas(fastadir)
+    >>> tcrconvert.build_lookup.build_lookup_from_fastas(fastadir, 'rabbit')
     '''
+
+    # Get the user data directory for saving lookup tables
+    user_dir = platformdirs.user_data_dir("tcrconvert", "Emmma Bishop")
+    save_dir = os.path.join(user_dir, species)
+    os.makedirs(save_dir, exist_ok=True)
 
     # Extract IMGT gene names and put into a dataframe
     lookup = extract_imgt_genes(data_dir)
@@ -188,10 +208,16 @@ def build_lookup_from_fastas(data_dir):
     from_adapt['adaptivev2'] = from_adapt['adaptive']
     from_adaptive = pd.concat([lookup2, from_adapt])[['adaptive', 'adaptivev2', 'imgt', 'tenx']]
 
-    # Remove any duplicate rows and save
-    lookup.drop_duplicates().to_csv(data_dir + '/lookup.csv', index=False)
-    from_tenx.drop_duplicates().to_csv(data_dir + '/lookup_from_tenx.csv', index=False)
-    from_adaptive.drop_duplicates().to_csv(data_dir + '/lookup_from_adaptive.csv', index=False)
+    # Remove any duplicate rows
+    lookup_path = os.path.join(save_dir, 'lookup.csv')
+    from_tenx_path = os.path.join(save_dir, 'lookup_from_tenx.csv')
+    from_adaptive_path = os.path.join(save_dir, 'lookup_from_adaptive.csv')
+
+    # Save
+    logger.info(f'Writing lookup tables to: {save_dir}')
+    lookup.drop_duplicates().to_csv(lookup_path, index=False)
+    from_tenx.drop_duplicates().to_csv(from_tenx_path, index=False)
+    from_adaptive.drop_duplicates().to_csv(from_adaptive_path, index=False)
 
 
 # Command-line version of build_lookup_from_fastas()
