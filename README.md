@@ -25,13 +25,13 @@ TCRconvert helps researchers unify TCR datasets by converting them to a standard
 import tcrconvert
 
 tcrconvert.convert_gene(dat, frm='tenx', to='adaptive')  # Convert gene names
-tcrconvert.build_lookup_from_fastas('path/to/fasta_dir/')  # Create a custom reference
+tcrconvert.build_lookup_from_fastas('path/to/fasta_dir/', 'myspecies')  # Create a custom reference
 ```
 
 **2. As a command-line tool**:
 ```bash
 $ tcrconvert convert -i 10x.csv -o adaptive.tsv --frm tenx --to adaptive # Convert gene names
-$ tcrconvert build path/to/fasta_dir/ # Create a custom reference
+$ tcrconvert build -i path/to/fasta_dir/ -s myspecies # Create a custom reference
 ```
 
 For full documentation visit [tcrconvert.readthedocs.io](https://tcrconvert.readthedocs.io/en/latest/)
@@ -43,6 +43,7 @@ Requirements:
 * `python >=3.9`
 * `pandas >=1.5.0`
 * `click >=8.1.7`
+* `platformdirs >=4.2.2`
 
 TCRconvert runs on Windows, macOS, and Linux.
 

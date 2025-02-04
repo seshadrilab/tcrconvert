@@ -7,7 +7,8 @@ How does TCRconvert work?
 TCRconvert essentially performing a pandas ``merge`` between the input data and a 
 lookup table that includes the naming conventions for each gene. 
 These lookup tables are constructed from IMGT reference FASTA files and account 
-for the specific naming peculiarities of each platform. They are located under ``tcrconvert/data/``.
+for the specific naming peculiarities of each platform. The built-in lookup tables 
+are located under ``tcrconvert/data/``.
 
 
 What input columns are required?
@@ -75,5 +76,10 @@ Combinations of gene names, like ``TCRAV01-02/12-02``, will be converted to ``NA
 Are non-human species supported?
 ----------------------------------
 
-Yes, Rhesus macaque and mouse. The rhesus and mouse lookup tables were built from IMGT reference 
-FASTAs and gene tables. Mouse genes cover both "Mouse" and "Mouse C57BL/6J" as listed in IMGT.
+Mouse and rhesus macaque are supported out-of-the-box. For other species, see 
+"Using a custom reference" in the usage pages. 
+
+The rhesus and mouse lookup tables were built from IMGT reference FASTAs and 
+gene tables. Mouse genes cover both "Mouse" and "Mouse C57BL/6J" as listed in IMGT.
+
+
