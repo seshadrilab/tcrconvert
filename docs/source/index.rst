@@ -18,7 +18,7 @@ these formats to any other one:
 * **IMGT**: TRAV1-2*01
 
 TCRconvert works with human, mouse, and rhesus macaque data out-of-the-box, but 
-users can also add their own species (see: `Using a custom reference <https://tcrconvert.readthedocs.io/en/latest/usage.html#Using-a-custom-reference>`_).
+users can also add their own species (see "Using a custom reference" in the usage pages).
 
 TCRconvert helps researchers unify TCR datasets by converting them to a standard 
 naming convention. It is fast, reliable, and prevents errors from manual conversions. 
@@ -34,7 +34,7 @@ Pandas DataFrames and CSV/TSV files.
    import tcrconvert
 
    tcrconvert.convert_gene(dat, frm='tenx', to='adaptive')  # Convert gene names
-   tcrconvert.build_lookup_from_fastas('path/to/fasta_dir/')  # Create a custom reference
+   tcrconvert.build_lookup_from_fastas('path/to/fasta_dir/', 'rabbit')  # Create a custom reference
 
 
 **2. As a command-line tool**:
@@ -42,7 +42,7 @@ Pandas DataFrames and CSV/TSV files.
 .. code-block:: console
 
    $ tcrconvert convert -i 10x.csv -o adaptive.tsv --frm tenx --to adaptive # Convert gene names
-   $ tcrconvert build path/to/fasta_dir/ # Create a custom reference
+   $ tcrconvert build -i path/to/fasta_dir/ -s rabbit # Create a custom reference
 
 
 View on `GitHub <https://github.com/seshadrilab/tcrconvert>`_.

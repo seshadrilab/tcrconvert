@@ -1,5 +1,6 @@
 import pytest
 import pandas as pd
+import os
 from importlib.resources import files
 from tcrconvert import convert
 
@@ -134,9 +135,10 @@ def test_convert_gene_input():
 
 def test_choose_lookup():
     # Using 'human' for all these examples
-    lookup_tenx = files('tcrconvert') / 'data' / 'human' / 'lookup_from_tenx.csv'
-    lookup_adapt = files('tcrconvert') / 'data' / 'human'  / 'lookup_from_adaptive.csv'
-    lookup_imgt = files('tcrconvert') / 'data' / 'human' / 'lookup.csv'
+    lookup_dir = os.path.join(files('tcrconvert'), 'data', 'human')
+    lookup_tenx = os.path.join(lookup_dir, 'lookup_from_tenx.csv')
+    lookup_adapt = os.path.join(lookup_dir, 'lookup_from_adaptive.csv')
+    lookup_imgt = os.path.join(lookup_dir, 'lookup.csv')
 
     # Species that doesn't exist
     with pytest.raises(FileNotFoundError):
