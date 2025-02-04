@@ -2,6 +2,8 @@ import pandas as pd
 from importlib.resources import files
 import logging
 import click
+import os
+import platformdirs
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(message)s')
@@ -21,7 +23,7 @@ def choose_lookup(frm, to, species='human'):
     :type frm: str
     :param to: Output format of TCR data ``['tenx', 'adaptive', 'adaptivev2', 'imgt']``
     :type to: str
-    :param species: Species folder name under ``tcrconvert/data/``
+    :param species: Species
     :type species: str, optional
     :return: Path to correct lookup table
     :rtype: str
@@ -33,19 +35,27 @@ def choose_lookup(frm, to, species='human'):
     PosixPath('/home/emmabishop/anaconda3/envs/tcrconvert/lib/python3.12/site-packages/tcrconvert/data/human/lookup.csv')
     '''
 
+    # Determine where to find lookup tables
+    if species in ['human', 'mouse', 'rhesus']:  # Built-in
+        lookup_dir = os.path.join(files('tcrconvert'), 'data')
+    else:
+        lookup_dir = platformdirs.user_data_dir('tcrconvert', 'Emmma Bishop')
+
+    species_dir = os.path.join(lookup_dir, species)
+
     # Determine which lookup table to use
     if frm == 'tenx':
-        lookup_f = files('tcrconvert') / 'data' / species / 'lookup_from_tenx.csv'
+        lookup_f = os.path.join(species_dir, 'lookup_from_tenx.csv')
         logger.info('Converting from 10X which lacks allele info. Choosing *01 as allele for all genes.')
     elif frm == 'adaptive' or frm == 'adaptivev2':
-        lookup_f = files('tcrconvert') / 'data' / species / 'lookup_from_adaptive.csv'
+        lookup_f = os.path.join(species_dir, 'lookup_from_adaptive.csv')
         if to == 'imgt':
             logger.info('Converting from Adaptive to IMGT. If a gene lacks allele, will choose *01 as allele.')
     else:
-        lookup_f = files('tcrconvert') / 'data' / species / 'lookup.csv'
+        lookup_f = os.path.join(species_dir, 'lookup.csv')
 
     # Check path
-    if lookup_f.is_file():
+    if os.path.exists(lookup_f):
         return lookup_f
     else:
         logger.error('Lookup table not found, please download IMGT reference FASTAs and run build_lookup_from_fastas()')
@@ -100,7 +110,7 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], quiet=False):
     :type frm: str
     :param to: Output format of TCR data ``['tenx', 'adaptive', 'adaptivev2', 'imgt']``
     :type to: str
-    :param species: Species folder name under ``tcrconvert/data/``.
+    :param species: Species
     :type species: str, optional
     :param frm_cols: Custom V/D/J/C gene column names.
     :type frm_cols: list of str, optional
@@ -135,7 +145,7 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], quiet=False):
     if quiet:
         logger.setLevel(logging.ERROR)
     else:
-        logger.setLevel(logging.WARNING)
+        logger.setLevel(logging.INFO)
 
     # Check that input is ok
     if frm == to:
