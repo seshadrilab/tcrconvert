@@ -23,14 +23,20 @@ TCRconvert helps researchers unify TCR datasets by converting them to a standard
 **1. As a library**:
 ```python
 import tcrconvert
+import pandas as pd
 
-tcrconvert.convert_gene(dat, frm='tenx', to='adaptive')  # Convert gene names
-tcrconvert.build_lookup_from_fastas('path/to/fasta_dir/', 'myspecies')  # Create a custom reference
+# Convert gene names
+tcr_file = tcrconvert.get_example_path('tenx.csv')
+dat = pd.read_csv(tcr_file)[['barcode', 'v_gene' , 'd_gene', 'j_gene', 'c_gene', 'cdr3']]
+tcrconvert.convert_gene(dat, frm='tenx', to='adaptive')
+
+# Create a custom reference
+tcrconvert.build_lookup_from_fastas('path/to/fasta/dir/', 'myspecies')
 ```
 
 **2. As a command-line tool**:
 ```bash
-$ tcrconvert convert -i 10x.csv -o adaptive.tsv --frm tenx --to adaptive # Convert gene names
+$ tcrconvert convert -i tcrconvert/examples/tenx.csv -o adaptive.tsv --frm tenx --to adaptive # Convert gene names
 $ tcrconvert build -i path/to/fasta_dir/ -s myspecies # Create a custom reference
 ```
 
@@ -68,8 +74,7 @@ pip install .
 import tcrconvert
 import pandas as pd
 
-tcr_file = 'tcrconvert/examples/tenx.csv'
-
+tcr_file = tcrconvert.get_example_path('tenx.csv')
 tcrs = pd.read_csv(tcr_file)[['barcode', 'v_gene' , 'd_gene', 'j_gene', 'c_gene', 'cdr3']]
 tcrs
 ```
