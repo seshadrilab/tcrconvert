@@ -32,7 +32,7 @@ def choose_lookup(frm, to, species='human'):
 
     >>> import tcrconvert
     >>> tcrconvert.convert.choose_lookup('imgt', 'adaptive')
-    PosixPath('/home/emmabishop/anaconda3/envs/tcrconvert/lib/python3.12/site-packages/tcrconvert/data/human/lookup.csv')
+    '.../tcrconvert/data/human/lookup.csv'
     '''
 
     # Determine where to find lookup tables
