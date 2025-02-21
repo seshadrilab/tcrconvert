@@ -14,7 +14,7 @@ TCRconvert takes T-cell receptor (TCR) data containing V, D, J, and/or C genes f
 * **Adaptive**: TCRAV01-02*01
 * **IMGT**: TRAV1-2*01
 
-TCRconvert works with human, mouse, and rhesus macaque data out-of-the-box, but users can also add their own species (see: [Using a custom reference](https://tcrconvert.readthedocs.io/en/latest/usage.html#Using-a-custom-reference)).
+TCRconvert works with human, mouse, and rhesus macaque data out-of-the-box, but users can also add their own species.
 
 TCRconvert helps researchers unify TCR datasets by converting them to a standard naming convention. It is fast, reliable, and prevents errors from manual conversions. Unlike other tools that require custom objects, TCRconvert works directly with Pandas DataFrames and CSV/TSV files.
 
