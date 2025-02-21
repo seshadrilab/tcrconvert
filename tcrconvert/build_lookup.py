@@ -147,7 +147,7 @@ def build_lookup_from_fastas(data_dir, species):
 
     :param data_dir: Directory containing FASTA files
     :type data_dir: str
-    :param species: Name of species that will be used when running TCRconvert with these lookup tables
+    :param species: Name of the species, used to create a species-specific folder for storing lookup tables.
     :type species: str
     :return: None
 
