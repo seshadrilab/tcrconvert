@@ -22,9 +22,12 @@ def parse_imgt_fasta(infile):
 
     Given a FASTA file containing this header:
 
-    >SomeText|TRAV1*01|MoreText|
-    >SomeText|TRAV14/DV4*01|MoreText|
-    >SomeText|TRAV38-2/DV8*01|MoreText|
+    .. code-block:: text
+
+       \b
+       >SomeText|TRAV1*01|MoreText|
+       >SomeText|TRAV14/DV4*01|MoreText|
+       >SomeText|TRAV38-2/DV8*01|MoreText|
 
     >>> import tcrconvert
     >>> fasta = tcrconvert.get_example_path('fasta_dir/test_trav.fa')
@@ -58,12 +61,14 @@ def extract_imgt_genes(data_dir):
 
     Given a folder with FASTA files containing these headers:
 
-    >SomeText|TRAV1*01|MoreText|
-    >SomeText|TRAV14/DV4*01|MoreText|
-    >SomeText|TRAV38-2/DV8*01|MoreText|
+    .. code-block:: text
 
-    >SomeText|TRBV29/OR9-2*01|MoreText|
-    >SomeText|TRBVA/OR9-2*01|MoreText|
+       \b
+       >SomeText|TRAV1*01|MoreText|
+       >SomeText|TRAV14/DV4*01|MoreText|
+       >SomeText|TRAV38-2/DV8*01|MoreText|
+       >SomeText|TRBV29/OR9-2*01|MoreText|
+       >SomeText|TRBVA/OR9-2*01|MoreText|
 
     >>> import tcrconvert
     >>> fastadir = tcrconvert.get_example_path('fasta_dir') + '/'
@@ -141,9 +146,9 @@ def build_lookup_from_fastas(data_dir, species):
 
     The lookup tables are stored in an application data folder via platformdirs. For example:
 
-    - MacOS: ~/Library/Application Support/tcrconvert/<species>
-    - Windows: C:/Documents and Settings/<User>/Application Data/Local Settings/Emma Bishop/tcrconvert/<species>
-    - Linux: ~/.local/share/tcrconvert/<species>
+    - MacOS: ``~/Library/Application Support/tcrconvert/<species>``
+    - Windows: ``C:/Documents and Settings/<User>/Application Data/Local Settings/Emma Bishop/tcrconvert/<species>``
+    - Linux: ``~/.local/share/tcrconvert/<species>``
 
     :param data_dir: Directory containing FASTA files
     :type data_dir: str
