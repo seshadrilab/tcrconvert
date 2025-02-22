@@ -7,9 +7,11 @@ install:
 	rm -rf build *.egg-info
 
 test:
+	pip install .[dev]
 	pytest
 
 docs:
+	pip install .[docs]
 	cd docs;\
 	make html
 
