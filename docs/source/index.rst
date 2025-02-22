@@ -32,17 +32,23 @@ Pandas DataFrames and CSV/TSV files.
 .. code-block:: python
 
    import tcrconvert
+   import pandas as pd
 
-   tcrconvert.convert_gene(dat, frm='tenx', to='adaptive')  # Convert gene names
-   tcrconvert.build_lookup_from_fastas('path/to/fasta_dir/', 'rabbit')  # Create a custom reference
+   # Convert gene names
+   tcr_file = tcrconvert.get_example_path('tenx.csv')
+   dat = pd.read_csv(tcr_file)[['barcode', 'v_gene' , 'd_gene', 'j_gene', 'c_gene', 'cdr3']]
+   tcrconvert.convert_gene(dat, frm='tenx', to='adaptive')
+
+   # Create a custom reference
+   tcrconvert.build_lookup_from_fastas('path/to/fasta/dir/', 'myspecies')
 
 
 **2. As a command-line tool**:
 
 .. code-block:: console
 
-   $ tcrconvert convert -i 10x.csv -o adaptive.tsv --frm tenx --to adaptive # Convert gene names
-   $ tcrconvert build -i path/to/fasta_dir/ -s rabbit # Create a custom reference
+   $ tcrconvert convert -i tcrconvert/examples/tenx.csv -o adaptive.tsv --frm tenx --to adaptive # Convert gene names
+   $ tcrconvert build -i path/to/fasta_dir/ -s myspecies # Create a custom reference
 
 
 View on `GitHub <https://github.com/seshadrilab/tcrconvert>`_.
