@@ -157,7 +157,7 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], quiet=False):
 
     # Warn about no Adaptive C genes if needed
     if to == 'adaptive' or to == 'adaptivev2':
-        logger.info('Adaptive only captures VDJ genes, any C genes will become NA.')
+        logger.info('Adaptive only captures VDJ genes. Converted C genes will become NA.')
 
     # Load lookup table
     lookup_f = choose_lookup(frm, to, species)

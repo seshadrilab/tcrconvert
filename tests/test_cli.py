@@ -71,7 +71,7 @@ def test_convert_gene_cli(caplog):
     assert result.exit_code == 0
 
     # Expected warning messages
-    assert "Adaptive only captures VDJ genes, any C genes will become NA." in caplog.text
+    assert "Adaptive only captures VDJ genes. Converted C genes will become NA." in caplog.text
     assert "Converting from 10X which lacks allele info. Choosing *01 as allele for all genes." in caplog.text
     assert "These genes are not in IMGT for this species and will be replaced with NA:" in caplog.text
     assert " ['TRAV1-2', 'TRBV6-1', 'TRBV6-4']" in caplog.text

@@ -157,7 +157,7 @@ new_tcrs
 ```
 
     Warning: Converting from 10X which lacks allele info. Choosing *01 as allele for all genes.
-    Warning: Adaptive only captures VDJ genes, any C genes will become NA.
+    Warning: Adaptive only captures VDJ genes. Converted C genes will become NA.
 
 
 
@@ -257,7 +257,7 @@ $ tcrconvert convert \
     --to adaptive
 ```
 
-    WARNING - Adaptive only captures VDJ genes, any C genes will become NA.
+    WARNING - Adaptive only captures VDJ genes. Converted C genes will become NA.
     WARNING - Converting from 10X which lacks allele info. Choosing *01 as allele for all genes.
 
 
