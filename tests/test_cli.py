@@ -1,6 +1,7 @@
 import os
 import tempfile
 from click.testing import CliRunner
+from unittest.mock import patch
 from tcrconvert import cli, utils
 
 in_csv = utils.get_example_path('customcols.csv')
@@ -10,14 +11,20 @@ out_tsv = tempfile.gettempdir() + '/custom2adapt.tsv'
 def test_build_lookup_from_fastas_cli():
     fastadir = utils.get_example_path('fasta_dir') + '/'
 
-    result = CliRunner().invoke(cli.entry_point, [
-        'build',
-        fastadir
-    ], catch_exceptions=False)
+    # Create mock folder in temporary directory to write to
+    mock_path = os.path.join(tempfile.gettempdir(), 'mock_data')
+    os.makedirs(mock_path, exist_ok=True)
+
+    with patch("platformdirs.user_data_dir", return_value=str(mock_path)):
+        result = CliRunner().invoke(cli.entry_point, [
+            'build',
+            '-i', fastadir,
+            '-s', 'rabbit',
+        ], catch_exceptions=False)
 
     assert result.exit_code == 0
 
-    with open(fastadir + 'lookup_from_adaptive.csv') as lookupadapt:
+    with open(mock_path + '/rabbit/lookup_from_adaptive.csv') as lookupadapt:
         assert lookupadapt.read() == 'adaptive,adaptivev2,imgt,tenx\n' \
                                      'TCRAV01-01*01,TCRAV01-01*01,TRAV1*01,TRAV1\n' \
                                      'TCRAV14-01*01,TCRAV14-01*01,TRAV14/DV4*01,TRAV14DV4\n' \
@@ -30,7 +37,7 @@ def test_build_lookup_from_fastas_cli():
                                      'TCRBV29-or09_02,TCRBV29-or09_02,TRBV29/OR9-2*01,TRBV29/OR9-2\n' \
                                      'TCRBVA-or09_02,TCRBVA-or09_02,TRBVA/OR9-2*01,TRBVA/OR9-2\n'
 
-    with open(fastadir + 'lookup_from_tenx.csv') as lookup10x:
+    with open(mock_path + '/rabbit/lookup_from_tenx.csv') as lookup10x:
         assert lookup10x.read() == 'tenx,imgt,adaptive,adaptivev2\n' \
                                    'TRAV1,TRAV1*01,TCRAV01-01*01,TCRAV01-01*01\n' \
                                    'TRAV14DV4,TRAV14/DV4*01,TCRAV14-01*01,TCRAV14-01*01\n' \
@@ -38,7 +45,7 @@ def test_build_lookup_from_fastas_cli():
                                    'TRBV29/OR9-2,TRBV29/OR9-2*01,TCRBV29-or09_02*01,TCRBV29-or09_02*01\n' \
                                    'TRBVA/OR9-2,TRBVA/OR9-2*01,TCRBVA-or09_02*01,TCRBVA-or09_02*01\n'
 
-    with open(fastadir + 'lookup.csv') as lookup:
+    with open(mock_path + '/rabbit/lookup.csv') as lookup:
         assert lookup.read() == 'imgt,tenx,adaptive,adaptivev2\n' \
                                 'TRAV1*01,TRAV1,TCRAV01-01*01,TCRAV01-01*01\n' \
                                 'TRAV14/DV4*01,TRAV14DV4,TCRAV14-01*01,TCRAV14-01*01\n' \
@@ -64,7 +71,7 @@ def test_convert_gene_cli(caplog):
     assert result.exit_code == 0
 
     # Expected warning messages
-    assert "Adaptive only captures VDJ genes, any C genes will become NA." in caplog.text
+    assert "Adaptive only captures VDJ genes. Converted C genes will become NA." in caplog.text
     assert "Converting from 10X which lacks allele info. Choosing *01 as allele for all genes." in caplog.text
     assert "These genes are not in IMGT for this species and will be replaced with NA:" in caplog.text
     assert " ['TRAV1-2', 'TRBV6-1', 'TRBV6-4']" in caplog.text

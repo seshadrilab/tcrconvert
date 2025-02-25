@@ -12,6 +12,7 @@ def get_example_path(file_name):
 
     >>> import tcrconvert
     >>> tcrconvert.get_example_path('tenx.csv')
+    '.../tcrconvert/examples/tenx.csv'
     '''
 
     out = files('tcrconvert') / 'examples' / file_name

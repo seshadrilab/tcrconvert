@@ -6,6 +6,7 @@ Requirements:
 * ``python >=3.9``
 * ``pandas >= 1.5.0``
 * ``click >= 8.1.7``
+* ``platformdirs >= 4.2.2``
 
 TCRconvert runs on Windows, macOS, and Linux.
 

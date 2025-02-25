@@ -14,7 +14,7 @@ TCRconvert takes T-cell receptor (TCR) data containing V, D, J, and/or C genes f
 * **Adaptive**: TCRAV01-02*01
 * **IMGT**: TRAV1-2*01
 
-TCRconvert works with human, mouse, and rhesus macaque data out-of-the-box, but users can also add their own species (see: [Using a custom reference](https://tcrconvert.readthedocs.io/en/latest/usage.html#Using-a-custom-reference)).
+TCRconvert works with human, mouse, and rhesus macaque data out-of-the-box, but users can also add their own species.
 
 TCRconvert helps researchers unify TCR datasets by converting them to a standard naming convention. It is fast, reliable, and prevents errors from manual conversions. Unlike other tools that require custom objects, TCRconvert works directly with Pandas DataFrames and CSV/TSV files.
 
@@ -23,15 +23,21 @@ TCRconvert helps researchers unify TCR datasets by converting them to a standard
 **1. As a library**:
 ```python
 import tcrconvert
+import pandas as pd
 
-tcrconvert.convert_gene(dat, frm='tenx', to='adaptive')  # Convert gene names
-tcrconvert.build_lookup_from_fastas('path/to/fasta_dir/')  # Create a custom reference
+# Convert gene names
+tcr_file = tcrconvert.get_example_path('tenx.csv')
+dat = pd.read_csv(tcr_file)[['barcode', 'v_gene' , 'd_gene', 'j_gene', 'c_gene', 'cdr3']]
+tcrconvert.convert_gene(dat, frm='tenx', to='adaptive')
+
+# Create a custom reference
+tcrconvert.build_lookup_from_fastas('path/to/fasta/dir/', 'myspecies')
 ```
 
 **2. As a command-line tool**:
 ```bash
-$ tcrconvert convert -i 10x.csv -o adaptive.tsv --frm tenx --to adaptive # Convert gene names
-$ tcrconvert build path/to/fasta_dir/ # Create a custom reference
+$ tcrconvert convert -i tcrconvert/examples/tenx.csv -o adaptive.tsv --frm tenx --to adaptive # Convert gene names
+$ tcrconvert build -i path/to/fasta_dir/ -s myspecies # Create a custom reference
 ```
 
 For full documentation visit [tcrconvert.readthedocs.io](https://tcrconvert.readthedocs.io/en/latest/)
@@ -43,6 +49,7 @@ Requirements:
 * `python >=3.9`
 * `pandas >=1.5.0`
 * `click >=8.1.7`
+* `platformdirs >=4.2.2`
 
 TCRconvert runs on Windows, macOS, and Linux.
 
@@ -67,8 +74,7 @@ pip install .
 import tcrconvert
 import pandas as pd
 
-tcr_file = 'tcrconvert/examples/tenx.csv'
-
+tcr_file = tcrconvert.get_example_path('tenx.csv')
 tcrs = pd.read_csv(tcr_file)[['barcode', 'v_gene' , 'd_gene', 'j_gene', 'c_gene', 'cdr3']]
 tcrs
 ```
@@ -151,7 +157,7 @@ new_tcrs
 ```
 
     Warning: Converting from 10X which lacks allele info. Choosing *01 as allele for all genes.
-    Warning: Adaptive only captures VDJ genes, any C genes will become NA.
+    Warning: Adaptive only captures VDJ genes. Converted C genes will become NA.
 
 
 
@@ -251,7 +257,7 @@ $ tcrconvert convert \
     --to adaptive
 ```
 
-    WARNING - Adaptive only captures VDJ genes, any C genes will become NA.
+    WARNING - Adaptive only captures VDJ genes. Converted C genes will become NA.
     WARNING - Converting from 10X which lacks allele info. Choosing *01 as allele for all genes.
 
 
