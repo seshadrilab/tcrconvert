@@ -171,13 +171,17 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], quiet=False):
     bad_genes = []
 
     for col in cols_from:
-        if col in df.columns:
-            new_genes[col] = df[[col]].\
-                merge(lookup[[frm, to]], how='left', left_on=col, right_on=frm).\
-                drop(columns=frm)
-            # Note genes where the merge produced an NA on the 'to' format side
-            bad_genes = bad_genes + new_genes[col][new_genes[col][to].isna()][col].dropna().tolist()
+        good_genes = df[[col]].\
+            merge(lookup[[frm, to]], how='left', left_on=col, right_on=frm).\
+            drop(columns=frm)
+        # Note genes where the merge produced an NA on the 'to' format side
+        new_bad_genes = good_genes[good_genes[to].isna()][col].dropna().tolist()
+        # We don't expect the entire column of genes to be empty.
+        if len(new_bad_genes) < len(good_genes):
+            new_genes[col] = good_genes
+            bad_genes += new_bad_genes
         else:
+            logger.warning(f"The input column '{col}' doesn't contain any valid genes and was skipped.")
             continue
 
     # Display genes we couldn't convert

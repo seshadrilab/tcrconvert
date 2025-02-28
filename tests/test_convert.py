@@ -32,6 +32,12 @@ custom_df = imgt_df.rename(columns={'v_gene': 'myV',
                                     'c_gene': 'myC',
                                     'cdr3': 'myCDR3'})
 
+custom_vj_tenx_df = pd.DataFrame({'myV': ['TRAV12-1', 'TRBV15'],
+                                  'myD': [pd.NA, 'TRBD1*01'],
+                                  'myJ': ['TRAJ16', 'TRBJ2-5'],
+                                  'myC': ['TRAC*01', 'TRBC2*01'],
+                                  'myCDR3': ['CAVLIF', 'CASSGF']})
+
 tenx_to_adapt_df = adapt_df.rename(columns={'v_resolved': 'v_gene', 
                                             'd_resolved': 'd_gene',
                                             'j_resolved': 'j_gene',
@@ -114,7 +120,9 @@ adapt_no_allele_df = pd.DataFrame({'v_resolved': ['TCRAV12-01', 'TCRBV15-01*01']
     (adapt_v2_df, 'adaptivev2', 'imgt', 'rhesus', None, adaptv2_to_imgt_df),
     (custom_df, 'imgt', 'tenx', 'rhesus', ['myV', 'myD', 'myJ', 'myC'], custom_to_tenx_df),
     # Some Adaptive genes without allele
-    (adapt_no_allele_df, 'adaptive', 'imgt', 'human', None, adapt_to_imgt_df)])
+    (adapt_no_allele_df, 'adaptive', 'imgt', 'human', None, adapt_to_imgt_df),
+    # Confirm won't convert non-VDJC gene column to NAs
+    (custom_df, 'imgt', 'tenx', 'human', ['myV', 'myJ', 'myCDR3'], custom_vj_tenx_df)])
 def test_convert_gene(df, frm, to, species, frm_cols, out):
     result = convert.convert_gene(df, frm, to, species, frm_cols)
     # Standardize the NA values so we can check for equality
