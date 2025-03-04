@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 def parse_imgt_fasta(infile):
-    '''Extract gene names from a reference FASTA.
+    """Extract gene names from a reference FASTA.
 
     :param infile: Path to FASTA file
     :type infile: str
@@ -33,24 +33,24 @@ def parse_imgt_fasta(infile):
     >>> fasta = tcrconvert.get_example_path('fasta_dir/test_trav.fa')
     >>> tcrconvert.build_lookup.parse_imgt_fasta(fasta)
     ['TRAV1*01', 'TRAV14/DV4*01', 'TRAV38-2/DV8*01']
-    '''
-    
+    """
+
     # Read the file and extract lines starting with ">"
-    with open(infile, "r") as f:
+    with open(infile, 'r') as f:
         lines = f.readlines()
 
     # Extract the second element from lines starting with ">"
     imgt_list = []
     for line in lines:
-        if line.startswith(">"):
-            gene = line.split("|")[1]
+        if line.startswith('>'):
+            gene = line.split('|')[1]
             imgt_list.append(gene)
 
     return imgt_list
 
 
 def extract_imgt_genes(data_dir):
-    '''Extract gene names from all reference FASTA files in a folder.
+    """Extract gene names from all reference FASTA files in a folder.
 
     :param data_dir: Path to directory containing FASTA files
     :type data_dir: str
@@ -79,7 +79,7 @@ def extract_imgt_genes(data_dir):
     2  TRAV38-2/DV8*01
     3  TRBV29/OR9-2*01
     4   TRBVA/OR9-2*01
-    '''
+    """
 
     fastas = []
     for file in os.listdir(data_dir):
@@ -97,7 +97,7 @@ def extract_imgt_genes(data_dir):
 
 
 def add_dash_one(gene_str):
-    '''Add a ``-01`` to genes without IMGT gene-level designation.
+    """Add a ``-01`` to genes without IMGT gene-level designation.
 
     :param gene_str: Gene name
     :type gene_str: str
@@ -109,7 +109,7 @@ def add_dash_one(gene_str):
     >>> import tcrconvert
     >>> tcrconvert.build_lookup.add_dash_one('TRBV2*01')
     'TRBV2-01*01'
-    '''
+    """
 
     if '-' not in gene_str:
         # Add -1 before allele
@@ -118,7 +118,7 @@ def add_dash_one(gene_str):
 
 
 def pad_single_digit(gene_str):
-    '''Add a zero to single-digit gene-level designatinon in gene names.
+    """Add a zero to single-digit gene-level designatinon in gene names.
 
     :param gene_str: Gene name
     :type gene_str: str
@@ -130,7 +130,7 @@ def pad_single_digit(gene_str):
     >>> import tcrconvert
     >>> tcrconvert.build_lookup.pad_single_digit('TCRBV1-2')
     'TCRBV01-2'
-    '''
+    """
 
     # Use regex to find a single digit preceded by letters and followed by a hyphen or asterisk
     updated_string = re.sub(r'([A-Za-z]+)(\d)([-\*])', r'\g<1>0\g<2>\g<3>', gene_str)
@@ -138,7 +138,7 @@ def pad_single_digit(gene_str):
 
 
 def build_lookup_from_fastas(data_dir, species):
-    '''Create these lookup tables from a directory of FASTA files:
+    """Create these lookup tables from a directory of FASTA files:
 
     - lookup.csv
     - lookup_from_tenx.csv
@@ -161,10 +161,10 @@ def build_lookup_from_fastas(data_dir, species):
     >>> import tcrconvert
     >>> fastadir = tcrconvert.get_example_path('fasta_dir') + '/'
     >>> tcrconvert.build_lookup.build_lookup_from_fastas(fastadir, 'rabbit')
-    '''
+    """
 
     # Get the user data directory for saving lookup tables
-    user_dir = platformdirs.user_data_dir("tcrconvert", "Emmma Bishop")
+    user_dir = platformdirs.user_data_dir('tcrconvert', 'Emmma Bishop')
     save_dir = os.path.join(user_dir, species)
     os.makedirs(save_dir, exist_ok=True)
 
@@ -175,25 +175,26 @@ def build_lookup_from_fastas(data_dir, species):
     lookup['tenx'] = lookup['imgt'].apply(lambda x: x[:-3].replace('/DV', 'DV'))
 
     # Create Adaptive columns by adding letters, 0's, removing /DV and renaming /OR
-    lookup['adaptive'] = lookup['imgt'].apply(lambda x: x.\
-                                            replace('TRAV14/DV4', 'TRAV14-1').\
-                                            replace('TRAV23/DV6', 'TRAV23-1').\
-                                            replace('TRAV29/DV5', 'TRAV29-1').\
-                                            replace('TRAV36/DV7', 'TRAV36-1').\
-                                            replace('TRAV38-2/DV8', 'TRAV38-2').\
-                                            replace('TRAV4-4/DV10', 'TRAV4-4/').\
-                                            replace('TRAV6-7/DV9', 'TRAV6-7').\
-                                            replace('TRAV13-4/DV7', 'TRAV13-4').\
-                                            replace('TRAV14D-3/DV8', 'TRAV14D-3').\
-                                            replace('TRAV15D-1/DV6D-1', 'TRAV15D-1').\
-                                            replace('TRAV15-1/DV6-1', 'TRAV15-1').\
-                                            replace('TRAV16D/DV11', 'TRAV16D-1').\
-                                            replace('TRAV21/DV12', 'TRAV21-1').\
-                                            replace('TRAV15-2/DV6-2', 'TRAV15-2').\
-                                            replace('TRAV15D-2/DV6D-2', 'TRAV15D-2').\
-                                            replace('TR', 'TCR').\
-                                            replace('-', '-0').\
-                                            replace('/OR9-02', '-or09_02'))
+    lookup['adaptive'] = lookup['imgt'].apply(
+        lambda x: x.replace('TRAV14/DV4', 'TRAV14-1')
+        .replace('TRAV23/DV6', 'TRAV23-1')
+        .replace('TRAV29/DV5', 'TRAV29-1')
+        .replace('TRAV36/DV7', 'TRAV36-1')
+        .replace('TRAV38-2/DV8', 'TRAV38-2')
+        .replace('TRAV4-4/DV10', 'TRAV4-4/')
+        .replace('TRAV6-7/DV9', 'TRAV6-7')
+        .replace('TRAV13-4/DV7', 'TRAV13-4')
+        .replace('TRAV14D-3/DV8', 'TRAV14D-3')
+        .replace('TRAV15D-1/DV6D-1', 'TRAV15D-1')
+        .replace('TRAV15-1/DV6-1', 'TRAV15-1')
+        .replace('TRAV16D/DV11', 'TRAV16D-1')
+        .replace('TRAV21/DV12', 'TRAV21-1')
+        .replace('TRAV15-2/DV6-2', 'TRAV15-2')
+        .replace('TRAV15D-2/DV6D-2', 'TRAV15D-2')
+        .replace('TR', 'TCR')
+        .replace('-', '-0')
+        .replace('/OR9-02', '-or09_02')
+    )
     lookup['adaptive'] = lookup['adaptive'].apply(lambda x: add_dash_one(x))
     lookup['adaptive'] = lookup['adaptive'].apply(lambda x: pad_single_digit(x))
     lookup['adaptivev2'] = lookup['adaptive']
@@ -209,9 +210,13 @@ def build_lookup_from_fastas(data_dir, species):
     lookup2 = lookup[~lookup.adaptivev2.str.contains('NoData')]
     from_adapt = lookup2[['adaptivev2', 'imgt', 'tenx']]
     from_adapt['adaptive'] = from_adapt['adaptivev2'].apply(lambda x: x[:-3])
-    from_adapt = from_adapt.drop(columns='adaptivev2').groupby('adaptive').first().reset_index()
+    from_adapt = (
+        from_adapt.drop(columns='adaptivev2').groupby('adaptive').first().reset_index()
+    )
     from_adapt['adaptivev2'] = from_adapt['adaptive']
-    from_adaptive = pd.concat([lookup2, from_adapt])[['adaptive', 'adaptivev2', 'imgt', 'tenx']]
+    from_adaptive = pd.concat([lookup2, from_adapt])[
+        ['adaptive', 'adaptivev2', 'imgt', 'tenx']
+    ]
 
     # Remove any duplicate rows
     lookup_path = os.path.join(save_dir, 'lookup.csv')
@@ -227,16 +232,22 @@ def build_lookup_from_fastas(data_dir, species):
 
 # Command-line version of build_lookup_from_fastas()
 @click.command(name='build', no_args_is_help=True)
-@click.option('-i', '--input', help='Path to folder of FASTA files', required=True, type=click.Path(exists=True))
+@click.option(
+    '-i',
+    '--input',
+    help='Path to folder of FASTA files',
+    required=True,
+    type=click.Path(exists=True),
+)
 @click.option('-s', '--species', help='Species name.', required=True)
 def build_lookup_from_fastas_cli(input, species):
-    '''Create lookup tables from within a folder of FASTA files.
+    """Create lookup tables from within a folder of FASTA files.
 
     :Example:
 
     .. code-block:: bash
 
        $ tcrconvert build -i tcrconvert/examples/fasta_dir/ -s rabbit
-    '''
+    """
 
     build_lookup_from_fastas(input, species)

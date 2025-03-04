@@ -60,3 +60,9 @@ docs = [
     "nbsphinx>=0.9.5",
     "ipython>=8.27.0"
     ]
+
+[tool.ruff]
+target-version = "py312"
+
+[tool.ruff.format]
+quote-style = "single"

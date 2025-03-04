@@ -12,6 +12,7 @@
 #
 import os
 import sys
+
 sys.path.insert(0, os.path.abspath(os.path.join('..', '..', 'tcrconvert')))
 
 
@@ -34,7 +35,7 @@ extensions = [
     'sphinx.ext.duration',
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
-    'nbsphinx'
+    'nbsphinx',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
