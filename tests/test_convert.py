@@ -218,23 +218,22 @@ def test_convert_gene_input():
     with pytest.raises(ValueError):
         convert.convert_gene(tenx_df, 'tenx', 'tenx')
 
-    # Empty dataframe
-    with pytest.raises(ValueError):
+    # Empty input dataframe
+    with pytest.raises(TypeError):
         convert.convert_gene(pd.DataFrame, 'tenx', 'imgt')
 
 
 def test_choose_lookup():
-    # Using 'human' for all these examples
     lookup_dir = os.path.join(files('tcrconvert'), 'data', 'human')
     lookup_tenx = os.path.join(lookup_dir, 'lookup_from_tenx.csv')
     lookup_adapt = os.path.join(lookup_dir, 'lookup_from_adaptive.csv')
     lookup_imgt = os.path.join(lookup_dir, 'lookup.csv')
 
-    # Species that doesn't exist
+    # Species we don't have lookups for
     with pytest.raises(FileNotFoundError):
         convert.choose_lookup('tenx', 'imgt', 'non-existent-species')
 
-    # From different 'frm' formats
+    # Different 'frm' formats
     assert convert.choose_lookup('tenx', 'imgt') == lookup_tenx
     assert convert.choose_lookup('adaptivev2', 'imgt') == lookup_adapt
     assert convert.choose_lookup('imgt', 'tenx') == lookup_imgt

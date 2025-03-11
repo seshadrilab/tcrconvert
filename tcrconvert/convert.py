@@ -28,7 +28,7 @@ def choose_lookup(frm, to, species='human', verbose=True):
     :type frm: str
     :param to: Output format of TCR data ``['tenx', 'adaptive', 'adaptivev2', 'imgt']``
     :type to: str
-    :param species: Species
+    :param species: Species, defaults to ``'human'``
     :type species: str, optional
     :param verbose: Whether to show all messages, defaults to ``True``
     :type verbose: bool, optional
@@ -46,29 +46,27 @@ def choose_lookup(frm, to, species='human', verbose=True):
         logger.setLevel(logging.INFO)
 
     # Determine where to find lookup tables
-    if species in ['human', 'mouse', 'rhesus']:  # Built-in
+    if species in ['human', 'mouse', 'rhesus']:
         lookup_dir = os.path.join(files('tcrconvert'), 'data')
     else:
         lookup_dir = platformdirs.user_data_dir('tcrconvert', 'Emmma Bishop')
 
-    species_dir = os.path.join(lookup_dir, species)
+    data_path = os.path.join(lookup_dir, species)
 
-    # Determine which lookup table to use
     if frm == 'tenx':
         lookup_f = os.path.join(species_dir, 'lookup_from_tenx.csv')
         logger.info(
             'Converting from 10X which lacks allele info. Choosing *01 as allele for all genes.'
         )
     elif frm == 'adaptive' or frm == 'adaptivev2':
-        lookup_f = os.path.join(species_dir, 'lookup_from_adaptive.csv')
+        lookup_f = os.path.join(data_path, 'lookup_from_adaptive.csv')
         if to == 'imgt':
             logger.info(
-                'Converting from Adaptive to IMGT. If a gene lacks allele, will choose *01 as allele.'
+                'Converting from Adaptive to IMGT. Using *01 for genes lacking alleles.'
             )
     else:
-        lookup_f = os.path.join(species_dir, 'lookup.csv')
+        lookup_f = os.path.join(data_path, 'lookup.csv')
 
-    # Check path
     if os.path.exists(lookup_f):
         return lookup_f
     else:
@@ -197,15 +195,12 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], verbose=True):
     if verbose:
         logger.setLevel(logging.INFO)
 
-    # Check that input is ok
     if frm == to:
         logger.error('"frm" and "to" formats should be different.')
         raise (ValueError)
     if df.empty:
         logger.error('Input data is empty.')
         raise (ValueError)
-
-    # Warn about no Adaptive C genes if needed
     if to == 'adaptive' or to == 'adaptivev2':
         logger.warning('Adaptive only captures VDJ genes; C genes will be NA.')
 
@@ -214,10 +209,7 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], verbose=True):
     lookup = pd.read_csv(lookup_f)
     cols_from = which_frm_cols(df, frm, frm_cols, verbose)
 
-    # Determine columns to use
-    cols_from = which_frm_cols(df, frm, frm_cols)
-
-    # Loop over gene columns, doing a pandas merge to get converted gene names
+    # Loop over gene columns, doing a merge to get converted gene names
     new_genes = {}
     bad_genes = []
 
@@ -282,13 +274,13 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], verbose=True):
     type=click.Choice(['tenx', 'adaptive', 'adaptivev2', 'imgt'], case_sensitive=False),
 )
 @click.option(
-    '-s', '--species', default='human', help='Species name.', show_default=True
+    '-s', '--species', default='human', help='Species name', show_default=True
 )
 @click.option(
     '-c',
     '--frm_cols',
     default=[],
-    help='List of custom V/D/J/C gene column names.',
+    help='List of custom gene column names.',
     show_default=True,
     multiple=True,
 )

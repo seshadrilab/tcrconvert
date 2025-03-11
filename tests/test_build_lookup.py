@@ -53,7 +53,7 @@ def test_build_lookup_from_fastas():
     fastadir = utils.get_example_path('fasta_dir')
 
     # Create mock folder in temporary directory to write to
-    mock_path = os.path.join(tempfile.gettempdir(), 'mock_data')
+    mock_path = os.path.join(tempfile.gettempdir(), 'tcrconvert_tmp')
     os.makedirs(mock_path, exist_ok=True)
 
     with patch('platformdirs.user_data_dir', return_value=str(mock_path)):

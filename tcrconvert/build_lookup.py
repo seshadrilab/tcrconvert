@@ -11,7 +11,10 @@ logger = logging.getLogger(__name__)
 
 
 def parse_imgt_fasta(infile):
-    """Extract gene names from a reference FASTA.
+    """Extract gene names from a reference FASTA
+
+    Extracts the second element from a "|"-delimited FASTA header, which will
+    be the gene name for IMGT reference FASTAs.
 
     :param infile: Path to FASTA file
     :type infile: str
@@ -48,7 +51,11 @@ def parse_imgt_fasta(infile):
 
 
 def extract_imgt_genes(data_dir):
-    """Extract gene names from all reference FASTA files in a folder.
+    """Extract all gene names from a folder of FASTAs
+
+    First run ``parse_imgt_fasta()`` on all FASTA files in a given folder to
+    pull out the gene names. Then return those names in an alphabetically
+    sorted dataframe.
 
     :param data_dir: Path to directory containing FASTA files
     :type data_dir: str
@@ -90,6 +97,8 @@ def extract_imgt_genes(data_dir):
     imgt = []
     for fa in fastas:
         imgt = imgt + parse_imgt_fasta(fa)
+
+    # Create and sort output data frame
     lookup = pd.DataFrame({'imgt': imgt})
     lookup_sorted = lookup.sort_values('imgt').reset_index(drop=True)
 
@@ -97,7 +106,12 @@ def extract_imgt_genes(data_dir):
 
 
 def add_dash_one(gene_str):
-    """Add a ``-01`` to genes without IMGT gene-level designation.
+    """Add ``-01`` to gene names lacking gene-level info
+
+    Some genes just have the IMGT subgroup (e.g. TRBV2) and allele (e.g. *01)
+    designation. The Adaptive format always includes an IMGT gene (e.g. -01)
+    designation, with "-01" as the apparent default. `add_dash_one()` adds a
+    default gene-level designation if it's missing.
 
     :param gene_str: Gene name
     :type gene_str: str
@@ -112,17 +126,20 @@ def add_dash_one(gene_str):
     """
 
     if '-' not in gene_str:
-        # Add -1 before allele
         return gene_str.replace('*', '-01*')
     return gene_str
 
 
 def pad_single_digit(gene_str):
-    """Add a zero to single-digit gene-level designatinon in gene names.
+    """Add a ``0`` to single-digit gene-level designation
+
+    Take a gene name and ensure that any single-digit number following a
+    sequence of letters is padded with a leading zero. This is to match the
+    Adaptive format.
 
     :param gene_str: Gene name
     :type gene_str: str
-    :return: Gene name
+    :return: Updated gene name
     :rtype: str
 
     :Example:
@@ -132,35 +149,51 @@ def pad_single_digit(gene_str):
     'TCRBV01-2'
     """
 
-    # Use regex to find a single digit preceded by letters and followed by a hyphen or asterisk
     updated_string = re.sub(r'([A-Za-z]+)(\d)([-\*])', r'\g<1>0\g<2>\g<3>', gene_str)
     return updated_string
 
 
 def build_lookup_from_fastas(data_dir, species):
-    """Create these lookup tables from a directory of FASTA files:
+    """Create lookup tables
 
-    - lookup.csv
-    - lookup_from_tenx.csv
-    - lookup_from_adaptive.csv
+    Process IMGT reference FASTA files in a given folder to generate lookup
+    tables used for making gene name conversions. It extracts all gene names
+    and transforms them into 10X and Adaptive formats following predefined
+    conversion rules. The resulting files are created:
 
-    The lookup tables are stored in an application data folder via platformdirs. For example:
+    - ``lookup.csv``: IMGT gene names and their 10X and Adaptive equivalents.
+    - ``lookup_from_tenx.csv``: Gene names aggregated by their 10X identifiers, with one representative allele (``*01``) for each.
+    - ``lookup_from_adaptive.csv``: Adaptive gene names, with or without alleles, and their IMGT and 10X equivalents.
 
-    - MacOS: ``~/Library/Application Support/tcrconvert/<species>``
-    - Windows: ``C:/Documents and Settings/<User>/Application Data/Local Settings/Emma Bishop/tcrconvert/<species>``
-    - Linux: ``~/.local/share/tcrconvert/<species>``
+    The files are saved in a given subfolder (``species``) within the appropriate
+    application folder via ``platformdirs``. For example:
+
+    - MacOS: ``~/Library/Application Support/<AppName>``
+    - Windows: ``C:\\Documents and Settings\\<User>\\Application Data\\Local Settings\\<AppAuthor>\\<AppName>``
+    - Linux: ``~/.local/share/<AppName>``
+
+    If a folder named ``species`` already exists in that location, it will be replaced.
+
+    Key transformations from IMGT:
+    - **10X:**
+        - Remove allele information (e.g., ``*01``) and modify ``/DV`` occurrences.
+    - **Adaptive:**
+        - Apply renaming rules such as adding gene-level designations and zero-padding single-digit numbers.
+        - Convert constant genes to ``'NoData'`` (Adaptive only captures VDJ) which will become ``NA`` after the merge in ``convert_gene()``.
 
     :param data_dir: Directory containing FASTA files
     :type data_dir: str
-    :param species: Name of the species, used to create a species-specific folder for storing lookup tables.
+    :param species: Name of species that will be used when running TCRconvert with these lookup tables.
     :type species: str
-    :return: None
+    :return: Path to the new lookup directory
+    :rtype: str
 
     :Example:
 
     >>> import tcrconvert
-    >>> fastadir = tcrconvert.get_example_path('fasta_dir') + '/'
+    >>> fastadir = tcrconvert.get_example_path('fasta_dir')
     >>> tcrconvert.build_lookup.build_lookup_from_fastas(fastadir, 'rabbit')
+    '.../.local/share/tcrconvert/rabbit'
     """
 
     # Get the user data directory for saving lookup tables
@@ -168,13 +201,12 @@ def build_lookup_from_fastas(data_dir, species):
     save_dir = os.path.join(user_dir, species)
     os.makedirs(save_dir, exist_ok=True)
 
-    # Extract IMGT gene names and put into a dataframe
     lookup = extract_imgt_genes(data_dir)
 
-    # Create 10X column by removing allele info (e.g. *01) and slash from "/DV"
+    # Create 10X column
     lookup['tenx'] = lookup['imgt'].apply(lambda x: x[:-3].replace('/DV', 'DV'))
 
-    # Create Adaptive columns by adding letters, 0's, removing /DV and renaming /OR
+    # Create Adaptive columns
     lookup['adaptive'] = lookup['imgt'].apply(
         lambda x: x.replace('TRAV14/DV4', 'TRAV14-1')
         .replace('TRAV23/DV6', 'TRAV23-1')
@@ -198,12 +230,9 @@ def build_lookup_from_fastas(data_dir, species):
     lookup['adaptive'] = lookup['adaptive'].apply(lambda x: add_dash_one(x))
     lookup['adaptive'] = lookup['adaptive'].apply(lambda x: pad_single_digit(x))
     lookup['adaptivev2'] = lookup['adaptive']
-
-    # Set Adaptive columns to 'NoData' for constant genes (Adaptive only captures VDJ)
-    # 'NoData' gets converted to NA by convert.convert_gene()
     lookup.loc[lookup['imgt'].str.contains('C'), ['adaptive', 'adaptivev2']] = 'NoData'
 
-    # If converting from 10X will just need the first *01 allele
+    # If converting from 10X will just need the *01 allele
     from_tenx = lookup.groupby('tenx').first().reset_index()
 
     # Make table for Adaptive genes with or without allele
@@ -241,8 +270,7 @@ def build_lookup_from_fastas(data_dir, species):
 )
 @click.option('-s', '--species', help='Species name.', required=True)
 def build_lookup_from_fastas_cli(input, species):
-    """Create lookup tables from within a folder of FASTA files.
-
+    """Create lookup tables
     :Example:
 
     .. code-block:: bash
