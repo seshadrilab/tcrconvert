@@ -6,7 +6,7 @@ import os
 import platformdirs
 
 # Set up logging
-logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(message)s')
+logging.basicConfig(level=logging.WARNING, format='%(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 # Standard column names for different sources of TCR data
@@ -18,8 +18,11 @@ col_ref = {
 }
 
 
-def choose_lookup(frm, to, species='human'):
-    """Determine which lookup table to use and get filepath.
+def choose_lookup(frm, to, species='human', verbose=True):
+    """Choose lookup table
+
+    Determine which CSV lookup table to use based on the the input format
+    (``frm``) and returns the path to that file.
 
     :param frm: Input format of TCR data ``['tenx', 'adaptive', 'adaptivev2', 'imgt']``
     :type frm: str
@@ -27,15 +30,20 @@ def choose_lookup(frm, to, species='human'):
     :type to: str
     :param species: Species
     :type species: str, optional
+    :param verbose: Whether to show all messages, defaults to ``True``
+    :type verbose: bool, optional
     :return: Path to correct lookup table
     :rtype: str
 
     :Example:
 
     >>> import tcrconvert
-    >>> tcrconvert.convert.choose_lookup('imgt', 'adaptive')
+    >>> tcrconvert.convert.choose_lookup('imgt', 'adaptive', verbose=False)
     '.../tcrconvert/data/human/lookup.csv'
     """
+
+    if verbose:
+        logger.setLevel(logging.INFO)
 
     # Determine where to find lookup tables
     if species in ['human', 'mouse', 'rhesus']:  # Built-in
@@ -70,8 +78,12 @@ def choose_lookup(frm, to, species='human'):
         raise (FileNotFoundError)
 
 
-def which_frm_cols(df, frm, frm_cols=[]):
-    """Determine input columns to use for converting gene names.
+def which_frm_cols(df, frm, frm_cols=[], verbose=True):
+    """Determine input columns to use
+
+    Determine the columns that are expected to hold gene name information in
+    the input file based on the input format (``frm``). Returns a list of
+    those column names.
 
     :param df: Dataframe containing TCR gene names
     :type df: DataFrame
@@ -79,6 +91,8 @@ def which_frm_cols(df, frm, frm_cols=[]):
     :type frm: str
     :param frm_cols: Custom column names to use
     :type frm_cols: list of str, optional
+    :param verbose: Whether to show all messages, defaults to ``True``
+    :type verbose: bool, optional
     :return: Column names to use
     :rtype: list of str
 
@@ -92,10 +106,13 @@ def which_frm_cols(df, frm, frm_cols=[]):
     ['v_gene', 'd_gene', 'j_gene', 'c_gene']
     """
 
+    if verbose:
+        logger.setLevel(logging.INFO)
+
     if frm == 'imgt' and not frm_cols:
         cols_from = col_ref['tenx']
-        logger.info(
-            f'No column names provided for IMGT data, will assume 10X column names: {str(cols_from)}'
+        logger.warning(
+            f'No column names for IMGT data. Using 10X columns: {str(cols_from)}'
         )
     if frm_cols:
         missing_cols = set(frm_cols) - set(df.columns)
@@ -113,8 +130,33 @@ def which_frm_cols(df, frm, frm_cols=[]):
     return cols_from
 
 
-def convert_gene(df, frm, to, species='human', frm_cols=[], quiet=False):
-    """Convert T-cell receptor V, D, J, and/or C gene names from one naming convention to another.
+def convert_gene(df, frm, to, species='human', frm_cols=[], verbose=True):
+    """Convert gene names
+
+    Convert T-cell receptor (TCR) gene names between the IMGT, 10X, and Adaptive
+    formats. Determines the columns to convert based on the input format
+    (``frm``) unless specified by the user (``frm_cols``). Returns a modified
+    version of the input data frame with converted gene names while preserving
+    row order.
+
+    **Behavioral Notes**:
+    - If a gene name cannot be mapped, it is replaced with ``NaN``, and a
+    warning is issued.
+    - If ``frm`` is ``'imgt'`` and ``frm_cols`` is not provided, 10X column
+    names are assumed.
+    - Constant (C) genes are set to ``NaN`` when converting to Adaptive formats,
+    as Adaptive does not capture constant regions.
+    - The input does not need to include all gene types; partial inputs
+    (e.g., only V genes) are supported.
+    - If no values in a custom column can be mapped (e.g., a CDR3 column) it is
+    skipped and a warning is raised.
+
+    **Standard Column Names**:
+    If ``frm_cols`` is not provided, these column names will be used if present:
+    - **IMGT**: ``'v_gene'``, ``'d_gene'``, ``'j_gene'``, ``'c_gene'``
+    - **10X**: ``'v_gene'``, ``'d_gene'``, ``'j_gene'``, ``'c_gene'``
+    - **Adaptive**: ``'v_resolved'``, ``'d_resolved'``, ``'j_resolved'``
+    - **Adaptive v2**: ``'vMaxResolved'``, ``'dMaxResolved'``, ``'jMaxResolved'``
 
     :param df: Dataframe containing TCR gene names
     :type df: DataFrame
@@ -122,12 +164,12 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], quiet=False):
     :type frm: str
     :param to: Output format of TCR data ``['tenx', 'adaptive', 'adaptivev2', 'imgt']``
     :type to: str
-    :param species: Species
+    :param species: Species name. Defaults to ``'human'``.
     :type species: str, optional
-    :param frm_cols: Custom V/D/J/C gene column names.
+    :param frm_cols: Custom gene column names.
     :type frm_cols: list of str, optional
-    :param quiet: Whether to suppress warning messages.
-    :type quiet: bool, optional
+    :param verbose: Whether to show all messages. Defaults to ``True``.
+    :type verbose: bool, optional
     :return: Converted TCR data
     :rtype: DataFrame
 
@@ -153,10 +195,7 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], quiet=False):
     4  TCRBV02-01*01  TCRBD01-01*01  TCRBJ01-02*01   <NA>    CASNQGLNYGYTF
     """
 
-    # Set logging level
-    if quiet:
-        logger.setLevel(logging.ERROR)
-    else:
+    if verbose:
         logger.setLevel(logging.INFO)
 
     # Check that input is ok
@@ -169,13 +208,12 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], quiet=False):
 
     # Warn about no Adaptive C genes if needed
     if to == 'adaptive' or to == 'adaptivev2':
-        logger.info(
-            'Adaptive only captures VDJ genes. Converted C genes will become NA.'
-        )
+        logger.warning('Adaptive only captures VDJ genes; C genes will be NA.')
 
-    # Load lookup table
-    lookup_f = choose_lookup(frm, to, species)
+    # Load lookup table and determine input columns
+    lookup_f = choose_lookup(frm, to, species, verbose)
     lookup = pd.read_csv(lookup_f)
+    cols_from = which_frm_cols(df, frm, frm_cols, verbose)
 
     # Determine columns to use
     cols_from = which_frm_cols(df, frm, frm_cols)
@@ -256,14 +294,13 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], quiet=False):
     multiple=True,
 )
 @click.option(
-    '-q',
-    '--quiet',
-    is_flag=True,
-    default=False,
-    help='Whether to suppress warning messages.',
+    '-v',
+    '--verbose',
+    default=True,
+    help='Whether to show all messages.',
     show_default=True,
 )
-def convert_gene_cli(infile, outfile, frm, to, species, frm_cols, quiet):
+def convert_gene_cli(infile, outfile, frm, to, species, frm_cols, verbose):
     """Convert T-cell receptor V/D/J/C gene names.
 
     :Example:
@@ -292,19 +329,19 @@ def convert_gene_cli(infile, outfile, frm, to, species, frm_cols, quiet):
     # Load data
     # For our purposes, read in every column as string so that boolean values
     # don't get converted from uppercase to capitalized, etc.
-    if not quiet:
+    if verbose:
         click.echo(f'Reading input file {infile}')
     sep_in = ',' if infile.endswith('csv') else '\t'
     df = pd.read_csv(infile, sep=sep_in, dtype=str)
 
     # Convert gene names
     # Cast frm_cols as list because will be read in from command line as tuple
-    if not quiet:
+    if verbose:
         click.echo(f'Converting gene names from {frm} to {to}')
-    out_df = convert_gene(df, frm, to, species, list(frm_cols), quiet)
+    out_df = convert_gene(df, frm, to, species, list(frm_cols), verbose)
 
     # Save output
-    if not quiet:
+    if verbose:
         click.echo(f'Writing output to {outfile}')
     sep_out = ',' if outfile.endswith('csv') else '\t'
     out_df.to_csv(outfile, sep=sep_out, index=False)

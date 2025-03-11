@@ -2,6 +2,7 @@ import pytest
 import pandas as pd
 import os
 from importlib.resources import files
+import logging
 from tcrconvert import convert
 
 imgt_df = pd.DataFrame(
@@ -259,3 +260,82 @@ def test_which_frm_cols():
     # Non-existent column
     with pytest.raises(ValueError):
         convert.which_frm_cols(tenx_df, 'tenx', frm_cols=['v_gene', 'j_gene', 'x_gene'])
+
+
+def test_choose_lookup_verbose(caplog):
+    # Capture messages when verbose=True
+    with caplog.at_level(logging.INFO):
+        convert.choose_lookup('tenx', 'adaptive')
+        assert 'Converting from 10X. Using *01 as allele for all genes.' in caplog.text
+        caplog.clear()
+
+        convert.choose_lookup('adaptive', 'imgt')
+        assert (
+            'Converting from Adaptive to IMGT. Using *01 for genes lacking alleles.'
+            in caplog.text
+        )
+
+    # Ensure no messages when verbose=False
+    caplog.clear()
+    with caplog.at_level(logging.WARNING):
+        convert.choose_lookup('tenx', 'adaptive', verbose=False)
+        assert not caplog.text
+
+        convert.choose_lookup('adaptive', 'imgt', verbose=False)
+        assert not caplog.text
+
+
+def test_which_frm_cols_verbose(caplog):
+    custom_df = pd.DataFrame(
+        {
+            'myV': ['TRAV12-1*01', 'TRBV15*01'],
+            'myD': [None, 'TRBD1*01'],
+            'myJ': ['TRAJ16*0', 'TRBJ2-5*01'],
+            'myC': ['TRAC*01', 'TRBC2*01'],
+            'myCDR3': ['CAVLIF', 'CASSGF'],
+        }
+    )
+
+    # Custom columns
+    with caplog.at_level(logging.INFO):
+        convert.which_frm_cols(custom_df, 'imgt', frm_cols=['myV', 'myJ'])
+        assert "Using custom column names: ['myV', 'myJ']" in caplog.text
+
+    # Custom columns with verbose=False
+    caplog.clear()
+    with caplog.at_level(logging.WARNING):
+        convert.which_frm_cols(
+            custom_df, 'imgt', frm_cols=['myV', 'myJ'], verbose=False
+        )
+        assert not caplog.text
+
+    # IMGT format without column names, still expect warnings with verbose=False
+    caplog.clear()
+    with caplog.at_level(logging.WARNING):
+        convert.which_frm_cols(custom_df, 'imgt', verbose=False)
+        assert (
+            "No column names for IMGT data. Using 10X columns: ['v_gene', 'd_gene', 'j_gene', 'c_gene']"
+            in caplog.text
+        )
+
+
+def test_convert_gene_verbose(caplog):
+    tenx_df_bad = pd.DataFrame(
+        {
+            'v_gene': ['TRAV12-1', 'TRBV15'],
+            'd_gene': [None, 'TRBD1'],
+            'j_gene': ['TRAJ16', 'BAD_J_GENE'],
+            'c_gene': ['TRAC', 'TRBC2'],
+            'cdr3': ['CAVLIF', 'CASSGF'],
+        }
+    )
+
+    with caplog.at_level(logging.WARNING):
+        convert.convert_gene(tenx_df_bad, 'tenx', 'adaptive', verbose=False)
+
+        # Verify expected warnings
+        assert 'Adaptive only captures VDJ genes; C genes will be NA.' in caplog.text
+        assert (
+            'These genes are not in IMGT for this species and will be replaced with NA'
+            in caplog.text
+        )
