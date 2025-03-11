@@ -25,17 +25,15 @@ def parse_imgt_fasta(infile):
     .. code-block:: text
 
        \b
-       >SomeText|TRAV1*01|MoreText|
-       >SomeText|TRAV14/DV4*01|MoreText|
-       >SomeText|TRAV38-2/DV8*01|MoreText|
+       >SomeText|TRBV29/OR9-2*01|MoreText|
+       >SomeText|TRBVA/OR9-2*01|MoreText|
 
     >>> import tcrconvert
-    >>> fasta = tcrconvert.get_example_path('fasta_dir/test_trav.fa')
+    >>> fasta = tcrconvert.get_example_path('fasta_dir/test_trbv.fa')
     >>> tcrconvert.build_lookup.parse_imgt_fasta(fasta)
-    ['TRAV1*01', 'TRAV14/DV4*01', 'TRAV38-2/DV8*01']
+    ['TRBV29/OR9-2*01', 'TRBVA/OR9-2*01']
     """
 
-    # Read the file and extract lines starting with ">"
     with open(infile, 'r') as f:
         lines = f.readlines()
 
@@ -64,21 +62,25 @@ def extract_imgt_genes(data_dir):
     .. code-block:: text
 
        \b
-       >SomeText|TRAV1*01|MoreText|
-       >SomeText|TRAV14/DV4*01|MoreText|
-       >SomeText|TRAV38-2/DV8*01|MoreText|
-       >SomeText|TRBV29/OR9-2*01|MoreText|
-       >SomeText|TRBVA/OR9-2*01|MoreText|
+        >SomeText|TRAC*01|MoreText|
+        >SomeText|TRAV1-1*01|MoreText|
+        >SomeText|TRAV1-1*02|MoreText|
+        >SomeText|TRAV14/DV4*01|MoreText|
+        >SomeText|TRAV38-2/DV8*01|MoreText|
+        >SomeText|TRBV29/OR9-2*01|MoreText|
+        >SomeText|TRBVA/OR9-2*01|MoreText|
 
     >>> import tcrconvert
     >>> fastadir = tcrconvert.get_example_path('fasta_dir')
     >>> tcrconvert.build_lookup.extract_imgt_genes(fastadir)
                   imgt
-    0         TRAV1*01
-    1    TRAV14/DV4*01
-    2  TRAV38-2/DV8*01
-    3  TRBV29/OR9-2*01
-    4   TRBVA/OR9-2*01
+    0          TRAC*01
+    1       TRAV1-1*01
+    2       TRAV1-1*02
+    3    TRAV14/DV4*01
+    4  TRAV38-2/DV8*01
+    5  TRBV29/OR9-2*01
+    6   TRBVA/OR9-2*01
     """
 
     fastas = []

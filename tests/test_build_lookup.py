@@ -8,9 +8,11 @@ from tcrconvert import build_lookup, utils
 def test_parse_imgt_fasta():
     fasta = utils.get_example_path('fasta_dir/test_trav.fa')
     assert build_lookup.parse_imgt_fasta(fasta) == [
-        'TRAV1*01',
+        'TRAV1-1*01',
+        'TRAV1-1*02',
         'TRAV14/DV4*01',
         'TRAV38-2/DV8*01',
+        'TRAC*01',
     ]
 
 
@@ -20,7 +22,9 @@ def test_extract_imgt_genes():
     outdf = pd.DataFrame(
         {
             'imgt': [
-                'TRAV1*01',
+                'TRAC*01',
+                'TRAV1-1*01',
+                'TRAV1-1*02',
                 'TRAV14/DV4*01',
                 'TRAV38-2/DV8*01',
                 'TRBV29/OR9-2*01',
@@ -58,12 +62,13 @@ def test_build_lookup_from_fastas():
     with open(mock_path + '/rabbit/lookup_from_adaptive.csv') as lookupadapt:
         assert (
             lookupadapt.read() == 'adaptive,adaptivev2,imgt,tenx\n'
-            'TCRAV01-01*01,TCRAV01-01*01,TRAV1*01,TRAV1\n'
+            'TCRAV01-01*01,TCRAV01-01*01,TRAV1-1*01,TRAV1-1\n'
+            'TCRAV01-01*02,TCRAV01-01*02,TRAV1-1*02,TRAV1-1\n'
             'TCRAV14-01*01,TCRAV14-01*01,TRAV14/DV4*01,TRAV14DV4\n'
             'TCRAV38-02*01,TCRAV38-02*01,TRAV38-2/DV8*01,TRAV38-2DV8\n'
             'TCRBV29-or09_02*01,TCRBV29-or09_02*01,TRBV29/OR9-2*01,TRBV29/OR9-2\n'
             'TCRBVA-or09_02*01,TCRBVA-or09_02*01,TRBVA/OR9-2*01,TRBVA/OR9-2\n'
-            'TCRAV01-01,TCRAV01-01,TRAV1*01,TRAV1\n'
+            'TCRAV01-01,TCRAV01-01,TRAV1-1*01,TRAV1-1\n'
             'TCRAV14-01,TCRAV14-01,TRAV14/DV4*01,TRAV14DV4\n'
             'TCRAV38-02,TCRAV38-02,TRAV38-2/DV8*01,TRAV38-2DV8\n'
             'TCRBV29-or09_02,TCRBV29-or09_02,TRBV29/OR9-2*01,TRBV29/OR9-2\n'
@@ -73,7 +78,8 @@ def test_build_lookup_from_fastas():
     with open(mock_path + '/rabbit/lookup_from_tenx.csv') as lookup10x:
         assert (
             lookup10x.read() == 'tenx,imgt,adaptive,adaptivev2\n'
-            'TRAV1,TRAV1*01,TCRAV01-01*01,TCRAV01-01*01\n'
+            'TRAC,TRAC*01,NoData,NoData\n'
+            'TRAV1-1,TRAV1-1*01,TCRAV01-01*01,TCRAV01-01*01\n'
             'TRAV14DV4,TRAV14/DV4*01,TCRAV14-01*01,TCRAV14-01*01\n'
             'TRAV38-2DV8,TRAV38-2/DV8*01,TCRAV38-02*01,TCRAV38-02*01\n'
             'TRBV29/OR9-2,TRBV29/OR9-2*01,TCRBV29-or09_02*01,TCRBV29-or09_02*01\n'
@@ -83,7 +89,9 @@ def test_build_lookup_from_fastas():
     with open(mock_path + '/rabbit/lookup.csv') as lookup:
         assert (
             lookup.read() == 'imgt,tenx,adaptive,adaptivev2\n'
-            'TRAV1*01,TRAV1,TCRAV01-01*01,TCRAV01-01*01\n'
+            'TRAC*01,TRAC,NoData,NoData\n'
+            'TRAV1-1*01,TRAV1-1,TCRAV01-01*01,TCRAV01-01*01\n'
+            'TRAV1-1*02,TRAV1-1,TCRAV01-01*02,TCRAV01-01*02\n'
             'TRAV14/DV4*01,TRAV14DV4,TCRAV14-01*01,TCRAV14-01*01\n'
             'TRAV38-2/DV8*01,TRAV38-2DV8,TCRAV38-02*01,TCRAV38-02*01\n'
             'TRBV29/OR9-2*01,TRBV29/OR9-2,TCRBV29-or09_02*01,TCRBV29-or09_02*01\n'

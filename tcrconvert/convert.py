@@ -177,22 +177,21 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], verbose=True):
 
     >>> import pandas as pd
     >>> import tcrconvert
-    >>> original = pd.read_csv(tcrconvert.get_example_path('tenx.csv'))
-    >>> original[['v_gene', 'd_gene', 'j_gene', 'c_gene', 'cdr3']]
-        v_gene d_gene   j_gene c_gene             cdr3
-    0  TRAV1-2  TRBD1   TRAJ12   TRAC     CAVMDSSYKLIF
-    1  TRBV6-1  TRBD2  TRBJ2-1  TRBC2  CASSGLAGGYNEQFF
-    2  TRBV6-4  TRBD2  TRBJ2-3  TRBC2  CASSGVAGGTDTQYF
-    3  TRAV1-2  TRBD1   TRAJ33   TRAC     CAVKDSNYQLIW
-    4    TRBV2  TRBD1  TRBJ1-2  TRBC1    CASNQGLNYGYTF
-    >>> converted = tcrconvert.convert_gene(original, 'tenx', 'adaptive', quiet=True)
-    >>> converted[['v_gene', 'd_gene', 'j_gene', 'c_gene', 'cdr3']]
-              v_gene         d_gene         j_gene c_gene             cdr3
-    0  TCRAV01-02*01  TCRBD01-01*01  TCRAJ12-01*01   <NA>     CAVMDSSYKLIF
-    1  TCRBV06-01*01  TCRBD02-01*01  TCRBJ02-01*01   <NA>  CASSGLAGGYNEQFF
-    2  TCRBV06-04*01  TCRBD02-01*01  TCRBJ02-03*01   <NA>  CASSGVAGGTDTQYF
-    3  TCRAV01-02*01  TCRBD01-01*01  TCRAJ33-01*01   <NA>     CAVKDSNYQLIW
-    4  TCRBV02-01*01  TCRBD01-01*01  TCRBJ01-02*01   <NA>    CASNQGLNYGYTF
+    >>> tcr_file = tcrconvert.get_example_path('tenx.csv')
+    >>> df = pd.read_csv(tcr_file)[['barcode', 'v_gene', 'j_gene', 'cdr3']]
+    >>> df
+                  barcode        v_gene   j_gene             cdr3
+    0  AAACCTGAGACCACGA-1     TRAV29DV5   TRAJ12     CAVMDSSYKLIF
+    1  AAACCTGAGACCACGA-1  TRBV20/OR9-2  TRBJ2-1  CASSGLAGGYNEQFF
+    2  AAACCTGAGGCTCTTA-1         TRDV2    TRDJ3  CASSGVAGGTDTQYF
+    3  AAACCTGAGGCTCTTA-1         TRGV9    TRGJ1     CAVKDSNYQLIW
+    >>> tcrconvert.convert_gene(df, 'tenx', 'adaptive', verbose=False)
+    WARNING - Adaptive only captures VDJ genes; C genes will be NA.
+                barcode                v_gene         j_gene             cdr3
+    0  AAACCTGAGACCACGA-1       TCRAV29-01*01  TCRAJ12-01*01     CAVMDSSYKLIF
+    1  AAACCTGAGACCACGA-1  TCRBV20-or09_02*01  TCRBJ02-01*01  CASSGLAGGYNEQFF
+    2  AAACCTGAGGCTCTTA-1       TCRDV02-01*01  TCRDJ03-01*01  CASSGVAGGTDTQYF
+    3  AAACCTGAGGCTCTTA-1       TCRGV09-01*01  TCRGJ01-01*01     CAVKDSNYQLIW
     """
 
     if verbose:
