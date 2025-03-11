@@ -194,6 +194,9 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], verbose=True):
     if frm == to:
         logger.error('"frm" and "to" formats should be different.')
         raise (ValueError)
+    if not isinstance(df, pd.DataFrame):
+        logger.error('Input is not a pandas DataFrame.')
+        raise (TypeError)
     if df.empty:
         logger.error('Input data is empty.')
         raise (ValueError)
