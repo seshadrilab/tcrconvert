@@ -153,6 +153,39 @@ def pad_single_digit(gene_str):
     return updated_string
 
 
+def save_lookup(df, savedir, name):
+    """Save a lookup table to a CSV file
+
+    Save a dataframe as a CSV file (without row names) in the specified directory.
+
+    :param df: Dataframe containing the lookup table data
+    :type df: pandas DataFrame
+    :param savedir: Path to the save directory
+    :type savedir: str
+    :param name: File name (should end in `.csv`)
+    :type name: str
+    :return: None
+
+    :Example:
+
+    >>> import tcrconvert
+    >>> import tempfile
+    >>> dat = pd.read_csv(tcrconvert.get_example_path("fasta_dir/lookup.csv"))
+    >>> save_dir = os.path.join(tempfile.gettempdir(), 'tcrconvert_tmp')
+    >>> tcrconvert.build_lookup.save_lookup(dat, save_dir, "newlookup.csv")
+    """
+
+    # Ensure valid inputs
+    if not os.path.exists(savedir):
+        os.makedirs(savedir, exist_ok=True)
+
+    if not isinstance(df, pd.DataFrame):
+        raise ValueError("'df' must be a pandas DataFrame")
+
+    file_path = os.path.join(savedir, name)
+    df.to_csv(file_path, index=False)
+
+
 def build_lookup_from_fastas(data_dir, species):
     """Create lookup tables
 
@@ -247,16 +280,18 @@ def build_lookup_from_fastas(data_dir, species):
         ['adaptive', 'adaptivev2', 'imgt', 'tenx']
     ]
 
-    # Remove any duplicate rows
-    lookup_path = os.path.join(save_dir, 'lookup.csv')
-    from_tenx_path = os.path.join(save_dir, 'lookup_from_tenx.csv')
-    from_adaptive_path = os.path.join(save_dir, 'lookup_from_adaptive.csv')
+    # Remove duplicate rows
+    lookup.drop_duplicates(inplace=True)
+    from_tenx.drop_duplicates(inplace=True)
+    from_adaptive.drop_duplicates(inplace=True)
 
     # Save
     logger.info(f'Writing lookup tables to: {save_dir}')
-    lookup.drop_duplicates().to_csv(lookup_path, index=False)
-    from_tenx.drop_duplicates().to_csv(from_tenx_path, index=False)
-    from_adaptive.drop_duplicates().to_csv(from_adaptive_path, index=False)
+    save_lookup(lookup, save_dir, 'lookup.csv')
+    save_lookup(from_tenx, save_dir, 'lookup_from_tenx.csv')
+    save_lookup(from_adaptive, save_dir, 'lookup_from_adaptive.csv')
+
+    return save_dir
 
 
 # Command-line version of build_lookup_from_fastas()
