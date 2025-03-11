@@ -229,6 +229,15 @@ def build_lookup_from_fastas(data_dir, species):
     '.../.local/share/tcrconvert/rabbit'
     """
 
+    # Check that species can be a valid folder name
+    forbidden_char = r'[/\\:*?\"<>|~`\n\t]'
+    if re.search(forbidden_char, species):
+        sanitized = re.sub(forbidden_char, '_', species)
+        raise ValueError(
+            f"Proposed folder name '{species}' contains invalid characters.\n"
+            f'Suggestion: {sanitized}'
+        )
+
     # Get the user data directory for saving lookup tables
     user_dir = platformdirs.user_data_dir('tcrconvert', 'Emmma Bishop')
     save_dir = os.path.join(user_dir, species)

@@ -1,6 +1,8 @@
 import pandas as pd
 import os
 import tempfile
+import shutil
+import pytest
 from unittest.mock import patch
 from tcrconvert import build_lookup, utils
 
@@ -97,3 +99,58 @@ def test_build_lookup_from_fastas():
             'TRBV29/OR9-2*01,TRBV29/OR9-2,TCRBV29-or09_02*01,TCRBV29-or09_02*01\n'
             'TRBVA/OR9-2*01,TRBVA/OR9-2,TCRBVA-or09_02*01,TCRBVA-or09_02*01\n'
         )
+
+
+def test_reject_invalid_species():
+    # Create mock folder in temporary directory to write to
+    mock_path = os.path.join(tempfile.gettempdir(), 'tcrconvert_tmp')
+    os.makedirs(mock_path, exist_ok=True)
+
+    # Generate a temporary directory to put input files in
+    fastadir = os.path.join(mock_path, 'fastas')
+    os.makedirs(fastadir, exist_ok=True)
+    # Copy test files into it
+    example_dir = utils.get_example_path(fastadir)
+    example_fastas = [f for f in os.listdir(example_dir) if f.endswith('.fa')]
+    for fasta in example_fastas:
+        shutil.copy(os.path.join(example_dir, fasta), fastadir)
+
+    # Mock `user_data_dir` inside `build_lookup_from_fastas`
+    with patch('platformdirs.user_data_dir', return_value=str(mock_path)):
+        invalid_species = [
+            'rabbit\\',
+            'rabbit/',
+            'rabbit:',
+            'rabbit*',
+            'rabbit?',
+            'rabbit<',
+            'rabbit>',
+            'rabbit|',
+            'rabbit~',
+            'rabbit`',
+            'rabbit\n',
+            'rabbi\t',
+        ]
+
+        # Attempt to create lookup tables with invalid species folder names
+        for species in invalid_species:
+            with pytest.raises(ValueError):
+                build_lookup.build_lookup_from_fastas(fastadir, species)
+
+    # Delete temp directories
+    shutil.rmtree(mock_path, ignore_errors=True)
+    shutil.rmtree(fastadir, ignore_errors=True)
+
+
+def test_save_lookup_tables():
+    mock_path = os.path.join(tempfile.gettempdir(), 'tcrconvert_tmp')
+    os.makedirs(mock_path, exist_ok=True)
+    dat = pd.read_csv(utils.get_example_path('fasta_dir/lookup.csv'))
+
+    build_lookup.save_lookup(dat, mock_path, 'newlookup.csv')
+
+    # Check that the file exists
+    assert os.path.exists(os.path.join(mock_path, 'newlookup.csv'))
+
+    # Delete temp directory
+    shutil.rmtree(mock_path, ignore_errors=True)
