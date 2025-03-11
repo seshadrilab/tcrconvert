@@ -54,10 +54,8 @@ def choose_lookup(frm, to, species='human', verbose=True):
     data_path = os.path.join(lookup_dir, species)
 
     if frm == 'tenx':
-        lookup_f = os.path.join(species_dir, 'lookup_from_tenx.csv')
-        logger.info(
-            'Converting from 10X which lacks allele info. Choosing *01 as allele for all genes.'
-        )
+        lookup_f = os.path.join(data_path, 'lookup_from_tenx.csv')
+        logger.info('Converting from 10X. Using *01 as allele for all genes.')
     elif frm == 'adaptive' or frm == 'adaptivev2':
         lookup_f = os.path.join(data_path, 'lookup_from_adaptive.csv')
         if to == 'imgt':
@@ -70,9 +68,7 @@ def choose_lookup(frm, to, species='human', verbose=True):
     if os.path.exists(lookup_f):
         return lookup_f
     else:
-        logger.error(
-            'Lookup table not found, please download IMGT reference FASTAs and run build_lookup_from_fastas()'
-        )
+        logger.error('Lookup table not found, please run build_lookup_from_fastas().')
         raise (FileNotFoundError)
 
 
@@ -121,7 +117,7 @@ def which_frm_cols(df, frm, frm_cols=[], verbose=True):
             raise (ValueError)
         else:
             cols_from = frm_cols
-            logger.info(f'Using these custom column names: {str(cols_from)}')
+            logger.info(f'Using custom column names: {str(cols_from)}')
     else:
         cols_from = col_ref[frm]
 
