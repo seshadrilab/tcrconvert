@@ -16,5 +16,5 @@ def get_example_path(file_name):
     '.../tcrconvert/examples/tenx.csv'
     """
 
-    out = files('tcrconvert') / 'examples' / file_name
+    out = files('tcrconvert').joinpath('examples', file_name)
     return str(out)

@@ -15,7 +15,7 @@ def test_parse_imgt_fasta():
 
 
 def test_extract_imgt_genes():
-    fastadir = utils.get_example_path('fasta_dir') + '/'
+    fastadir = utils.get_example_path('fasta_dir')
     df = build_lookup.extract_imgt_genes(fastadir)
     outdf = pd.DataFrame(
         {
@@ -46,7 +46,7 @@ def test_pad_single_digit():
 
 
 def test_build_lookup_from_fastas():
-    fastadir = utils.get_example_path('fasta_dir') + '/'
+    fastadir = utils.get_example_path('fasta_dir')
 
     # Create mock folder in temporary directory to write to
     mock_path = os.path.join(tempfile.gettempdir(), 'mock_data')

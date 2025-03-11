@@ -71,7 +71,7 @@ def extract_imgt_genes(data_dir):
        >SomeText|TRBVA/OR9-2*01|MoreText|
 
     >>> import tcrconvert
-    >>> fastadir = tcrconvert.get_example_path('fasta_dir') + '/'
+    >>> fastadir = tcrconvert.get_example_path('fasta_dir')
     >>> tcrconvert.build_lookup.extract_imgt_genes(fastadir)
                   imgt
     0         TRAV1*01
@@ -84,9 +84,7 @@ def extract_imgt_genes(data_dir):
     fastas = []
     for file in os.listdir(data_dir):
         if file.endswith('.fa') | file.endswith('.fasta'):
-            fastas.append(data_dir + file)
-
-    # Extract gene names and put into a dataframe
+            fastas.append(os.path.join(data_dir, file))
     imgt = []
     for fa in fastas:
         imgt = imgt + parse_imgt_fasta(fa)
