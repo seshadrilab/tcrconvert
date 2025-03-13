@@ -9,3 +9,4 @@ tcrconvert/tests/__pycache__/*
 venv/
 *.pyc
 *.egg
+**/.DS_Store
