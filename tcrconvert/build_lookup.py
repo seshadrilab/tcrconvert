@@ -296,15 +296,19 @@ def build_lookup_from_fastas(data_dir, species):
 
     # Make a DataFrame with subgroup-level Adaptive gene names
     merged_data = pd.merge(from_adapt, agg_filtered, on='tenx_prefix')
-    subgroup_only_rows = pd.DataFrame({
-        'adaptive': merged_data['adaptive'].str.replace(r'-\d+.*', '', regex=True),
-        'imgt': merged_data['imgt'],
-        'tenx': merged_data['tenx_x'],
-        'tenx_prefix': merged_data['tenx_prefix']
-    })
+    subgroup_only_rows = pd.DataFrame(
+        {
+            'adaptive': merged_data['adaptive'].str.replace(r'-\d+.*', '', regex=True),
+            'imgt': merged_data['imgt'],
+            'tenx': merged_data['tenx_x'],
+            'tenx_prefix': merged_data['tenx_prefix'],
+        }
+    )
 
     # Combine the new rows with the original data
-    from_adaptive_updated = pd.concat([from_adapt, subgroup_only_rows], ignore_index=True)
+    from_adaptive_updated = pd.concat(
+        [from_adapt, subgroup_only_rows], ignore_index=True
+    )
     from_adaptive_updated = from_adaptive_updated.drop(columns=['tenx_prefix'])
 
     # Final polishing

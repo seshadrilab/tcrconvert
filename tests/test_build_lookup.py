@@ -10,8 +10,13 @@ from tcrconvert import build_lookup, utils
 def test_parse_imgt_fasta():
     fasta = utils.get_example_path('fasta_dir/test_trav.fa')
     assert build_lookup.parse_imgt_fasta(fasta) == [
-            "TRAV1-1*01", "TRAV1-1*02", "TRAV1-2*01", "TRAV14/DV4*01",
-            "TRAV38-1*01", "TRAV38-2/DV8*01", "TRAC*01"
+        'TRAV1-1*01',
+        'TRAV1-1*02',
+        'TRAV1-2*01',
+        'TRAV14/DV4*01',
+        'TRAV38-1*01',
+        'TRAV38-2/DV8*01',
+        'TRAC*01',
     ]
 
 
@@ -21,9 +26,16 @@ def test_extract_imgt_genes():
     outdf = pd.DataFrame(
         {
             'imgt': [
-                "TRAC*01", "TRAV1-1*01", "TRAV1-1*02",
-                "TRAV1-2*01", "TRAV14/DV4*01", "TRAV38-1*01", "TRAV38-2/DV8*01",
-                "TRBV29-1*01", "TRBV29-1*02", "TRBV29/OR9-2*01"
+                'TRAC*01',
+                'TRAV1-1*01',
+                'TRAV1-1*02',
+                'TRAV1-2*01',
+                'TRAV14/DV4*01',
+                'TRAV38-1*01',
+                'TRAV38-2/DV8*01',
+                'TRBV29-1*01',
+                'TRBV29-1*02',
+                'TRBV29/OR9-2*01',
             ]
         }
     )
