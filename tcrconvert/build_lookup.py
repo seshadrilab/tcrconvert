@@ -6,7 +6,7 @@ import platformdirs
 import logging
 
 # Set up logging
-logging.basicConfig(level=logging.WARNING, format='%(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 
@@ -323,4 +323,5 @@ def build_lookup_from_fastas_cli(input, species):
        $ tcrconvert build -i tcrconvert/examples/fasta_dir/ -s rabbit
     """
 
-    build_lookup_from_fastas(input, species)
+    file_path = build_lookup_from_fastas(input, species)
+    click.echo(f'Lookup table written to: {file_path}')
