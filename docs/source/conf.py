@@ -19,11 +19,11 @@ sys.path.insert(0, os.path.abspath(os.path.join('..', '..', 'tcrconvert')))
 # -- Project information -----------------------------------------------------
 
 project = 'tcrconvert'
-copyright = '2024, Emma Bishop'
+copyright = '2025, Emma Bishop'
 author = 'Emma Bishop'
 
 # The full version, including alpha/beta/rc tags
-release = '0.1.0'
+release = '1.0.0'
 
 
 # -- General configuration ---------------------------------------------------
