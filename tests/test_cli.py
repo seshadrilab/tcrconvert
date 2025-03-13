@@ -33,17 +33,24 @@ def test_build_lookup_from_fastas_cli():
     with open(mock_path + '/rabbit/lookup_from_adaptive.csv') as lookupadapt:
         assert (
             lookupadapt.read() == 'adaptive,adaptivev2,imgt,tenx\n'
+            'TCRAV01-01,TCRAV01-01,TRAV1-1*01,TRAV1-1\n'
             'TCRAV01-01*01,TCRAV01-01*01,TRAV1-1*01,TRAV1-1\n'
             'TCRAV01-01*02,TCRAV01-01*02,TRAV1-1*02,TRAV1-1\n'
-            'TCRAV14-01*01,TCRAV14-01*01,TRAV14/DV4*01,TRAV14DV4\n'
-            'TCRAV38-02*01,TCRAV38-02*01,TRAV38-2/DV8*01,TRAV38-2DV8\n'
-            'TCRBV29-or09_02*01,TCRBV29-or09_02*01,TRBV29/OR9-2*01,TRBV29/OR9-2\n'
-            'TCRBVA-or09_02*01,TCRBVA-or09_02*01,TRBVA/OR9-2*01,TRBVA/OR9-2\n'
-            'TCRAV01-01,TCRAV01-01,TRAV1-1*01,TRAV1-1\n'
+            'TCRAV01-02,TCRAV01-02,TRAV1-2*01,TRAV1-2\n'
+            'TCRAV01-02*01,TCRAV01-02*01,TRAV1-2*01,TRAV1-2\n'
+            'TCRAV14,TCRAV14,TRAV14/DV4*01,TRAV14DV4\n'
             'TCRAV14-01,TCRAV14-01,TRAV14/DV4*01,TRAV14DV4\n'
+            'TCRAV14-01*01,TCRAV14-01*01,TRAV14/DV4*01,TRAV14DV4\n'
+            'TCRAV38-01,TCRAV38-01,TRAV38-1*01,TRAV38-1\n'
+            'TCRAV38-01*01,TCRAV38-01*01,TRAV38-1*01,TRAV38-1\n'
             'TCRAV38-02,TCRAV38-02,TRAV38-2/DV8*01,TRAV38-2DV8\n'
+            'TCRAV38-02*01,TCRAV38-02*01,TRAV38-2/DV8*01,TRAV38-2DV8\n'
+            'TCRBV29,TCRBV29,TRBV29-1*01,TRBV29-1\n'
+            'TCRBV29-01,TCRBV29-01,TRBV29-1*01,TRBV29-1\n'
+            'TCRBV29-01*01,TCRBV29-01*01,TRBV29-1*01,TRBV29-1\n'
+            'TCRBV29-01*02,TCRBV29-01*02,TRBV29-1*02,TRBV29-1\n'
             'TCRBV29-or09_02,TCRBV29-or09_02,TRBV29/OR9-2*01,TRBV29/OR9-2\n'
-            'TCRBVA-or09_02,TCRBVA-or09_02,TRBVA/OR9-2*01,TRBVA/OR9-2\n'
+            'TCRBV29-or09_02*01,TCRBV29-or09_02*01,TRBV29/OR9-2*01,TRBV29/OR9-2\n'
         )
 
     with open(mock_path + '/rabbit/lookup_from_tenx.csv') as lookup10x:
@@ -51,10 +58,12 @@ def test_build_lookup_from_fastas_cli():
             lookup10x.read() == 'tenx,imgt,adaptive,adaptivev2\n'
             'TRAC,TRAC*01,NoData,NoData\n'
             'TRAV1-1,TRAV1-1*01,TCRAV01-01*01,TCRAV01-01*01\n'
+            'TRAV1-2,TRAV1-2*01,TCRAV01-02*01,TCRAV01-02*01\n'
             'TRAV14DV4,TRAV14/DV4*01,TCRAV14-01*01,TCRAV14-01*01\n'
+            'TRAV38-1,TRAV38-1*01,TCRAV38-01*01,TCRAV38-01*01\n'
             'TRAV38-2DV8,TRAV38-2/DV8*01,TCRAV38-02*01,TCRAV38-02*01\n'
+            'TRBV29-1,TRBV29-1*01,TCRBV29-01*01,TCRBV29-01*01\n'
             'TRBV29/OR9-2,TRBV29/OR9-2*01,TCRBV29-or09_02*01,TCRBV29-or09_02*01\n'
-            'TRBVA/OR9-2,TRBVA/OR9-2*01,TCRBVA-or09_02*01,TCRBVA-or09_02*01\n'
         )
 
     with open(mock_path + '/rabbit/lookup.csv') as lookup:
@@ -63,10 +72,13 @@ def test_build_lookup_from_fastas_cli():
             'TRAC*01,TRAC,NoData,NoData\n'
             'TRAV1-1*01,TRAV1-1,TCRAV01-01*01,TCRAV01-01*01\n'
             'TRAV1-1*02,TRAV1-1,TCRAV01-01*02,TCRAV01-01*02\n'
+            'TRAV1-2*01,TRAV1-2,TCRAV01-02*01,TCRAV01-02*01\n'
             'TRAV14/DV4*01,TRAV14DV4,TCRAV14-01*01,TCRAV14-01*01\n'
+            'TRAV38-1*01,TRAV38-1,TCRAV38-01*01,TCRAV38-01*01\n'
             'TRAV38-2/DV8*01,TRAV38-2DV8,TCRAV38-02*01,TCRAV38-02*01\n'
+            'TRBV29-1*01,TRBV29-1,TCRBV29-01*01,TCRBV29-01*01\n'
+            'TRBV29-1*02,TRBV29-1,TCRBV29-01*02,TCRBV29-01*02\n'
             'TRBV29/OR9-2*01,TRBV29/OR9-2,TCRBV29-or09_02*01,TCRBV29-or09_02*01\n'
-            'TRBVA/OR9-2*01,TRBVA/OR9-2,TCRBVA-or09_02*01,TCRBVA-or09_02*01\n'
         )
 
 
