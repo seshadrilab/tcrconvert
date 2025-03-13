@@ -52,7 +52,7 @@ Examples of files you may want to load:
 import tcrconvert
 import pandas as pd
 
-tcr_file = get_example_path('tenx.csv')
+tcr_file = tcrconvert.get_example_path('tenx.csv')
 tcrs = pd.read_csv(tcr_file)[['barcode', 'v_gene' , 'j_gene', 'cdr3']]
 tcrs
 #               barcode        v_gene   j_gene             cdr3
@@ -65,10 +65,7 @@ tcrs
 #### 2. Convert
 
 ```python
-tcrconvert.convert_gene(dat, frm='tenx', to='adaptive')
-
-
-new_tcrs = convert_gene(tcrs, frm = "tenx", to = "adaptive")
+new_tcrs = tcrconvert.convert_gene(tcrs, frm = "tenx", to = "adaptive")
 #> Warning in convert_gene(tcrs, frm = "tenx", to = "adaptive"): Adaptive captures
 #> only VDJ genes; C genes will be NA.
 #> Converting from 10X. Using *01 as allele for all genes.
@@ -82,9 +79,16 @@ new_tcrs
 
 ## Command-line usage
 
+#### Use `convert` subcommand
+
 ```bash
-$ tcrconvert convert -i tcrconvert/examples/tenx.csv -o adaptive.tsv --frm tenx --to adaptive
+$ tcrconvert convert --input tcrconvert/examples/tenx.csv --output adaptive.tsv --frm tenx --to adaptive
 ```
+
+* `--input`: Input file path (CSV or TSV)
+* `--output`: Output file path (CSV or TSV)
+* `--frm`: Input TCR gene format (`tenx`, `adaptive`, `adaptivev2`, or `imgt`)
+* `--to`: Output TCR gene format (`tenx`, `adaptive`, `adaptivev2`, or `imgt`)
 
 ## Contributing
 
