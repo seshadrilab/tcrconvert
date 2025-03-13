@@ -276,7 +276,7 @@ def test_choose_lookup_verbose(caplog):
 
     # Ensure no messages when verbose=False
     caplog.clear()
-    with caplog.at_level(logging.WARNING):
+    with caplog.at_level(logging.INFO):
         convert.choose_lookup('tenx', 'adaptive', verbose=False)
         assert not caplog.text
 

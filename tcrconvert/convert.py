@@ -44,6 +44,8 @@ def choose_lookup(frm, to, species='human', verbose=True):
 
     if verbose:
         logger.setLevel(logging.INFO)
+    else:
+        logger.setLevel(logging.WARNING)
 
     # Determine where to find lookup tables
     if species in ['human', 'mouse', 'rhesus']:
@@ -102,6 +104,8 @@ def which_frm_cols(df, frm, frm_cols=[], verbose=True):
 
     if verbose:
         logger.setLevel(logging.INFO)
+    else:
+        logger.setLevel(logging.WARNING)
 
     if frm == 'imgt' and not frm_cols:
         cols_from = col_ref['tenx']
@@ -190,6 +194,8 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], verbose=True):
 
     if verbose:
         logger.setLevel(logging.INFO)
+    else:
+        logger.setLevel(logging.WARNING)
 
     if frm == to:
         logger.error('"frm" and "to" formats should be different.')
