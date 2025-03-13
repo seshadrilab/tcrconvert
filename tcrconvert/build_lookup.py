@@ -285,10 +285,33 @@ def build_lookup_from_fastas(data_dir, species):
     from_adapt = (
         from_adapt.drop(columns='adaptivev2').groupby('adaptive').first().reset_index()
     )
-    from_adapt['adaptivev2'] = from_adapt['adaptive']
-    from_adaptive = pd.concat([lookup2, from_adapt])[
-        ['adaptive', 'adaptivev2', 'imgt', 'tenx']
-    ]
+
+    # Lacking gene-level
+    from_adapt['tenx_prefix'] = from_adapt['tenx'].str.split('-', expand=True)[0]
+
+    # Group by 'tenx_prefix', keeping groups with only one unique 'tenx' value
+    agg_data = from_adapt.groupby('tenx_prefix')['tenx'].nunique().reset_index()
+    agg_data['tenx'] = agg_data['tenx'] == 1
+    agg_filtered = agg_data[agg_data['tenx']]
+
+    # Make a DataFrame with subgroup-level Adaptive gene names
+    merged_data = pd.merge(from_adapt, agg_filtered, on='tenx_prefix')
+    subgroup_only_rows = pd.DataFrame({
+        'adaptive': merged_data['adaptive'].str.replace(r'-\d+.*', '', regex=True),
+        'imgt': merged_data['imgt'],
+        'tenx': merged_data['tenx_x'],
+        'tenx_prefix': merged_data['tenx_prefix']
+    })
+
+    # Combine the new rows with the original data
+    from_adaptive_updated = pd.concat([from_adapt, subgroup_only_rows], ignore_index=True)
+    from_adaptive_updated = from_adaptive_updated.drop(columns=['tenx_prefix'])
+
+    # Final polishing
+    from_adaptive_updated['adaptivev2'] = from_adaptive_updated['adaptive']
+    from_adaptive = pd.concat([lookup2, from_adaptive_updated], ignore_index=True)
+    from_adaptive = from_adaptive[['adaptive', 'adaptivev2', 'imgt', 'tenx']]
+    from_adaptive = from_adaptive.sort_values(by='adaptive').reset_index(drop=True)
 
     # Remove duplicate rows
     lookup.drop_duplicates(inplace=True)

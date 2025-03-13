@@ -1,13 +1,18 @@
-
+>L36092|TRBV29-1*01|Homo sapiens|F|V-REGION|574270..574559|290 nt|1| | | | |290+0=290| | |
+agtgctgtcatctctcaaaagccaagcagggatatctgtcaacgtggaacctccctgacg
+atccagtgtcaagtcgatagccaagtcaccatgatgttctggtaccgtcagcaacctgga
+cagagcctgacactgatcgcaactgcaaatcagggctctgaggccacatatgagagtgga
+tttgtcattgacaagtttcccatcagccgcccaaacctaacattctcaactctgactgtg
+agcaacatgagccctgaagacagcagcatatatctctgcagcgttgaaga
+>M13847|TRBV29-1*02|Homo sapiens|(F)|V-REGION|17..304|288 nt|1| | | | |288+0=288| | |
+agtgctgtcatctctcaaaagccaagcagggatatctgtcaacgtggaacctccctgacg
+atccagtgtcaagtcgatagccaagtcaccatgatgttctggtaccgtcagcaacctgga
+cagagcctgacactgatcgcaactgcaaatcagggctctgaggccacatatgagagtgga
+tttgtcattgacaagtttcccatcagccgcccaaacctaacattctcaagtctgactgtg
+agcaacatgagccctgaagacagcagcatatatctctgcagcgttgaa
 >L05150|TRBV29/OR9-2*01|Homo sapiens|ORF|V-REGION|1..290|290 nt|1| | | | |290+0=290| | |
 agtgctgtcatctctcaaaagccaagcagggatatctgtcaacgtggaacctccatgatg
 atccagtgtcaagtcgacagccaagtcaccatgatgttctggtactgtcagcaacctgga
 cagagcctgacactgattgcaactgcaaatcagggctctgaggccacatatgagagcaga
 tttgtcattgacaagtttcccatcagccgcccaaacctaacattctcaactctgactgtg
 agcaacaggagacctgaagacagcagcatatacctctgcagcgttgaaga
->AF029308|TRBVA/OR9-2*01|Homo sapiens|P|V-REGION|76049..76310|262 nt|1| | | | |262+0=262| | |
-gaagctgaagtcacctagactccaagacacctgattgtagagacaggaaaggagttctca
-ggatatgtgccataatttcatactggtttctacaagaatcagggttggaattagagctga
-ttcattattcagttaacattgacattgttgattagagacatatccctgttgaaaatattt
-cccggcaaaaaacagaagttccctttggctctgaaatctgcaaagccctttcagatgtcc
-ctgtgtccttgtgccgtcactc
