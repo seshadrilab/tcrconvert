@@ -208,6 +208,7 @@ def build_lookup_from_fastas(data_dir, species):
     If a folder named ``species`` already exists in that location, it will be replaced.
 
     Key transformations from IMGT:
+
     - **10X:**
         - Remove allele information (e.g., ``*01``) and modify ``/DV`` occurrences.
     - **Adaptive:**

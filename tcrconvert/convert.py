@@ -137,20 +137,18 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], verbose=True):
     version of the input data frame with converted gene names while preserving
     row order.
 
-    **Behavioral Notes**:
-    - If a gene name cannot be mapped, it is replaced with ``NaN``, and a
-    warning is issued.
-    - If ``frm`` is ``'imgt'`` and ``frm_cols`` is not provided, 10X column
-    names are assumed.
-    - Constant (C) genes are set to ``NaN`` when converting to Adaptive formats,
-    as Adaptive does not capture constant regions.
-    - The input does not need to include all gene types; partial inputs
-    (e.g., only V genes) are supported.
-    - If no values in a custom column can be mapped (e.g., a CDR3 column) it is
-    skipped and a warning is raised.
+    Behavioral Notes:
 
-    **Standard Column Names**:
+    - If a gene name cannot be mapped, it is replaced with ``NaN``, and a warning is issued.
+    - If ``frm`` is ``'imgt'`` and ``frm_cols`` is not provided, 10X column names are assumed.
+    - Constant (C) genes are set to ``NaN`` when converting to Adaptive formats, as Adaptive does not capture constant regions.
+    - The input does not need to include all gene types; partial inputs (e.g., only V genes) are supported.
+    - If no values in a custom column can be mapped (e.g., a CDR3 column) it is skipped and a warning is raised.
+
+    Standard Column Names:
+
     If ``frm_cols`` is not provided, these column names will be used if present:
+
     - **IMGT**: ``'v_gene'``, ``'d_gene'``, ``'j_gene'``, ``'c_gene'``
     - **10X**: ``'v_gene'``, ``'d_gene'``, ``'j_gene'``, ``'c_gene'``
     - **Adaptive**: ``'v_resolved'``, ``'d_resolved'``, ``'j_resolved'``
@@ -184,8 +182,7 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], verbose=True):
     2  AAACCTGAGGCTCTTA-1         TRDV2    TRDJ3  CASSGVAGGTDTQYF
     3  AAACCTGAGGCTCTTA-1         TRGV9    TRGJ1     CAVKDSNYQLIW
     >>> tcrconvert.convert_gene(df, 'tenx', 'adaptive', verbose=False)
-    WARNING - Adaptive only captures VDJ genes; C genes will be NA.
-                barcode                v_gene         j_gene             cdr3
+                  barcode              v_gene         j_gene             cdr3
     0  AAACCTGAGACCACGA-1       TCRAV29-01*01  TCRAJ12-01*01     CAVMDSSYKLIF
     1  AAACCTGAGACCACGA-1  TCRBV20-or09_02*01  TCRBJ02-01*01  CASSGLAGGYNEQFF
     2  AAACCTGAGGCTCTTA-1       TCRDV02-01*01  TCRDJ03-01*01  CASSGVAGGTDTQYF
@@ -293,7 +290,7 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], verbose=True):
     '-v',
     '--verbose',
     default=True,
-    help='Whether to show all messages.',
+    help='Show INFO-level messages',
     show_default=True,
 )
 def convert_gene_cli(infile, outfile, frm, to, species, frm_cols, verbose):
@@ -306,8 +303,9 @@ def convert_gene_cli(infile, outfile, frm, to, species, frm_cols, verbose):
     .. code-block:: bash
 
        \b
-       $ tcrconvert convert --infile tcrconvert/examples/customcols.csv \\
-           --outfile tcrconvert/examples/custom2adapt.tsv \\
+       $ tcrconvert convert \\
+           --input tcrconvert/examples/customcols.csv \\
+           --output tcrconvert/examples/custom2adapt.tsv \\
            --frm tenx \\
            --to adaptive \\
            -c myVgene \\
