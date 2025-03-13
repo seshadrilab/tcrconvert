@@ -75,9 +75,9 @@ def test_convert_gene_cli(caplog):
         cli.entry_point,
         [
             'convert',
-            '--infile',
+            '--input',
             in_csv,
-            '--outfile',
+            '--output',
             out_tsv,
             '--frm',
             'tenx',
@@ -130,9 +130,9 @@ def test_convert_gene_cli_errors():
         cli.entry_point,
         [
             'convert',
-            '--infile',
+            '--input',
             badinfile,
-            '--outfile',
+            '--output',
             out_tsv,
             '--frm',
             'tenx',
@@ -153,16 +153,16 @@ def test_convert_gene_cli_errors():
     )
 
     assert result_in.exit_code != 0
-    assert '"infile" must be a .csv or .tsv file' in result_in.output
+    assert '"input" must be a .csv or .tsv file' in result_in.output
 
     # Output not CSV/TSV
     result_out = CliRunner().invoke(
         cli.entry_point,
         [
             'convert',
-            '--infile',
+            '--input',
             in_csv,
-            '--outfile',
+            '--output',
             badoutfile,
             '--frm',
             'tenx',
@@ -183,4 +183,4 @@ def test_convert_gene_cli_errors():
     )
 
     assert result_out.exit_code != 0
-    assert '"outfile" must be a .csv or .tsv file' in result_out.output
+    assert '"output" must be a .csv or .tsv file' in result_out.output

@@ -255,23 +255,23 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], verbose=True):
 @click.command(name='convert', no_args_is_help=True)
 @click.option(
     '-i',
-    '--infile',
-    help='Path to input CSV or TSV',
+    '--input',
+    help='Input file (CSV or TSV)',
     required=True,
     type=click.Path(exists=True),
 )
-@click.option('-o', '--outfile', help='Path to output CSV or TSV', required=True)
+@click.option('-o', '--output', help='Output file (CSV or TSV)', required=True)
 @click.option(
     '-f',
     '--frm',
-    help='Input format of TCR data',
+    help='Input TCR gene format',
     required=True,
     type=click.Choice(['tenx', 'adaptive', 'adaptivev2', 'imgt'], case_sensitive=False),
 )
 @click.option(
     '-t',
     '--to',
-    help='Output format of TCR data',
+    help='Output TCR gene format',
     required=True,
     type=click.Choice(['tenx', 'adaptive', 'adaptivev2', 'imgt'], case_sensitive=False),
 )
@@ -280,9 +280,9 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], verbose=True):
 )
 @click.option(
     '-c',
-    '--frm_cols',
+    '--column',
     default=[],
-    help='List of custom gene column names.',
+    help='Custom gene column name',
     show_default=True,
     multiple=True,
 )
@@ -293,7 +293,7 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], verbose=True):
     help='Show INFO-level messages',
     show_default=True,
 )
-def convert_gene_cli(infile, outfile, frm, to, species, frm_cols, verbose):
+def convert_gene_cli(input, output, frm, to, species, column, verbose):
     """Convert T-cell receptor V/D/J/C gene names.
 
     :Example:
@@ -314,28 +314,28 @@ def convert_gene_cli(infile, outfile, frm, to, species, frm_cols, verbose):
     """
 
     # Check that input and output paths are CSV/TSV
-    if not infile.endswith(('csv', 'tsv')):
-        raise click.BadParameter('"infile" must be a .csv or .tsv file')
+    if not input.endswith(('csv', 'tsv')):
+        raise click.BadParameter('"input" must be a .csv or .tsv file')
 
-    if not outfile.endswith(('csv', 'tsv')):
-        raise click.BadParameter('"outfile" must be a .csv or .tsv file')
+    if not output.endswith(('csv', 'tsv')):
+        raise click.BadParameter('"output" must be a .csv or .tsv file')
 
     # Load data
     # For our purposes, read in every column as string so that boolean values
     # don't get converted from uppercase to capitalized, etc.
     if verbose:
-        click.echo(f'Reading input file {infile}')
-    sep_in = ',' if infile.endswith('csv') else '\t'
-    df = pd.read_csv(infile, sep=sep_in, dtype=str)
+        click.echo(f'Reading input file {os.path.abspath(input)}')
+    sep_in = ',' if input.endswith('csv') else '\t'
+    df = pd.read_csv(input, sep=sep_in, dtype=str)
 
     # Convert gene names
     # Cast frm_cols as list because will be read in from command line as tuple
     if verbose:
         click.echo(f'Converting gene names from {frm} to {to}')
-    out_df = convert_gene(df, frm, to, species, list(frm_cols), verbose)
+    out_df = convert_gene(df, frm, to, species, list(column), verbose)
 
     # Save output
     if verbose:
-        click.echo(f'Writing output to {outfile}')
-    sep_out = ',' if outfile.endswith('csv') else '\t'
-    out_df.to_csv(outfile, sep=sep_out, index=False)
+        click.echo(f'Writing output to {os.path.abspath(output)}')
+    sep_out = ',' if output.endswith('csv') else '\t'
+    out_df.to_csv(output, sep=sep_out, index=False)
