@@ -38,7 +38,7 @@ def choose_lookup(frm, to, species='human', verbose=True):
     :Example:
 
     >>> import tcrconvert
-    >>> tcrconvert.convert.choose_lookup('imgt', 'adaptive', verbose=False)
+    >>> tcrconvert.convert.choose_lookup('imgt', 'adaptive', verbose=False) # doctest: +ELLIPSIS
     '.../tcrconvert/data/human/lookup.csv'
     """
 

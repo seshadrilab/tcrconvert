@@ -12,7 +12,7 @@ def get_example_path(file_name):
     :Example:
 
     >>> import tcrconvert
-    >>> tcrconvert.get_example_path('tenx.csv')
+    >>> tcrconvert.get_example_path('tenx.csv') # doctest: +ELLIPSIS
     '.../tcrconvert/examples/tenx.csv'
     """
 

@@ -233,8 +233,8 @@ def build_lookup_from_fastas(data_dir, species):
 
     >>> import tcrconvert
     >>> fastadir = tcrconvert.get_example_path('fasta_dir')
-    >>> tcrconvert.build_lookup.build_lookup_from_fastas(fastadir, 'rabbit')
-    '.../.local/share/tcrconvert/rabbit'
+    >>> tcrconvert.build_lookup.build_lookup_from_fastas(fastadir, 'rabbit') # doctest: +ELLIPSIS
+    '...tcrconvert/rabbit'
     """
 
     # Check that species can be a valid folder name
