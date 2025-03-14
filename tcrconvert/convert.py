@@ -324,18 +324,18 @@ def convert_gene_cli(input, output, frm, to, species, column, verbose):
     # For our purposes, read in every column as string so that boolean values
     # don't get converted from uppercase to capitalized, etc.
     if verbose:
-        click.echo(f'Reading input file {os.path.abspath(input)}')
+        click.echo(f'Reading input TCR data from: {os.path.abspath(input)}')
     sep_in = ',' if input.endswith('csv') else '\t'
     df = pd.read_csv(input, sep=sep_in, dtype=str)
 
     # Convert gene names
     # Cast frm_cols as list because will be read in from command line as tuple
     if verbose:
-        click.echo(f'Converting gene names from {frm} to {to}')
+        click.echo(f'Converting gene nomenclature from "{frm}" to "{to}"')
     out_df = convert_gene(df, frm, to, species, list(column), verbose)
 
     # Save output
     if verbose:
-        click.echo(f'Writing output to {os.path.abspath(output)}')
+        click.echo(f'Writing TCR data with converted gene names to: {os.path.abspath(output)}')
     sep_out = ',' if output.endswith('csv') else '\t'
     out_df.to_csv(output, sep=sep_out, index=False)
