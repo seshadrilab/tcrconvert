@@ -28,13 +28,14 @@ def parse_imgt_fasta(infile):
     .. code-block:: text
 
        \b
+       >SomeText|TRBV29-1*01|MoreText|
+       >SomeText|TRBV29-1*02|MoreText|
        >SomeText|TRBV29/OR9-2*01|MoreText|
-       >SomeText|TRBVA/OR9-2*01|MoreText|
 
     >>> import tcrconvert
     >>> fasta = tcrconvert.get_example_path('fasta_dir/test_trbv.fa')
     >>> tcrconvert.build_lookup.parse_imgt_fasta(fasta)
-    ['TRBV29/OR9-2*01', 'TRBVA/OR9-2*01']
+    ['TRBV29-1*01', 'TRBV29-1*02', 'TRBV29/OR9-2*01']
     """
 
     with open(infile, 'r') as f:
@@ -72,10 +73,13 @@ def extract_imgt_genes(data_dir):
         >SomeText|TRAC*01|MoreText|
         >SomeText|TRAV1-1*01|MoreText|
         >SomeText|TRAV1-1*02|MoreText|
+        >SomeText|TRAV1-2*01|MoreText|
         >SomeText|TRAV14/DV4*01|MoreText|
+        >SomeText|TRAV38-1*01|MoreText|
         >SomeText|TRAV38-2/DV8*01|MoreText|
+        >SomeText|TRBV29-1*01|MoreText|
+        >SomeText|TRBV29-1*02|MoreText|
         >SomeText|TRBV29/OR9-2*01|MoreText|
-        >SomeText|TRBVA/OR9-2*01|MoreText|
 
     >>> import tcrconvert
     >>> fastadir = tcrconvert.get_example_path('fasta_dir')
@@ -84,10 +88,13 @@ def extract_imgt_genes(data_dir):
     0          TRAC*01
     1       TRAV1-1*01
     2       TRAV1-1*02
-    3    TRAV14/DV4*01
-    4  TRAV38-2/DV8*01
-    5  TRBV29/OR9-2*01
-    6   TRBVA/OR9-2*01
+    3       TRAV1-2*01
+    4    TRAV14/DV4*01
+    5      TRAV38-1*01
+    6  TRAV38-2/DV8*01
+    7      TRBV29-1*01
+    8      TRBV29-1*02
+    9  TRBV29/OR9-2*01
     """
 
     fastas = []
