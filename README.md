@@ -93,7 +93,8 @@ $ tcrconvert convert --input tcrconvert/examples/tenx.csv --output adaptive.tsv 
 ## Contributing
 
 Contributions are welcome! To contribute, submit a pull request. See the
-documentation for details.
+[contributing page](https://tcrconvert.readthedocs.io/en/latest/contributing.html) 
+for details.
 
 ## Issues
 
