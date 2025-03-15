@@ -336,6 +336,8 @@ def convert_gene_cli(input, output, frm, to, species, column, verbose):
 
     # Save output
     if verbose:
-        click.echo(f'Writing TCR data with converted gene names to: {os.path.abspath(output)}')
+        click.echo(
+            f'Writing TCR data with converted gene names to: {os.path.abspath(output)}'
+        )
     sep_out = ',' if output.endswith('csv') else '\t'
     out_df.to_csv(output, sep=sep_out, index=False)
