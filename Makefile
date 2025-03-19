@@ -13,6 +13,7 @@ test:
 docs:
 	pip install .[docs]
 	cd docs;\
+	make clean; \
 	make html
 
 lint:
