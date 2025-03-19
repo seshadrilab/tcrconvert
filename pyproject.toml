@@ -58,7 +58,8 @@ docs = [
     "sphinx_rtd_theme>=2.0.0",
     "tomli>=2.0.1",
     "nbsphinx>=0.9.5",
-    "ipython>=8.27.0"
+    "ipython>=8.27.0",
+    "ipykernel>=6.29.5"
     ]
 
 [tool.ruff]

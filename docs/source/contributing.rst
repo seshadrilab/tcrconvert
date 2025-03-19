@@ -21,6 +21,7 @@ Install the testing and documentation dependencies listed in ``pyproject.toml``:
 .. code-block:: console
 
    $ pip install .[dev]
+   $ pip install .[docs]
 
 **2. Fork the repo and make changes**
 
