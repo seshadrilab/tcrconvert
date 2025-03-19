@@ -82,7 +82,7 @@ Are non-human species supported?
 ----------------------------------
 
 Mouse and rhesus macaque are supported out-of-the-box. For other species, see 
-"Custom species" in the usage pages. 
+pages for building custom lookup tables for library or command-line usage.
 
 The rhesus and mouse lookup tables were built from IMGT reference FASTAs and 
 gene tables. Mouse genes cover both "Mouse" and "Mouse C57BL/6J" as listed in IMGT.
