@@ -1,38 +1,51 @@
 Contributing
 ==============
 
-To contribute, please submit a pull request on our GitHub `page <https://github.com/seshadrilab/tcrconvert/pulls>`_.
+Thank you for contributing!
 
 
-Testing
----------
+Reporting Issues
+------------------
 
-It's essential that you write tests for any new code that performs actions (not documentation changes). 
-You should also run the current test suite to ensure your code doesn't break anything.
+To report a bug or request a feature please open an 
+[issue](https://github.com/seshadrilab/tcrconvertr/issues).
 
-To get started, first install the necessary testing and documentation dependencies listed in ``pyproject.toml``:
+
+Contributing Code
+-------------------
+
+**1. Install suggested dependencies**
+
+Install the testing and documentation dependencies listed in ``pyproject.toml``:
 
 .. code-block:: console
 
    $ pip install .[dev]
 
-Then you can run tests using ``pytest`` from the root of the GitHub repository:
+**2. Fork the repo and make changes**
+
+- Fork the repository and create a branch off of `main`.
+- Ensure changes are covered by tests.
+- Update the documentation as needed.
+
+**3. Run checks**
+
+GitHub Actions will perform linting and run package checks and tests when you 
+push changes. You can also check your code ahead of time:
 
 .. code-block:: console
 
+   # Tests
    $ pytest
 
-Additionally, the ``tests`` and ``codecov`` GitHub Actions automatically run the current test suite and 
-check for test coverage on every push and pull request. 
+   # Run code examples
+   $ python -m doctest <changed_script.py>
 
+   # Linting, change format of files to match style
+   $ ruff format
 
-Linting
----------
+**4. When ready, open a pull request (PR)**
 
-We recommend `Ruff <https://docs.astral.sh/ruff/>`_ for linting. You can install it from PyPi:
-
-.. code-block:: console
-
-   $ pip install ruff
-
-The ``ruff`` GitHub Action will automatically perform linting on every push and pull request.
+- Include a clear description of the changes.
+- Reference any related issues.
+- Make sure all checks pass.

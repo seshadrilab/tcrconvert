@@ -4,55 +4,18 @@
    contain the root `toctree` directive.
 
 TCRconvert
-===========
+============
 
-Rename T-cell receptor genes between 10X, Adaptive, and IMGT formats
----------------------------------------------------------------------
+Convert TCR gene names
+------------------------
 
-TCRconvert takes T-cell receptor (TCR) data containing V, D, J, and/or C genes 
-from 10X, Adaptive, or other sequencing platforms and renames them from any of 
-these formats to any other one:
+``TCRconvert`` converts V, D, J, and/or C gene names between the 10X
+Genomics, Adaptive Biotechnologies, and IMGT nomenclatures. It supports
+alpha-beta and gamma-delta T cell receptors (TCRs) for human, mouse, and
+rhesus macaque. Users can also define custom species (see the docs). An 
+`R version <https://github.com/seshadrilab/tcrconvertr>`_ is also available.
 
-* **10X**: TRAV1-2
-* **Adaptive**: TCRAV01-02*01
-* **IMGT**: TRAV1-2*01
-
-TCRconvert works with human, mouse, and rhesus macaque data out-of-the-box, but 
-users can also add their own species (see "Using a custom reference" in the usage pages).
-
-TCRconvert helps researchers unify TCR datasets by converting them to a standard 
-naming convention. It is fast, reliable, and prevents errors from manual conversions. 
-Unlike other tools that require custom objects, TCRconvert works directly with 
-Pandas DataFrames and CSV/TSV files.
-
-**You can use it two ways:**
-
-**1. As a library**:
-
-.. code-block:: python
-
-   import tcrconvert
-   import pandas as pd
-
-   # Convert gene names
-   tcr_file = tcrconvert.get_example_path('tenx.csv')
-   dat = pd.read_csv(tcr_file)[['barcode', 'v_gene' , 'd_gene', 'j_gene', 'c_gene', 'cdr3']]
-   tcrconvert.convert_gene(dat, frm='tenx', to='adaptive')
-
-   # Create a custom reference
-   tcrconvert.build_lookup_from_fastas('path/to/fasta/dir/', 'myspecies')
-
-
-**2. As a command-line tool**:
-
-.. code-block:: console
-
-   $ tcrconvert convert -i tcrconvert/examples/tenx.csv -o adaptive.tsv --frm tenx --to adaptive # Convert gene names
-   $ tcrconvert build -i path/to/fasta_dir/ -s myspecies # Create a custom reference
-
-
-View on `GitHub <https://github.com/seshadrilab/tcrconvert>`_.
-
+Use ``TCRconvert`` as a Python library or on the command line.
 
 .. toctree::
    :maxdepth: 1
@@ -60,7 +23,43 @@ View on `GitHub <https://github.com/seshadrilab/tcrconvert>`_.
 
    installation
    usage_library
+   custom_species_lib
    usage_cli
+   custom_species_cli
    faq
    functions
    contributing
+
+
+Background
+------------
+
+TCR annotation tools use different gene naming conventions, making
+cross-dataset searches difficult (e.g., identifying 10X-annotated TCRs
+in Adaptive data). Manual conversion is complex and error-prone due to
+inconsistencies in naming rules.
+
+``TCRconvert`` automates this process efficiently and accurately. Our
+approach is based on analyzing multiple 10X and Adaptive data sets to
+capture their naming variations.
+
+
+Issues
+--------
+
+To report a bug or request a feature please open an
+`issue <https://github.com/seshadrilab/tcrconvert/issues>`_.
+
+Contact
+---------
+
+For other inquiries, contact Emma Bishop: emmab5 at uw dot edu.
+
+Acknowledgments
+-----------------
+
+This project was supported by the Fred Hutchinson Cancer Center
+Translational Data Science Integrated Research Center (TDS IRC) through
+the 2024 Data Scientist Collaboration Grant. Special thanks to Scott
+Chamberlain for development support and Shashidhar Ravishankar for gene
+name curation.
