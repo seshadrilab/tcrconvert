@@ -285,27 +285,50 @@ def build_lookup_from_fastas(data_dir, species):
     # If converting from 10X will just need the *01 allele
     from_tenx = lookup.groupby('tenx').first().reset_index()
 
-    # Make table for Adaptive genes with or without allele
-    lookup2 = lookup[~lookup.adaptivev2.str.contains('NoData')]
-    from_adapt = lookup2[['adaptivev2', 'imgt', 'tenx']]
-    from_adapt['adaptive'] = from_adapt['adaptivev2'].apply(lambda x: x[:-3])
-    from_adapt = (
-        from_adapt.drop(columns='adaptivev2').groupby('adaptive').first().reset_index()
+    # Start Adaptive tables
+    lookup2 = lookup[~lookup.adaptive.str.contains('NoData')]
+
+    # Adaptive: Gene-level info but not allele-level (e.g. TCRAJ03-01)
+    adapt_no_allele = lookup2[['adaptivev2', 'imgt', 'tenx']]
+    adapt_no_allele['adaptive'] = adapt_no_allele['adaptivev2'].apply(lambda x: x[:-3])
+    adapt_no_allele = (
+        adapt_no_allele.drop(columns='adaptivev2')
+        .groupby('adaptive')
+        .first()
+        .reset_index()
     )
 
-    # Lacking gene-level
-    from_adapt['tenx_prefix'] = from_adapt['tenx'].str.split('-', expand=True)[0]
+    # Start Adaptive: No gene-level info where unneeded, with and without allele-level (e.g. TCRAV14*01 and TCRAV14)
+    subgroup_only = lookup2[['adaptivev2', 'imgt', 'tenx']]
+    subgroup_only['tenx_prefix'] = subgroup_only['tenx'].str.split('-', expand=True)[0]
 
     # Group by 'tenx_prefix', keeping groups with only one unique 'tenx' value
-    agg_data = from_adapt.groupby('tenx_prefix')['tenx'].nunique().reset_index()
+    agg_data = subgroup_only.groupby('tenx_prefix')['tenx'].nunique().reset_index()
     agg_data['tenx'] = agg_data['tenx'] == 1
     agg_filtered = agg_data[agg_data['tenx']]
 
     # Make a DataFrame with subgroup-level Adaptive gene names
-    merged_data = pd.merge(from_adapt, agg_filtered, on='tenx_prefix')
-    subgroup_only_rows = pd.DataFrame(
+    merged_data = pd.merge(subgroup_only, agg_filtered, on='tenx_prefix')
+
+    subgroup_only_rows_start = pd.DataFrame(
         {
-            'adaptive': merged_data['adaptive'].str.replace(r'-\d+.*', '', regex=True),
+            'adaptive': merged_data['adaptivev2'].str.replace(
+                r'-\d+.*', '', regex=True
+            ),
+            'imgt': merged_data['imgt'],
+            'tenx': merged_data['tenx_x'],
+            'tenx_prefix': merged_data['tenx_prefix'],
+        }
+    )
+    subgroup_only_rows = (
+        subgroup_only_rows_start.groupby('adaptive').first().reset_index()
+    )
+
+    subgroup_only_with_allele_rows = pd.DataFrame(
+        {
+            'adaptive': merged_data['adaptivev2'].str.replace(
+                r'-0[0-9]', '', regex=True
+            ),
             'imgt': merged_data['imgt'],
             'tenx': merged_data['tenx_x'],
             'tenx_prefix': merged_data['tenx_prefix'],
@@ -314,7 +337,8 @@ def build_lookup_from_fastas(data_dir, species):
 
     # Combine the new rows with the original data
     from_adaptive_updated = pd.concat(
-        [from_adapt, subgroup_only_rows], ignore_index=True
+        [adapt_no_allele, subgroup_only_rows, subgroup_only_with_allele_rows],
+        ignore_index=True,
     )
     from_adaptive_updated = from_adaptive_updated.drop(columns=['tenx_prefix'])
 
