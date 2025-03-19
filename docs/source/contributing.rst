@@ -39,7 +39,7 @@ push changes. You can also check your code ahead of time:
    $ pytest
 
    # Run code examples
-   $ python -m doctest -o ELLIPSIS <changed_script.py>
+   $ python -m doctest <changed_script.py>
 
    # Linting, change format of files to match style
    $ ruff format
