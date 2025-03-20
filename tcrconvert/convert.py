@@ -177,7 +177,7 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], verbose=True):
     >>> df = pd.read_csv(tcr_file)[['barcode', 'v_gene', 'j_gene', 'cdr3']]
     >>> df
                   barcode        v_gene   j_gene             cdr3
-    0  AAACCTGAGACCACGA-1     TRAV29DV5   TRAJ12     CAVMDSSYKLIF
+    0  AAACCTGAGACCACGA-1    TRAV29/DV5   TRAJ12     CAVMDSSYKLIF
     1  AAACCTGAGACCACGA-1  TRBV20/OR9-2  TRBJ2-1  CASSGLAGGYNEQFF
     2  AAACCTGAGGCTCTTA-1         TRDV2    TRDJ3  CASSGVAGGTDTQYF
     3  AAACCTGAGGCTCTTA-1         TRGV9    TRGJ1     CAVKDSNYQLIW

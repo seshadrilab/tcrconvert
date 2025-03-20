@@ -254,7 +254,19 @@ def build_lookup_from_fastas(data_dir, species):
     lookup = extract_imgt_genes(data_dir)
 
     # Create 10X column
-    lookup['tenx'] = lookup['imgt'].apply(lambda x: x[:-3].replace('/DV', 'DV'))
+    lookup['tenx'] = lookup['imgt'].apply(lambda x: x[:-3])
+    lookup['tenx'] = lookup['tenx'].apply(
+        lambda x: x.replace('TRAV13-4/DV7', 'TRAV13-4-DV7')
+        .replace('TRAV14D-3/DV8', 'TRAV14D-3-DV8')
+        .replace('TRAV15-1/DV6-1', 'TRAV15-1-DV6-1')
+        .replace('TRAV15-2/DV6-2', 'TRAV15-2-DV6-2')
+        .replace('TRAV15D-1/DV6D-1', 'TRAV15D-1-DV6D-1')
+        .replace('TRAV15D-2/DV6D-2', 'TRAV15D-2-DV6D-2')
+        .replace('TRAV16D/DV11', 'TRAV16D-DV11')
+        .replace('TRAV21/DV12', 'TRAV21-DV12')
+        .replace('TRAV4-4/DV10', 'TRAV4-4-DV10')
+        .replace('TRAV6-7/DV9', 'TRAV6-7-DV9')
+    )
 
     # Create Adaptive columns
     lookup['adaptive'] = lookup['imgt'].apply(
