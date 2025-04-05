@@ -4,11 +4,12 @@ FAQ
 How does TCRconvert work?
 ---------------------------
 
-TCRconvert essentially performs a ``merge`` between the input data and a 
-lookup table that includes the naming conventions for each gene. 
-These lookup tables are constructed from IMGT reference FASTA files and account 
-for the specific naming peculiarities of each platform. The built-in lookup tables 
-are located under ``tcrconvert/data/``.
+TCRconvert performs a ``merge`` between the input data and a lookup table that 
+includes gene names with each nomenclature. These lookup tables are constructed 
+from IMGT reference FASTA files and account for the specific naming peculiarities 
+of each platform. The built-in lookup tables are located under ``tcrconvert/data/``. 
+The code used to build the lookup tables, which demonstrates the conversion logic, is 
+within the `<build_lookup_from_fastas https://github.com/seshadrilab/tcrconvert/blob/361f930d598996f3fa239a715c829ad8c107c63e/tcrconvert/build_lookup.py#L196>_` function.
 
 
 What input columns are required?
