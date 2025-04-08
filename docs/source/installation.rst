@@ -8,7 +8,15 @@ Requirements:
 * ``click >=8.1.7```
 * ``platformdirs >=4.2.2```
 
-Install from GitHub:
+
+Install the latest stable version from  PyPi:
+
+.. code-block:: bash
+
+    pip install tcrconvert
+
+
+You can also install the development version from GitHub:
 
 .. code-block:: bash
 
