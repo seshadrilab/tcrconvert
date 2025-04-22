@@ -32,7 +32,7 @@ Requirements:
 * `click >=8.1.7`
 * `platformdirs >=4.2.2`
 
-Install the latest stable version from  PyPi:
+Install the latest stable version from [PyPI](https://pypi.org/project/tcrconvert/):
 
 ```
 pip install tcrconvert
