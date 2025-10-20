@@ -128,7 +128,8 @@ def which_frm_cols(df, frm, frm_cols=[], verbose=True):
     return cols_from
 
 
-def convert_gene(df, frm, to, species='human', frm_cols=[], verbose=True):
+def convert_gene(df, frm, to, species='human', frm_cols=[], verbose=True,
+                 bad_genes_col=False):
     """Convert gene names
 
     Convert T-cell receptor (TCR) gene names between the IMGT, 10X, and Adaptive
@@ -215,6 +216,9 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], verbose=True):
     new_genes = {}
     bad_genes = []
 
+    if bad_genes_col:
+        bad_df = pd.DataFrame(index=df.index)
+
     for col in cols_from:
         if col in df.columns:
             good_genes = (
@@ -222,6 +226,9 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], verbose=True):
                 .merge(lookup[[frm, to]], how='left', left_on=col, right_on=frm)
                 .drop(columns=frm)
             )
+            if bad_genes_col:
+                # Keep bad genes and make good genes NA
+                bad_df[col] = df[col].where(good_genes[to].isna(), pd.NA)
             # Note genes where the merge produced an NA on the 'to' format side
             new_bad_genes = good_genes[good_genes[to].isna()][col].dropna().tolist()
             # We don't expect the entire column of genes to be empty.
@@ -247,6 +254,12 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], verbose=True):
         out_df[col] = new_genes[col][to].values
         # Replace NoData and np.nan with pd.NA
         out_df[col] = out_df[col].replace('NoData', pd.NA)
+
+    if bad_genes_col:
+        # Append the column of bad genes
+        out_df['bad_genes'] = bad_df.agg(
+            lambda row: ','.join(row.dropna().astype(str)), axis=1
+            ).replace('', pd.NA)
 
     return out_df
 
