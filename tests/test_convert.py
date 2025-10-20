@@ -338,3 +338,54 @@ def test_convert_gene_verbose(caplog):
             'These genes are not in IMGT for this species and will be replaced with NA'
             in caplog.text
         )
+
+def test_convert_gene_bad_genes_col():
+    # Test dataframe with some genes that won't convert
+    tenx_df_bad = pd.DataFrame(
+        {
+            'v_gene': ['TRAV12-1', 'BAD_V_GENE'],
+            'd_gene': [pd.NA, 'TRBD1'],
+            'j_gene': ['TRAJ16', 'BAD_J_GENE'],
+            'c_gene': ['BAD_C_GENE', 'TRBC2'],
+            'cdr3': ['CAVLIF', 'CASSGF'],
+        }
+    )
+
+    # Expected output with bad_genes_col=True
+    expected_with_bad = pd.DataFrame(
+        {
+            'v_gene': ['TRAV12-1*01', pd.NA],
+            'd_gene': [pd.NA, 'TRBD1*01'],
+            'j_gene': ['TRAJ16*01', pd.NA],
+            'c_gene': [pd.NA, 'TRBC2*01'],
+            'cdr3': ['CAVLIF', 'CASSGF'],
+            'bad_genes': ['BAD_C_GENE', 'BAD_V_GENE,BAD_J_GENE'],
+        }
+    )
+
+    # Expected output with bad_genes_col=False
+    expected_without_bad = pd.DataFrame(
+        {
+            'v_gene': ['TRAV12-1*01', pd.NA],
+            'd_gene': [pd.NA, 'TRBD1*01'],
+            'j_gene': ['TRAJ16*01', pd.NA],
+            'c_gene': [pd.NA, 'TRBC2*01'],
+            'cdr3': ['CAVLIF', 'CASSGF'],
+        }
+    )
+
+    # Test with bad_genes_col=True
+    result_with = convert.convert_gene(tenx_df_bad, 'tenx', 'imgt', bad_genes_col=True)
+    test_result_with = result_with.fillna('blank')
+    test_expected_with = expected_with_bad.fillna('blank')
+    pd.testing.assert_frame_equal(test_result_with, test_expected_with)
+
+    # Test with bad_genes_col=False
+    result_without = convert.convert_gene(tenx_df_bad, 'tenx', 'imgt', bad_genes_col=False)
+    test_result_without = result_without.fillna('blank')
+    test_expected_without = expected_without_bad.fillna('blank')
+    pd.testing.assert_frame_equal(test_result_without, test_expected_without)
+
+    # Test that all genes convert successfully - bad_genes should be NA
+    result_good = convert.convert_gene(tenx_df, 'tenx', 'imgt', bad_genes_col=True)
+    assert result_good['bad_genes'].isna().all()
