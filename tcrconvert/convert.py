@@ -128,7 +128,9 @@ def which_frm_cols(df, frm, frm_cols=[], verbose=True):
     return cols_from
 
 
-def convert_gene(df, frm, to, species='human', frm_cols=[], verbose=True):
+def convert_gene(
+    df, frm, to, species='human', frm_cols=[], verbose=True, bad_genes_col=False
+):
     """Convert gene names
 
     Convert T-cell receptor (TCR) gene names between the IMGT, 10X, and Adaptive
@@ -139,9 +141,10 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], verbose=True):
 
     Behavioral Notes:
 
-    - If a gene name cannot be mapped, it is replaced with ``NaN``, and a warning is issued.
+    - If a gene name cannot be mapped, it is replaced with ``NA``, and a warning is issued.
+    - If ``bad_genes_col=True``, appends a 'bad_genes' column containing comma-separated gene names that could not be converted for each row.
     - If ``frm`` is ``'imgt'`` and ``frm_cols`` is not provided, 10X column names are assumed.
-    - Constant (C) genes are set to ``NaN`` when converting to Adaptive formats, as Adaptive does not capture constant regions.
+    - Constant (C) genes are set to ``NA`` when converting to Adaptive formats, as Adaptive does not capture constant regions.
     - The input does not need to include all gene types; partial inputs (e.g., only V genes) are supported.
     - If no values in a custom column can be mapped (e.g., a CDR3 column) it is skipped and a warning is raised.
 
@@ -166,6 +169,7 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], verbose=True):
     :type frm_cols: list of str, optional
     :param verbose: Whether to show all messages. Defaults to ``True``.
     :type verbose: bool, optional
+    :param bad_genes_col: Whether to add a column of the unconvertable genes. Defaults to ``False``.
     :return: Converted TCR data
     :rtype: DataFrame
 
@@ -215,6 +219,9 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], verbose=True):
     new_genes = {}
     bad_genes = []
 
+    if bad_genes_col:
+        bad_df = pd.DataFrame(index=df.index)
+
     for col in cols_from:
         if col in df.columns:
             good_genes = (
@@ -222,6 +229,9 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], verbose=True):
                 .merge(lookup[[frm, to]], how='left', left_on=col, right_on=frm)
                 .drop(columns=frm)
             )
+            if bad_genes_col:
+                # Keep bad genes and make good genes NA
+                bad_df[col] = df[col].where(good_genes[to].isna(), pd.NA)
             # Note genes where the merge produced an NA on the 'to' format side
             new_bad_genes = good_genes[good_genes[to].isna()][col].dropna().tolist()
             # We don't expect the entire column of genes to be empty.
@@ -247,6 +257,15 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], verbose=True):
         out_df[col] = new_genes[col][to].values
         # Replace NoData and np.nan with pd.NA
         out_df[col] = out_df[col].replace('NoData', pd.NA)
+
+    if bad_genes_col:
+        # Append the column of bad genes
+        out_df['bad_genes'] = bad_df.agg(
+            lambda row: ','.join(row.dropna().astype(str)), axis=1
+        ).replace('', pd.NA)
+
+    # Ensure all NAs are the same type
+    out_df = out_df.fillna(pd.NA)
 
     return out_df
 
@@ -293,7 +312,14 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], verbose=True):
     help='Show INFO-level messages',
     show_default=True,
 )
-def convert_gene_cli(input, output, frm, to, species, column, verbose):
+@click.option(
+    '-b',
+    '--bad_genes_col',
+    default=False,
+    help='Append column of unconvertable genes',
+    show_default=True,
+)
+def convert_gene_cli(input, output, frm, to, species, column, verbose, bad_genes_col):
     """Convert T-cell receptor V/D/J/C gene names.
 
     :Example:
@@ -332,7 +358,7 @@ def convert_gene_cli(input, output, frm, to, species, column, verbose):
     # Cast frm_cols as list because will be read in from command line as tuple
     if verbose:
         click.echo(f'Converting gene nomenclature from "{frm}" to "{to}"')
-    out_df = convert_gene(df, frm, to, species, list(column), verbose)
+    out_df = convert_gene(df, frm, to, species, list(column), verbose, bad_genes_col)
 
     # Save output
     if verbose:
