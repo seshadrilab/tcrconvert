@@ -140,9 +140,10 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], verbose=True,
 
     Behavioral Notes:
 
-    - If a gene name cannot be mapped, it is replaced with ``NaN``, and a warning is issued.
+    - If a gene name cannot be mapped, it is replaced with ``NA``, and a warning is issued.
+    - If ``bad_genes_col=True``, appends a 'bad_genes' column containing comma-separated gene names that could not be converted for each row.
     - If ``frm`` is ``'imgt'`` and ``frm_cols`` is not provided, 10X column names are assumed.
-    - Constant (C) genes are set to ``NaN`` when converting to Adaptive formats, as Adaptive does not capture constant regions.
+    - Constant (C) genes are set to ``NA`` when converting to Adaptive formats, as Adaptive does not capture constant regions.
     - The input does not need to include all gene types; partial inputs (e.g., only V genes) are supported.
     - If no values in a custom column can be mapped (e.g., a CDR3 column) it is skipped and a warning is raised.
 
@@ -167,6 +168,7 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], verbose=True,
     :type frm_cols: list of str, optional
     :param verbose: Whether to show all messages. Defaults to ``True``.
     :type verbose: bool, optional
+    :param bad_genes_col: Whether to add a column of the unconvertable genes. Defaults to ``False``.
     :return: Converted TCR data
     :rtype: DataFrame
 
