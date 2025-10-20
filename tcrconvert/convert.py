@@ -128,8 +128,9 @@ def which_frm_cols(df, frm, frm_cols=[], verbose=True):
     return cols_from
 
 
-def convert_gene(df, frm, to, species='human', frm_cols=[], verbose=True,
-                 bad_genes_col=False):
+def convert_gene(
+    df, frm, to, species='human', frm_cols=[], verbose=True, bad_genes_col=False
+):
     """Convert gene names
 
     Convert T-cell receptor (TCR) gene names between the IMGT, 10X, and Adaptive
@@ -261,7 +262,7 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], verbose=True,
         # Append the column of bad genes
         out_df['bad_genes'] = bad_df.agg(
             lambda row: ','.join(row.dropna().astype(str)), axis=1
-            ).replace('', pd.NA)
+        ).replace('', pd.NA)
 
     # Ensure all NAs are the same type
     out_df = out_df.fillna(pd.NA)

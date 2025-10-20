@@ -339,6 +339,7 @@ def test_convert_gene_verbose(caplog):
             in caplog.text
         )
 
+
 def test_convert_gene_bad_genes_col():
     # Test dataframe with some genes that won't convert
     tenx_df_bad = pd.DataFrame(
@@ -381,7 +382,9 @@ def test_convert_gene_bad_genes_col():
     pd.testing.assert_frame_equal(test_result_with, test_expected_with)
 
     # Test with bad_genes_col=False
-    result_without = convert.convert_gene(tenx_df_bad, 'tenx', 'imgt', bad_genes_col=False)
+    result_without = convert.convert_gene(
+        tenx_df_bad, 'tenx', 'imgt', bad_genes_col=False
+    )
     test_result_without = result_without.fillna('blank')
     test_expected_without = expected_without_bad.fillna('blank')
     pd.testing.assert_frame_equal(test_result_without, test_expected_without)
