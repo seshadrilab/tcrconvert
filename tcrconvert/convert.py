@@ -261,6 +261,9 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], verbose=True,
             lambda row: ','.join(row.dropna().astype(str)), axis=1
             ).replace('', pd.NA)
 
+    # Ensure all NAs are the same type
+    out_df = out_df.fillna(pd.NA)
+
     return out_df
 
 
