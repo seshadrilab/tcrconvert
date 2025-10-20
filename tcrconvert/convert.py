@@ -311,7 +311,14 @@ def convert_gene(df, frm, to, species='human', frm_cols=[], verbose=True,
     help='Show INFO-level messages',
     show_default=True,
 )
-def convert_gene_cli(input, output, frm, to, species, column, verbose):
+@click.option(
+    '-b',
+    '--bad_genes_col',
+    default=False,
+    help='Append column of unconvertable genes',
+    show_default=True,
+)
+def convert_gene_cli(input, output, frm, to, species, column, verbose, bad_genes_col):
     """Convert T-cell receptor V/D/J/C gene names.
 
     :Example:
@@ -350,7 +357,7 @@ def convert_gene_cli(input, output, frm, to, species, column, verbose):
     # Cast frm_cols as list because will be read in from command line as tuple
     if verbose:
         click.echo(f'Converting gene nomenclature from "{frm}" to "{to}"')
-    out_df = convert_gene(df, frm, to, species, list(column), verbose)
+    out_df = convert_gene(df, frm, to, species, list(column), verbose, bad_genes_col)
 
     # Save output
     if verbose:
