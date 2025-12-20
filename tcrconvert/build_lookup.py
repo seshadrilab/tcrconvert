@@ -1,5 +1,6 @@
 import os
 import re
+from numpy import full
 import pandas as pd
 import click
 import platformdirs
@@ -50,6 +51,62 @@ def parse_imgt_fasta(infile):
 
     return imgt_list
 
+def parse_mixcr_csv(data_dir):
+    """
+    Extract gene names from a reference CSV.
+    
+    :param data_dir: A string, the path to directory containing mixcr CSV files.
+    :return: A 1-column dataframe of gene names.
+    :rtype: DataFrame
+
+    :Example:
+
+    >>> import tcrconvert
+    >>> testdir = tcrconvert.get_example_path("mixcr_dir/test_mixcr/")
+    >>> tcrconvert.build_lookup.parse_mixcr_csv(testdir)
+    	      mixcr
+    17	TCRG-C3
+    8	TCRG-C3*00
+    9	TRAC
+    0	TRAC*00
+    16	TRAV12D-3
+    7	TRAV12D-3*00
+    10	TRAV14-2
+    1	TRAV14-2*00
+    11	TRBD2
+    2	TRBD2*00
+    12	TRBJ2-1
+    3	TRBJ2-1*00
+    13	TRDC
+    4	TRDC*00
+    14	TRDD2
+    5	TRDD2*00
+    15	TRDJ1
+    6	TRDJ1*00
+    """
+    ## Throw error if the directory provided for data_dir is not valid
+    if not os.path.exists(data_dir):
+        raise FileNotFoundError("File does not exist")
+
+    ## List of full paths to each .csv file for that species
+    full_paths = [os.path.join(data_dir, f) for f in os.listdir(data_dir) if f.endswith(".csv")]
+
+    ## For each .csv file data_dir, select only the 'name' and 'geneName'
+    ## column and combine them. Capture the result in a list of dataframes (genes)
+    ## Read in each df and create 'mixcr' column
+    dfs = []
+    for path in full_paths:
+        df = pd.read_csv(path)
+        mixcr_col = pd.concat([df["name"], df["geneName"]], axis=0, ignore_index=True)
+        dfs.append(pd.DataFrame({"mixcr":mixcr_col}))
+
+    ## Stack the DataFrames together to form one DataFrame
+    df_stacked = pd.concat(dfs, axis=0, ignore_index=True)
+
+    ## Remove duplicate rows and return the DataFrame
+    df_unique = df_stacked.drop_duplicates(ignore_index=True)
+    dfs = df_unique.sort_values(by="mixcr").reset_index(drop=True)
+    return(dfs)
 
 def extract_imgt_genes(data_dir):
     """Extract all gene names from a folder of FASTAs
