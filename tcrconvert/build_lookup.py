@@ -1,6 +1,5 @@
 import os
 import re
-from numpy import full
 import pandas as pd
 import click
 import platformdirs

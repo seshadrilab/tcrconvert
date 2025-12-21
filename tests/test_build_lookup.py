@@ -6,6 +6,10 @@ import pytest
 from unittest.mock import patch
 from tcrconvert import build_lookup, utils
 
+def test_parse_mixcr_csv_invalid_dir_raises_error():
+    with pytest.raises(FileNotFoundError):
+        build_lookup.parse_mixcr_csv("invalid_dir/")
+
 def test_parse_mixcr_csv():
     mixcr_dir = utils.get_example_path("mixcr_dir/test_mixcr/")
     df = build_lookup.parse_mixcr_csv(mixcr_dir) 
