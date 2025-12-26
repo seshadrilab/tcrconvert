@@ -6,36 +6,39 @@ import pytest
 from unittest.mock import patch
 from tcrconvert import build_lookup, utils
 
+
 def test_parse_mixcr_csv_invalid_dir_raises_error():
     with pytest.raises(FileNotFoundError):
-        build_lookup.parse_mixcr_csv("invalid_dir/")
+        build_lookup.parse_mixcr_csv('invalid_dir/')
+
 
 def test_parse_mixcr_csv():
-    mixcr_dir = utils.get_example_path("mixcr_dir/test_mixcr/")
-    df = build_lookup.parse_mixcr_csv(mixcr_dir) 
+    mixcr_dir = utils.get_example_path('mixcr_dir/test_mixcr/')
+    df = build_lookup.parse_mixcr_csv(mixcr_dir)
     outdf = pd.DataFrame(
         {
             'mixcr': [
-                "TCRG-C3", 
-                "TCRG-C3*00", 
-                "TRAC", 
-                "TRAC*00", 
-                "TRAV12D-3",
-                "TRAV12D-3*00", 
-                "TRAV14-2", 
-                "TRAV14-2*00", 
-                "TRBD2",
-                "TRBD2*00", 
-                "TRDC", 
-                "TRDC*00",
-                "TRDD2", 
-                "TRDD2*00", 
-                "TRDJ1", 
-                "TRDJ1*00"
+                'TCRG-C3',
+                'TCRG-C3*00',
+                'TRAC',
+                'TRAC*00',
+                'TRAV12D-3',
+                'TRAV12D-3*00',
+                'TRAV14-2',
+                'TRAV14-2*00',
+                'TRBD2',
+                'TRBD2*00',
+                'TRDC',
+                'TRDC*00',
+                'TRDD2',
+                'TRDD2*00',
+                'TRDJ1',
+                'TRDJ1*00',
             ]
         }
-    ) 
+    )
     pd.testing.assert_frame_equal(df, outdf)
+
 
 def test_parse_imgt_fasta():
     fasta = utils.get_example_path('fasta_dir/test_trav.fa')
